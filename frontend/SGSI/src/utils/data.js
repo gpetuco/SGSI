@@ -20,6 +20,30 @@ export const SIDE_MENU_DATA = [
     path: "/admin/tasks",
   },
   {
+    id: "02d",
+    label: "GRC",
+    icon: LuClipboardCheck,
+    path: "/admin/tasks/grc",
+  },
+  {
+    id: "02e",
+    label: "ISO 27001",
+    icon: LuClipboardCheck,
+    path: "/admin/tasks/iso-27001",
+  },
+  {
+    id: "02f",
+    label: "NIST CSF",
+    icon: LuClipboardCheck,
+    path: "/admin/tasks/nist-csf",
+  },
+  {
+    id: "02c",
+    label: "Kanban",
+    icon: LuClipboardCheck,
+    path: "/admin/kanban",
+  },
+  {
     id: "02b",
     label: "My Tasks",
     icon: LuClipboardCheck,
@@ -59,6 +83,12 @@ export const SIDE_MENU_USER_DATA = [
     path: "/user/tasks",
   },
   {
+    id: "02c",
+    label: "Kanban",
+    icon: LuClipboardCheck,
+    path: "/user/kanban",
+  },
+  {
     id: "05",
     label: "Logout",
     icon: LuLogOut,
@@ -76,4 +106,10 @@ export const STATUS_DATA = [
   { label: "Pending", value: "Pending" },
   { label: "In Progress", value: "In Progress" },
   { label: "Completed", value: "Completed" },
+];
+
+export const CLASSIFICATION_DATA = [
+  { label: "GRC", value: "GRC" },
+  { label: "ISO 27001", value: "ISO 27001" },
+  { label: "NIST CSF", value: "NIST CSF" },
 ];

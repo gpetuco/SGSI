@@ -9,6 +9,11 @@ const taskSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     description: { type: String },
+    classification: {
+      type: String,
+      enum: ["GRC", "ISO 27001", "NIST CSF"],
+      default: "GRC",
+    },
     priority: {
       type: String,
       enum: ["Low", "Medium", "High"],

@@ -5,11 +5,14 @@ const Task = require("../models/Task");
 // @access  Private
 const getTasks = async (req, res) => {
   try {
-    const { status, assignedTo } = req.query;
+    const { status, assignedTo, classification } = req.query;
     let filter = {};
 
     if (status) {
       filter.status = status;
+    }
+    if (classification) {
+      filter.classification = classification;
     }
 
     let tasks;
@@ -41,25 +44,30 @@ const getTasks = async (req, res) => {
 
     // Status summary counts
     const allTasks = await Task.countDocuments(
-      req.user.role === "admin" && !restrictToMe ? {} : { assignedTo: req.user._id }
+      req.user.role === "admin" && !restrictToMe
+        ? { ...(classification && { classification }) }
+        : { assignedTo: req.user._id, ...(classification && { classification }) }
     );
 
     const pendingTasks = await Task.countDocuments({
       ...filter,
       status: "Pending",
       ...((req.user.role !== "admin" || restrictToMe) && { assignedTo: req.user._id }),
+      ...(classification && { classification }),
     });
 
     const inProgressTasks = await Task.countDocuments({
       ...filter,
       status: "In Progress",
       ...((req.user.role !== "admin" || restrictToMe) && { assignedTo: req.user._id }),
+      ...(classification && { classification }),
     });
 
     const completedTasks = await Task.countDocuments({
       ...filter,
       status: "Completed",
       ...((req.user.role !== "admin" || restrictToMe) && { assignedTo: req.user._id }),
+      ...(classification && { classification }),
     });
 
     res.json({
@@ -103,6 +111,7 @@ const createTask = async (req, res) => {
       title,
       description,
       priority,
+      classification,
       dueDate,
       assignedTo,
       attachments,
@@ -119,6 +128,7 @@ const createTask = async (req, res) => {
       title,
       description,
       priority,
+      classification,
       dueDate,
       assignedTo,
       createdBy: req.user._id,
@@ -144,6 +154,7 @@ const updateTask = async (req, res) => {
     task.title = req.body.title || task.title;
     task.description = req.body.description || task.description;
     task.priority = req.body.priority || task.priority;
+    task.classification = req.body.classification || task.classification;
     task.dueDate = req.body.dueDate || task.dueDate;
     task.todoChecklist = req.body.todoChecklist || task.todoChecklist;
     task.attachments = req.body.attachments || task.attachments;

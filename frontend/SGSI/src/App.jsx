@@ -12,12 +12,17 @@ import SignUp from "./pages/Auth/SignUp";
 import ManageTasks from "./pages/Admin/ManageTasks";
 import AdminMyTasks from "./pages/Admin/MyTasks";
 import AdminViewTaskDetails from "./pages/Admin/ViewTaskDetails";
+import AdminKanban from "./pages/Admin/Kanban";
+import GrcTasks from "./pages/Admin/GrcTasks";
+import Iso27001Tasks from "./pages/Admin/Iso27001Tasks";
+import NistCsfTasks from "./pages/Admin/NistCsfTasks";
 import CreateTask from "./pages/Admin/CreateTask";
 import ManageUsers from "./pages/Admin/ManageUsers";
 
 import UserDashboard from "./pages/User/UserDashboard";
 import MyTasks from "./pages/User/MyTasks";
 import ViewTaskDetails from "./pages/User/ViewTaskDetails";
+import UserKanban from "./pages/User/Kanban";
 
 import PrivateRoute from "./routes/PrivateRoute";
 import UserProvider, { UserContext } from "./context/userContext";
@@ -36,6 +41,10 @@ const App = () => {
             <Route element={<PrivateRoute allowedRoles={["admin"]} />}>
               <Route path="/admin/dashboard" element={<Dashboard />} />
               <Route path="/admin/tasks" element={<ManageTasks />} />
+              <Route path="/admin/kanban" element={<AdminKanban />} />
+              <Route path="/admin/tasks/grc" element={<GrcTasks />} />
+              <Route path="/admin/tasks/iso-27001" element={<Iso27001Tasks />} />
+              <Route path="/admin/tasks/nist-csf" element={<NistCsfTasks />} />
               <Route path="/admin/create-task" element={<CreateTask />} />
               <Route path="/admin/users" element={<ManageUsers />} />
               <Route path="/admin/my-tasks" element={<AdminMyTasks />} />
@@ -46,6 +55,7 @@ const App = () => {
             <Route element={<PrivateRoute allowedRoles={["admin"]} />}>
               <Route path="/user/dashboard" element={<UserDashboard />} />
               <Route path="/user/tasks" element={<MyTasks />} />
+              <Route path="/user/kanban" element={<UserKanban />} />
               <Route
                 path="/user/task-details/:id"
                 element={<ViewTaskDetails />}

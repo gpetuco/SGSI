@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
-import { PRIORITY_DATA } from "../../utils/data";
+import { PRIORITY_DATA, CLASSIFICATION_DATA } from "../../utils/data";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import toast from "react-hot-toast";
@@ -18,10 +18,12 @@ const CreateTask = () => {
   const location = useLocation();
   const { taskId } = location.state || {};
   const navigate = useNavigate();
+  const [openFormModal, setOpenFormModal] = useState(true);
 
   const [taskData, setTaskData] = useState({
     title: "",
     description: "",
+    classification: "GRC",
     priority: "Low",
     dueDate: null,
     assignedTo: [],
@@ -45,6 +47,7 @@ const CreateTask = () => {
     setTaskData({
       title: "",
       description: "",
+      classification: "GRC",
       priority: "Low",
       dueDate: null,
       assignedTo: [],
@@ -162,6 +165,7 @@ const CreateTask = () => {
         setTaskData((prevState) => ({
           title: taskInfo.title,
           description: taskInfo.description,
+          classification: taskInfo.classification || "GRC",
           priority: taskInfo.priority,
           dueDate: taskInfo.dueDate
             ? moment(taskInfo.dueDate).format("YYYY-MM-DD")
@@ -202,16 +206,35 @@ const CreateTask = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [taskId]);
 
+  const closeAndGoBack = () => {
+    setOpenFormModal(false);
+    setTimeout(() => {
+      navigate(-1);
+    }, 0);
+  };
+
   return (
     <DashboardLayout activeMenu="Create Task">
-      <div className="mt-5">
-        <div className="grid grid-cols-1 md:grid-cols-4 mt-4">
-          <div className="form-card col-span-3">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl md:text-xl font-medium">
-                {taskId ? "Update Task" : "Create Task"}
-              </h2>
-
+      <Modal
+        isOpen={openFormModal}
+        onClose={closeAndGoBack}
+        title={taskId ? "Update Task" : "Create Task"}
+        variant="wide"
+        footer={
+          <div className="flex justify-end">
+            <button
+              className="add-btn w-auto px-6"
+              onClick={handleSubmit}
+              disabled={loading}
+            >
+              {taskId ? "UPDATE TASK" : "CREATE TASK"}
+            </button>
+          </div>
+        }
+      >
+        <div className="grid grid-cols-1 mt-1">
+          <div className="form-card">
+            <div className="flex items-center justify-end">
               {taskId && (
                 <button
                   className="flex items-center gap-1.5 text-[13px] font-medium text-rose-500 bg-rose-50 rounded px-2 py-1 border border-rose-100 hover:border-rose-300 cursor-pointer"
@@ -254,6 +277,19 @@ const CreateTask = () => {
             </div>
 
             <div className="grid grid-cols-12 gap-4 mt-2">
+              <div className="col-span-6 md:col-span-4">
+                <label className="text-xs font-medium text-slate-600">
+                  Classification
+                </label>
+
+                <SelectDropdown
+                  options={CLASSIFICATION_DATA}
+                  value={taskData.classification}
+                  onChange={(value) => handleValueChange("classification", value)}
+                  placeholder="Select Classification"
+                />
+              </div>
+
               <div className="col-span-6 md:col-span-4">
                 <label className="text-xs font-medium text-slate-600">
                   Priority
@@ -326,19 +362,9 @@ const CreateTask = () => {
             {error && (
               <p className="text-xs font-medium text-red-500 mt-5">{error}</p>
             )}
-
-            <div className="flex justify-end mt-7">
-              <button
-                className="add-btn"
-                onClick={handleSubmit}
-                disabled={loading}
-              >
-                {taskId ? "UPDATE TASK" : "CREATE TASK"}
-              </button>
-            </div>
           </div>
         </div>
-      </div>
+      </Modal>
 
       <Modal
         isOpen={openDeleteAlert}

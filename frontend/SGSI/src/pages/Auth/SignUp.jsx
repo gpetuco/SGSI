@@ -85,9 +85,9 @@ const SignUp = () => {
   return (
     <AuthLayout>
       <div className="lg:w-[100%] h-auto md:h-full mt-10 md:mt-0 flex flex-col justify-center">
-        <h3 className="text-xl font-semibold text-black">Create an Account</h3>
+        <h3 className="text-xl font-semibold text-black">Criar nova conta</h3>
         <p className="text-xs text-slate-700 mt-[5px] mb-6">
-          Join us today by entering your details below.
+          Cadastre-se inserindo suas informações.
         </p>
 
         <form onSubmit={handleSignUp}>
@@ -97,32 +97,32 @@ const SignUp = () => {
             <Input
               value={fullName}
               onChange={({ target }) => setFullName(target.value)}
-              label="Full Name"
-              placeholder="John"
+              label="Nome"
+              placeholder="Digite seu nome"
               type="text"
             />
 
             <Input
               value={email}
               onChange={({ target }) => setEmail(target.value)}
-              label="Email Address"
-              placeholder="john@example.com"
+              label="Email"
+              placeholder="Digite seu email"
               type="text"
             />
 
             <Input
               value={password}
               onChange={({ target }) => setPassword(target.value)}
-              label="Password"
-              placeholder="Min 8 Characters"
+              label="Senha"
+              placeholder="Digite uma senha com pelo menos 8 caracteres"
               type="password"
             />
 
             <Input
               value={adminInviteToken}
               onChange={({ target }) => setAdminInviteToken(target.value)}
-              label="Admin Invite Token"
-              placeholder="6 Digit Code"
+              label="Token de Admin (opcional)"
+              placeholder="Digite o token se você for administrador"
               type="text"
             />
           </div>
@@ -130,13 +130,13 @@ const SignUp = () => {
           {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
 
           <button type="submit" className="btn-primary">
-            SIGN UP
+            Cadastre-se
           </button>
 
           <p className="text-[13px] text-slate-800 mt-3">
-            Already an account?{" "}
+            Já tem uma conta?{" "}
             <Link className="font-medium text-primary underline" to="/login">
-              Login
+              Entrar
             </Link>
           </p>
         </form>

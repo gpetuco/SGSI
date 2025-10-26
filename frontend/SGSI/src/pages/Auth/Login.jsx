@@ -63,38 +63,38 @@ const Login = () => {
   return (
     <AuthLayout>
       <div className="lg:w-[70%] h-3/4 md:h-full flex flex-col justify-center">
-        <h3 className="text-xl font-semibold text-black">Welcome Back</h3>
+        <h3 className="text-xl font-semibold text-black">Bem-vindo!</h3>
         <p className="text-xs text-slate-700 mt-[5px] mb-6">
-          Please enter your details to log in
+          Digite seu email e senha para iniciar sessão
         </p>
 
         <form onSubmit={handleLogin}>
           <Input
             value={email}
             onChange={({ target }) => setEmail(target.value)}
-            label="Email Address"
-            placeholder="john@example.com"
+            label="Email"
+            placeholder="Digite seu email"
             type="text"
           />
 
           <Input
             value={password}
             onChange={({ target }) => setPassword(target.value)}
-            label="Password"
-            placeholder="Min 8 Characters"
+            label="Senha"
+            placeholder="Digite sua senha"
             type="password"
           />
 
           {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
 
           <button type="submit" className="btn-primary">
-            LOGIN
+            Entrar
           </button>
 
           <p className="text-[13px] text-slate-800 mt-3">
-            Don’t have an account?{" "}
+            Não tem uma conta?{" "}
             <Link className="font-medium text-primary underline" to="/signup">
-              SignUp
+              Cadastre-se
             </Link>
           </p>
         </form>
