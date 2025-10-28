@@ -46,7 +46,7 @@ const GrcTasks = () => {
   }, [filterStatus]);
 
   return (
-    <DashboardLayout activeMenu="GRC Tasks">
+    <DashboardLayout activeMenu="GRC">
       <div className="my-5">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between">
           <h2 className="text-xl md:text-xl font-medium">GRC</h2>
@@ -67,6 +67,7 @@ const GrcTasks = () => {
               title={item.title}
               description={item.description}
               priority={item.priority}
+              classification={item.classification}
               status={item.status}
               progress={item.progress}
               createdAt={item.createdAt}
@@ -85,3 +86,4 @@ const GrcTasks = () => {
 };
 
 export default GrcTasks;
+

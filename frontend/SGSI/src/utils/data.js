@@ -4,6 +4,11 @@ import {
   LuClipboardCheck,
   LuSquarePlus,
   LuLogOut,
+  LuListTodo,
+  LuShieldCheck,
+  LuBadgeCheck,
+  LuNetwork,
+  LuColumns3,
 } from "react-icons/lu";
 
 export const SIDE_MENU_DATA = [
@@ -16,31 +21,31 @@ export const SIDE_MENU_DATA = [
   {
     id: "02",
     label: "Manage Tasks",
-    icon: LuClipboardCheck,
+    icon: LuListTodo,
     path: "/admin/tasks",
   },
   {
     id: "02d",
     label: "GRC",
-    icon: LuClipboardCheck,
+    icon: LuShieldCheck,
     path: "/admin/tasks/grc",
   },
   {
     id: "02e",
     label: "ISO 27001",
-    icon: LuClipboardCheck,
+    icon: LuBadgeCheck,
     path: "/admin/tasks/iso-27001",
   },
   {
     id: "02f",
     label: "NIST CSF",
-    icon: LuClipboardCheck,
+    icon: LuNetwork,
     path: "/admin/tasks/nist-csf",
   },
   {
     id: "02c",
     label: "Kanban",
-    icon: LuClipboardCheck,
+    icon: LuColumns3,
     path: "/admin/kanban",
   },
   {
@@ -85,7 +90,7 @@ export const SIDE_MENU_USER_DATA = [
   {
     id: "02c",
     label: "Kanban",
-    icon: LuClipboardCheck,
+    icon: LuColumns3,
     path: "/user/kanban",
   },
   {

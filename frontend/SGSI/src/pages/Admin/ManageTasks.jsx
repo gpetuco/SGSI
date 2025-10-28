@@ -6,22 +6,30 @@ import { API_PATHS } from "../../utils/apiPaths";
 import { LuFileSpreadsheet } from "react-icons/lu";
 import TaskStatusTabs from "../../components/TaskStatusTabs";
 import TaskCard from "../../components/Cards/TaskCard";
+import SelectDropdown from "../../components/Inputs/SelectDropdown";
+import SelectDropdownSearch from "../../components/Inputs/SelectDropdownSearch";
+import { CLASSIFICATION_DATA } from "../../utils/data";
 
 const ManageTasks = () => {
   const [allTasks, setAllTasks] = useState([]);
 
   const [tabs, setTabs] = useState([]);
   const [filterStatus, setFilterStatus] = useState("All");
+  const [selectedUser, setSelectedUser] = useState("All");
+  const [selectedFramework, setSelectedFramework] = useState("All");
+  const [userOptions, setUserOptions] = useState([{ label: "All", value: "All" }]);
 
   const navigate = useNavigate();
 
   const getAllTasks = async () => {
     try {
-      const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, {
-        params: {
-          status: filterStatus === "All" ? "" : filterStatus,
-        },
-      });
+      const params = {
+        status: filterStatus === "All" ? "" : filterStatus,
+      };
+      if (selectedFramework !== "All") params.classification = selectedFramework;
+      if (selectedUser !== "All") params.assignedTo = selectedUser;
+
+      const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, { params });
 
       setAllTasks(response.data?.tasks?.length > 0 ? response.data.tasks : []);
 
@@ -68,28 +76,57 @@ const ManageTasks = () => {
     }
   };
 
+  // fetch users for dropdown
+  const fetchUsers = async () => {
+    try {
+      const res = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
+      const opts = [{ label: "All", value: "All" }].concat(
+        (res.data || []).map((u) => ({ label: u.name, value: u._id, avatar: u.profileImageUrl }))
+      );
+      setUserOptions(opts);
+    } catch (e) {
+      console.error("Error fetching users:", e);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   useEffect(() => {
     getAllTasks(filterStatus);
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterStatus]);
+  }, [filterStatus, selectedFramework, selectedUser]);
 
   return (
     <DashboardLayout activeMenu="Manage Tasks">
       <div className="my-5">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between">
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="text-xl md:text-xl font-medium">My Tasks</h2>
-
-            <button
-              className="flex lg:hidden download-btn"
-              onClick={handleDownloadReport}
-            >
-              <LuFileSpreadsheet className="text-lg" />
-              Download Report
-            </button>
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          {/* Left: Filters */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full lg:w-[520px]">
+            <div>
+              <label className="text-xs font-medium text-slate-600">User</label>
+              <SelectDropdownSearch
+                options={userOptions}
+                value={selectedUser}
+                onChange={setSelectedUser}
+                placeholder="All Users"
+                showAvatar
+              />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-slate-600">Framework</label>
+              <SelectDropdown
+                options={[{ label: "All", value: "All" }, ...CLASSIFICATION_DATA]}
+                value={selectedFramework}
+                onChange={setSelectedFramework}
+                placeholder="All Frameworks"
+              />
+            </div>
           </div>
 
+          {/* Right: Status tabs + Download */}
           {tabs?.[0]?.count > 0 && (
             <div className="flex items-center gap-3">
               <TaskStatusTabs
@@ -98,10 +135,7 @@ const ManageTasks = () => {
                 setActiveTab={setFilterStatus}
               />
 
-              <button
-                className="hidden lg:flex download-btn"
-                onClick={handleDownloadReport}
-              >
+              <button className="hidden lg:flex download-btn" onClick={handleDownloadReport}>
                 <LuFileSpreadsheet className="text-lg" />
                 Download Report
               </button>
@@ -116,11 +150,12 @@ const ManageTasks = () => {
               title={item.title}
               description={item.description}
               priority={item.priority}
+              classification={item.classification}
               status={item.status}
               progress={item.progress}
               createdAt={item.createdAt}
               dueDate={item.dueDate}
-              assignedTo={item.assignedTo?.map((item) => item.profileImageUrl)}
+              assignedTo={item.assignedTo?.map((member) => member.profileImageUrl)}
               attachmentCount={item.attachments?.length || 0}
               completedTodoCount={item.completedTodoCount || 0}
               todoChecklist={item.todoChecklist || []}
@@ -136,3 +171,5 @@ const ManageTasks = () => {
 };
 
 export default ManageTasks;
+
+

@@ -111,7 +111,7 @@ const ViewTaskDetails = () => {
                 </div>
                 <div className="col-span-6 md:col-span-4">
                   <InfoBox
-                    label="Due Date"
+                    label="Previsto"
                     value={
                       task?.dueDate
                         ? moment(task?.dueDate).format("Do MMM YYYY")

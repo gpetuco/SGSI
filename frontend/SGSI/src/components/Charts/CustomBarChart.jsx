@@ -32,13 +32,12 @@ const CustomBarChart = ({ data }) => {
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white shadow-md rounded-lg p-2 border border-gray-300">
-          <p className="text-xs font-semibold text-purple-800 mb-1">
+        <div className="bg-white dark:bg-slate-700 shadow-md rounded-lg p-2 border border-gray-300 dark:border-slate-500">
+          <p className="text-xs font-semibold text-purple-800 dark:text-purple-300 mb-1">
             {payload[0].payload.priority}
           </p>
-          <p className="text-sm text-gray-600">
-            Count:{" "}
-            <span className="text-sm font-medium text-gray-900">
+          <p className="text-sm text-gray-600 dark:text-slate-200">\n            Count:{" "}
+            <span className="text-sm font-medium text-gray-900 dark:text-white">
               {payload[0].payload.count}
             </span>
           </p>
@@ -56,10 +55,10 @@ const CustomBarChart = ({ data }) => {
 
           <XAxis
             dataKey="priority"
-            tick={{ fontSize: 12, fill: "#555" }}
+            tick={{ fontSize: 12, fill: 'var(--sgsi-text-muted)' }}
             stroke="none"
           />
-          <YAxis tick={{ fontSize: 12, fill: "#555" }} stroke="none" />
+          <YAxis tick={{ fontSize: 12, fill: 'var(--sgsi-text-muted)' }} stroke="none" />
 
           <Tooltip content={CustomTooltip} cursor={{ fill: "transparent" }} />
 
@@ -82,3 +81,4 @@ const CustomBarChart = ({ data }) => {
 };
 
 export default CustomBarChart;
+

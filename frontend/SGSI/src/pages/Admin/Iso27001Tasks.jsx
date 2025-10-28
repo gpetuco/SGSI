@@ -46,7 +46,7 @@ const Iso27001Tasks = () => {
   }, [filterStatus]);
 
   return (
-    <DashboardLayout activeMenu="ISO 27001 Tasks">
+    <DashboardLayout activeMenu="ISO 27001">
       <div className="my-5">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between">
           <h2 className="text-xl md:text-xl font-medium">ISO 27001</h2>
@@ -67,6 +67,7 @@ const Iso27001Tasks = () => {
               title={item.title}
               description={item.description}
               priority={item.priority}
+              classification={item.classification}
               status={item.status}
               progress={item.progress}
               createdAt={item.createdAt}
@@ -85,3 +86,4 @@ const Iso27001Tasks = () => {
 };
 
 export default Iso27001Tasks;
+

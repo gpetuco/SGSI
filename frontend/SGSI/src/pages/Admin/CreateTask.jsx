@@ -129,7 +129,7 @@ const CreateTask = () => {
       return;
     }
     if (!taskData.dueDate) {
-      setError("Due date is required.");
+      setError("Previsto is required.");
       return;
     }
 
@@ -285,7 +285,9 @@ const CreateTask = () => {
                 <SelectDropdown
                   options={CLASSIFICATION_DATA}
                   value={taskData.classification}
-                  onChange={(value) => handleValueChange("classification", value)}
+                  onChange={(value) =>
+                    handleValueChange("classification", value)
+                  }
                   placeholder="Select Classification"
                 />
               </div>
@@ -305,7 +307,7 @@ const CreateTask = () => {
 
               <div className="col-span-6 md:col-span-4">
                 <label className="text-xs font-medium text-slate-600">
-                  Due Date
+                  Previsto
                 </label>
 
                 <input

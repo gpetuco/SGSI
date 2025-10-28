@@ -4,6 +4,7 @@ import axiosInstance from "../../utils/axiosInstance";
 import { LuUsers } from "react-icons/lu";
 import Modal from "../Modal";
 import AvatarGroup from "../AvatarGroup";
+import UserAvatar from "../UserAvatar";
 
 const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
   const [allUsers, setAllUsers] = useState([]);
@@ -75,11 +76,7 @@ const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
               key={user._id}
               className="flex items-center gap-4 p-3 border-b border-gray-200"
             >
-              <img
-                src={user.profileImageUrl}
-                alt={user.name}
-                className="w-10 h-10 rounded-full"
-              />
+              <UserAvatar src={user.profileImageUrl} name={user.name} size="w-10 h-10" />
               <div className="flex-1">
                 <p className="font-medium text-gray-800 dark:text-white">
                   {user.name}

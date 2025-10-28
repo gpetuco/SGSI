@@ -24,11 +24,11 @@ const AddAttachmentsInput = ({ attachments, setAttachments }) => {
       {attachments.map((item, index) => (
         <div
           key={item}
-          className="flex justify-between bg-gray-50 border border-gray-100 px-3 py-2 rounded-md mb-3 mt-2"
+          className="flex justify-between bg-gray-50 dark:bg-slate-700 border border-gray-100 dark:border-slate-500 px-3 py-2 rounded-md mb-3 mt-2"
         >
-          <div className="flex-1 flex items-center gap-3 border border-gray-100">
-            <LuPaperclip className="text-gray-400" />
-            <p className="text-xs text-black">{item}</p>
+          <div className="flex-1 flex items-center gap-3 border border-gray-100 dark:border-slate-500">
+            <LuPaperclip className="text-gray-400 dark:text-white" />
+            <p className="text-xs text-black dark:text-white">{item}</p>
           </div>
 
           <button
@@ -43,19 +43,19 @@ const AddAttachmentsInput = ({ attachments, setAttachments }) => {
       ))}
 
       <div className="flex items-center gap-5 mt-4">
-        <div className="flex-1 flex items-center gap-3 border border-gray-100 rounded-md px-3">
-          <LuPaperclip className="text-gray-400" />
+        <div className="flex-1 flex items-center gap-3 border border-gray-100 dark:border-slate-500 rounded-md px-3 bg-white dark:bg-slate-700">
+          <LuPaperclip className="text-gray-400 dark:text-white" />
 
           <input
             type="text"
             placeholder="Add File Link"
             value={option}
             onChange={({ target }) => setOption(target.value)}
-            className="w-full text-[13px] text-black outline-none bg-white py-2"
+            className="w-full text-[13px] text-black dark:text-white outline-none bg-white dark:bg-slate-700 py-2"
           />
         </div>
 
-        <button className="card-btn text-nowrap" onClick={handleAddOption}>
+        <button className="card-btn text-nowrap dark:!text-white" onClick={handleAddOption}>
           <HiMiniPlus className="text-lg" /> Add
         </button>
       </div>

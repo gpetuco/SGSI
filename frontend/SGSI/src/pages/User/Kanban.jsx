@@ -24,6 +24,7 @@ const Column = ({ title, tasks, onOpen }) => {
               title={item.title}
               description={item.description}
               priority={item.priority}
+              classification={item.classification}
               status={item.status}
               progress={item.progress}
               createdAt={item.createdAt}

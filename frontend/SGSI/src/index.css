@@ -19,12 +19,12 @@
 
 html.dark {
   /* Dark colors inspired by provided mockup */
-  --sgsi-bg: #2b3240; /* app background */
-  --sgsi-surface: #34404f; /* cards, navbar */
-  --sgsi-surface-2: #2d3a49; /* subtle surfaces, buttons */
+  --sgsi-bg: #232a36; /* app background */
+  --sgsi-surface: #2d3543; /* cards, navbar */
+  --sgsi-surface-2: #263041; /* subtle surfaces, buttons */
   --sgsi-border: #4b5a70; /* borders */
-  --sgsi-text: #e9eef7; /* main text */
-  --sgsi-text-muted: #c0c9d6; /* secondary text */
+  --sgsi-text: #eef2f8; /* main text */
+  --sgsi-text-muted: #b8c4d6; /* secondary text */
 }
 
 @layer base {
@@ -36,6 +36,16 @@ html.dark {
     background-color: var(--sgsi-bg);
     overflow-x: hidden;
   }
+}
+
+/* Dark: make native date picker icon light */
+html.dark input[type='date']::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(1.4);
+}
+
+/* Dark: placeholders readable */
+html.dark ::placeholder {
+  color: #e5e7eb !important;
 }
 
 .input-box {
@@ -116,7 +126,13 @@ html.dark {
   background-color: var(--sgsi-surface);
   border-color: var(--sgsi-border);
   color: var(--sgsi-text);
+  /* replace bright white shadow with subtle dark elevation */
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35) !important;
 }
+
+/* Tone down generic light shadow utilities when in dark */
+.dark .shadow-gray-100 { --tw-shadow-color: rgba(0, 0, 0, 0.45) !important; }
+.dark .shadow-md { box-shadow: 0 6px 18px var(--tw-shadow-color) !important; }
 
 .dark .input-box {
   background-color: var(--sgsi-surface-2);
@@ -128,6 +144,19 @@ html.dark {
   background-color: var(--sgsi-surface-2);
   color: var(--sgsi-text);
   border-color: var(--sgsi-border);
+}
+
+/* Improve label/readability inside forms (modals) */
+.dark .form-card label,
+.dark label.text-slate-600,
+.dark .text-slate-600 {
+  color: #d6e0ee !important; /* lighter muted text */
+}
+
+/* Headings inside form cards */
+.dark .form-card h2,
+.dark .form-card h5 {
+  color: var(--sgsi-text) !important;
 }
 
 .dark .card-btn {
@@ -154,3 +183,29 @@ html.dark {
   color: #dcfce7;
   border-color: #2f6a3f;
 }
+
+/* Improve text contrast for common gray utilities in dark */
+.dark .text-gray-900,
+.dark .text-gray-800 {
+  color: var(--sgsi-text) !important;
+}
+.dark .text-gray-950 {
+  color: var(--sgsi-text) !important;
+}
+.dark .text-gray-500 {
+  color: #9fb0c8 !important;
+}
+
+/* Dark equivalents for light tag backgrounds used on TaskCard */
+.dark .bg-blue-50 { background-color: rgba(37, 99, 235, 0.16) !important; }
+.dark .bg-violet-50 { background-color: rgba(124, 58, 237, 0.16) !important; }
+.dark .bg-cyan-50 { background-color: rgba(34, 211, 238, 0.16) !important; }
+.dark .bg-lime-50 { background-color: rgba(132, 204, 22, 0.16) !important; }
+.dark .bg-emerald-50 { background-color: rgba(16, 185, 129, 0.16) !important; }
+.dark .bg-amber-50 { background-color: rgba(245, 158, 11, 0.16) !important; }
+.dark .bg-rose-50 { background-color: rgba(244, 63, 94, 0.16) !important; }
+
+/* Subtle scrollbars for dark */
+html.dark ::-webkit-scrollbar { width: 10px; height: 10px; }
+html.dark ::-webkit-scrollbar-thumb { background: #3b475a; border-radius: 8px; }
+html.dark ::-webkit-scrollbar-track { background: #1f2631; }

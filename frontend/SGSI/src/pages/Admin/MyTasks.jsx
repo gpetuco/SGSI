@@ -74,11 +74,12 @@ const MyTasks = () => {
               title={item.title}
               description={item.description}
               priority={item.priority}
+              classification={item.classification}
               status={item.status}
               progress={item.progress}
               createdAt={item.createdAt}
               dueDate={item.dueDate}
-              assignedTo={item.assignedTo?.map((item) => item.profileImageUrl)}
+              assignedTo={item.assignedTo?.map((member) => member.profileImageUrl)}
               attachmentCount={item.attachments?.length || 0}
               completedTodoCount={item.completedTodoCount || 0}
               todoChecklist={item.todoChecklist || []}
@@ -94,3 +95,6 @@ const MyTasks = () => {
 };
 
 export default MyTasks;
+
+
+

@@ -21,6 +21,9 @@ const getTasks = async (req, res) => {
     const restrictToMe = assignedTo === "me";
 
     if (req.user.role === "admin" && !restrictToMe) {
+      if (assignedTo && assignedTo !== "me") {
+        filter.assignedTo = assignedTo;
+      }
       tasks = await Task.find(filter).populate(
         "assignedTo",
         "name email profileImageUrl"
@@ -207,11 +210,17 @@ const updateTaskStatus = async (req, res) => {
       return res.status(403).json({ message: "Not authorized" });
     }
 
-    task.status = req.body.status || task.status;
+    const newStatus = req.body.status || task.status;
+    const prevStatus = task.status;
+    task.status = newStatus;
 
     if (task.status === "Completed") {
       task.todoChecklist.forEach((item) => (item.completed = true));
       task.progress = 100;
+      if (!task.completedAt) task.completedAt = new Date();
+    } else {
+      // if moving away from Completed, clear completedAt
+      if (prevStatus === "Completed") task.completedAt = undefined;
     }
 
     await task.save();
@@ -250,10 +259,13 @@ const updateTaskChecklist = async (req, res) => {
     // Auto-mark task as completed if all items are checked
     if (task.progress === 100) {
       task.status = "Completed";
+      if (!task.completedAt) task.completedAt = new Date();
     } else if (task.progress > 0) {
       task.status = "In Progress";
+      if (task.completedAt) task.completedAt = undefined;
     } else {
       task.status = "Pending";
+      if (task.completedAt) task.completedAt = undefined;
     }
 
     await task.save();
@@ -273,66 +285,99 @@ const updateTaskChecklist = async (req, res) => {
 // @access  Private
 const getDashboardData = async (req, res) => {
   try {
-    // Fetch statistics
-    const totalTasks = await Task.countDocuments();
-    const pendingTasks = await Task.countDocuments({ status: "Pending" });
-    const completedTasks = await Task.countDocuments({ status: "Completed" });
+    const { classification, startDate, endDate } = req.query;
+
+    const baseMatch = {};
+    if (classification) baseMatch.classification = classification;
+    if (startDate || endDate) {
+      baseMatch.createdAt = {};
+      if (startDate) baseMatch.createdAt.$gte = new Date(startDate);
+      if (endDate) baseMatch.createdAt.$lte = new Date(endDate);
+    }
+
+    // Statistics (with filters)
+    const totalTasks = await Task.countDocuments(baseMatch);
+    const pendingTasks = await Task.countDocuments({ ...baseMatch, status: "Pending" });
+    const completedTasks = await Task.countDocuments({ ...baseMatch, status: "Completed" });
     const overdueTasks = await Task.countDocuments({
+      ...baseMatch,
       status: { $ne: "Completed" },
       dueDate: { $lt: new Date() },
     });
 
-    // Ensure all possible statuses are included
+    // Status distribution
     const taskStatuses = ["Pending", "In Progress", "Completed"];
     const taskDistributionRaw = await Task.aggregate([
-      {
-        $group: {
-          _id: "$status",
-          count: { $sum: 1 },
-        },
-      },
+      { $match: baseMatch },
+      { $group: { _id: "$status", count: { $sum: 1 } } },
     ]);
     const taskDistribution = taskStatuses.reduce((acc, status) => {
-      const formattedKey = status.replace(/\s+/g, ""); // Remove spaces for response keys
-      acc[formattedKey] =
-        taskDistributionRaw.find((item) => item._id === status)?.count || 0;
+      const formattedKey = status.replace(/\s+/g, "");
+      acc[formattedKey] = taskDistributionRaw.find((i) => i._id === status)?.count || 0;
       return acc;
     }, {});
-    taskDistribution["All"] = totalTasks; // Add total count to taskDistribution
+    taskDistribution["All"] = totalTasks;
 
-    // Ensure all priority levels are included
+    // Priority levels
     const taskPriorities = ["Low", "Medium", "High"];
     const taskPriorityLevelsRaw = await Task.aggregate([
-      {
-        $group: {
-          _id: "$priority",
-          count: { $sum: 1 },
-        },
-      },
+      { $match: baseMatch },
+      { $group: { _id: "$priority", count: { $sum: 1 } } },
     ]);
     const taskPriorityLevels = taskPriorities.reduce((acc, priority) => {
-      acc[priority] =
-        taskPriorityLevelsRaw.find((item) => item._id === priority)?.count || 0;
+      acc[priority] = taskPriorityLevelsRaw.find((i) => i._id === priority)?.count || 0;
       return acc;
     }, {});
 
-    // Fetch recent 10 tasks
-    const recentTasks = await Task.find()
+    // Recent tasks
+    const recentTasks = await Task.find(baseMatch)
       .sort({ createdAt: -1 })
       .limit(10)
-      .select("title status priority dueDate createdAt");
+      .select("title status priority classification dueDate createdAt assignedTo").populate("assignedTo", "name profileImageUrl");
+
+    // Status by framework
+    const frameworks = ["GRC", "ISO 27001", "NIST CSF"];
+    const statusByFrameworkRaw = await Task.aggregate([
+      { $match: baseMatch },
+      { $group: { _id: { classification: "$classification", status: "$status" }, count: { $sum: 1 } } },
+    ]);
+    const statusByFramework = frameworks.reduce((acc, fw) => {
+      const bucket = { Pending: 0, InProgress: 0, Completed: 0 };
+      taskStatuses.forEach((st) => {
+        const f = statusByFrameworkRaw.find((r) => r._id.classification === fw && r._id.status === st);
+        if (f) {
+          const key = st === "In Progress" ? "InProgress" : st;
+          bucket[key] = f.count;
+        }
+      });
+      acc[fw] = bucket;
+      return acc;
+    }, {});
+
+    // Completion by framework
+    const totalByFrameworkRaw = await Task.aggregate([
+      { $match: baseMatch },
+      { $group: { _id: "$classification", total: { $sum: 1 } } },
+    ]);
+    const completedByFrameworkRaw = await Task.aggregate([
+      { $match: { ...baseMatch, status: "Completed" } },
+      { $group: { _id: "$classification", count: { $sum: 1 } } },
+    ]);
+    const completionByFramework = frameworks.map((fw) => {
+      const total = totalByFrameworkRaw.find((i) => i._id === fw)?.total || 0;
+      const done = completedByFrameworkRaw.find((i) => i._id === fw)?.count || 0;
+      const percent = total > 0 ? Math.round((done / total) * 100) : 0;
+      return { framework: fw, percent, total, completed: done };
+    });
+
+    // On-time rate among completed
+    const completedInScope = await Task.find({ ...baseMatch, status: "Completed" }).select("completedAt dueDate");
+    const onTime = completedInScope.filter((t) => t.completedAt && t.dueDate && t.completedAt <= t.dueDate).length;
+    const onTimeRate = completedInScope.length > 0 ? Math.round((onTime / completedInScope.length) * 100) : 0;
 
     res.status(200).json({
-      statistics: {
-        totalTasks,
-        pendingTasks,
-        completedTasks,
-        overdueTasks,
-      },
-      charts: {
-        taskDistribution,
-        taskPriorityLevels,
-      },
+      statistics: { totalTasks, pendingTasks, completedTasks, overdueTasks, onTimeRate },
+      charts: { taskDistribution, taskPriorityLevels, statusByFramework, completionByFramework },
       recentTasks,
     });
   } catch (error) {
@@ -395,7 +440,7 @@ const getUserDashboardData = async (req, res) => {
     const recentTasks = await Task.find({ assignedTo: userId })
       .sort({ createdAt: -1 })
       .limit(10)
-      .select("title status priority dueDate createdAt");
+      .select("title status priority classification dueDate createdAt assignedTo").populate("assignedTo", "name profileImageUrl");
 
     res.status(200).json({
       statistics: {
@@ -426,3 +471,5 @@ module.exports = {
   getDashboardData,
   getUserDashboardData,
 };
+
+

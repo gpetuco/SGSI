@@ -13,6 +13,10 @@ import { LuArrowRight } from "react-icons/lu";
 import TaskListTable from "../../components/TaskListTable";
 import CustomPieChart from "../../components/Charts/CustomPieChart";
 import CustomBarChart from "../../components/Charts/CustomBarChart";
+import StackedStatusByFramework from "../../components/Charts/StackedStatusByFramework";
+import PercentBarByFramework from "../../components/Charts/PercentBarByFramework";
+import SelectDropdown from "../../components/Inputs/SelectDropdown";
+import { CLASSIFICATION_DATA } from "../../utils/data";
 
 const COLORS = ["#8D51FF", "#00B8DB", "#7BCE00"];
 
@@ -26,6 +30,10 @@ const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [pieChartData, setPieChartData] = useState([]);
   const [barChartData, setBarChartData] = useState([]);
+  const [stackedStatusData, setStackedStatusData] = useState([]);
+  const [completionPercentData, setCompletionPercentData] = useState([]);
+
+  const [classificationFilter, setClassificationFilter] = useState("All");
 
   // Prepare Chart Data
   const prepareChartData = (data) => {
@@ -47,12 +55,34 @@ const Dashboard = () => {
     ];
 
     setBarChartData(PriorityLevelData);
+
+    // Stacked status by framework
+    const statusByFramework = data?.statusByFramework || {};
+    const stacked = ["GRC", "ISO 27001", "NIST CSF"].map((fw) => ({
+      framework: fw,
+      Pending: statusByFramework?.[fw]?.Pending || 0,
+      InProgress: statusByFramework?.[fw]?.InProgress || 0,
+      Completed: statusByFramework?.[fw]?.Completed || 0,
+    }));
+    setStackedStatusData(stacked);
+
+    // Completion % bar by framework
+    const completion = (data?.completionByFramework || []).map((i) => ({
+      framework: i.framework,
+      percent: i.percent,
+    }));
+    setCompletionPercentData(completion);
   };
 
   const getDashboardData = async () => {
     try {
+      const params = {};
+      if (classificationFilter !== "All")
+        params.classification = classificationFilter;
+
       const response = await axiosInstance.get(
-        API_PATHS.TASKS.GET_DASHBOARD_DATA
+        API_PATHS.TASKS.GET_DASHBOARD_DATA,
+        { params }
       );
       if (response.data) {
         setDashboardData(response.data);
@@ -69,20 +99,27 @@ const Dashboard = () => {
 
   useEffect(() => {
     getDashboardData();
-
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [classificationFilter]);
 
   return (
     <DashboardLayout activeMenu="Dashboard">
       <div className="card my-5">
-        <div>
-          <div className="col-span-3">
-            <h2 className="text-xl md:text-2xl">Good Morning! {user?.name}</h2>
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+          <div>
+            <h2 className="text-xl md:text-2xl">Bem-vindo, {user?.name}!</h2>
             <p className="text-xs md:text-[13px] text-gray-400 mt-1.5">
               {moment().format("dddd Do MMM YYYY")}
             </p>
+          </div>
+          <div className="grid grid-cols-1 gap-3 w-full lg:w-auto lg:min-w-[240px]">
+            <SelectDropdown
+              options={[{ label: "All", value: "All" }, ...CLASSIFICATION_DATA]}
+              value={classificationFilter}
+              onChange={setClassificationFilter}
+              placeholder="Classification"
+            />
           </div>
         </div>
 
@@ -139,6 +176,24 @@ const Dashboard = () => {
             </div>
 
             <CustomBarChart data={barChartData} />
+          </div>
+        </div>
+
+        <div>
+          <div className="card">
+            <div className="flex items-center justify-between">
+              <h5 className="font-medium">Status by Framework</h5>
+            </div>
+            <StackedStatusByFramework data={stackedStatusData} />
+          </div>
+        </div>
+
+        <div>
+          <div className="card">
+            <div className="flex items-center justify-between">
+              <h5 className="font-medium">Completion % by Framework</h5>
+            </div>
+            <PercentBarByFramework data={completionPercentData} />
           </div>
         </div>
 
