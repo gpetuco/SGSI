@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
+import Modal from "../../components/Modal";
 import AvatarGroup from "../../components/AvatarGroup";
 import moment from "moment";
 import { LuSquareArrowOutUpRight } from "react-icons/lu";
@@ -10,6 +11,7 @@ import { LuSquareArrowOutUpRight } from "react-icons/lu";
 const ViewTaskDetails = () => {
   const { id } = useParams();
   const [task, setTask] = useState(null);
+  const [openModal, setOpenModal] = useState(true);
 
   const getStatusTagColor = (status) => {
     switch (status) {
@@ -81,24 +83,20 @@ const ViewTaskDetails = () => {
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+  const closeAndGoBack = () => {
+    setOpenModal(false);
+    setTimeout(() => window.history.back(), 0);
+  };
+
   return (
     <DashboardLayout activeMenu="My Tasks">
-      <div className="mt-5">
+      <Modal isOpen={openModal} onClose={closeAndGoBack} title={task?.title || "Task Details"} variant="wide">
         {task && (
-          <div className="grid grid-cols-1 md:grid-cols-4 mt-4">
-            <div className="form-card col-span-3">
+          <div className="grid grid-cols-1 mt-1">
+            <div className="form-card">
               <div className="flex items-center justify-between">
-                <h2 className="text-sm md:text-xl font-medium">
-                  {task?.title}
-                </h2>
-
-                <div
-                  className={`text-[11px] md:text-[13px] font-medium ${getStatusTagColor(
-                    task?.status
-                  )} px-4 py-0.5 rounded `}
-                >
-                  {task?.status}
-                </div>
+                <h2 className="text-sm md:text-xl font-medium">{task?.title}</h2>
+                <div className={`text-[11px] md:text-[13px] font-medium ${getStatusTagColor(task?.status)} px-4 py-0.5 rounded`}>{task?.status}</div>
               </div>
 
               <div className="mt-4">
@@ -110,65 +108,33 @@ const ViewTaskDetails = () => {
                   <InfoBox label="Priority" value={task?.priority} />
                 </div>
                 <div className="col-span-6 md:col-span-4">
-                  <InfoBox
-                    label="Previsto"
-                    value={
-                      task?.dueDate
-                        ? moment(task?.dueDate).format("Do MMM YYYY")
-                        : "N/A"
-                    }
-                  />
+                  <InfoBox label="Previsto" value={task?.dueDate ? moment(task?.dueDate).format("Do MMM YYYY") : "N/A"} />
                 </div>
                 <div className="col-span-6 md:col-span-4">
-                  <label className="text-xs font-medium text-slate-500">
-                    Assigned To
-                  </label>
-
-                  <AvatarGroup
-                    avatars={
-                      task?.assignedTo?.map((item) => item?.profileImageUrl) ||
-                      []
-                    }
-                    maxVisible={5}
-                  />
+                  <label className="text-xs font-medium text-slate-500">Assigned To</label>
+                  <AvatarGroup avatars={task?.assignedTo?.map((item) => item?.profileImageUrl) || []} maxVisible={5} />
                 </div>
               </div>
 
               <div className="mt-2">
-                <label className="text-xs font-medium text-slate-500">
-                  Todo Checklist
-                </label>
-
+                <label className="text-xs font-medium text-slate-500">Todo Checklist</label>
                 {task?.todoChecklist?.map((item, index) => (
-                  <TodoCheckList
-                    key={`todo_${index}`}
-                    text={item.text}
-                    isChecked={item?.completed}
-                    onChange={() => updateTodoChecklist(index)}
-                  />
+                  <TodoCheckList key={`todo_${index}`} text={item.text} isChecked={item?.completed} onChange={() => updateTodoChecklist(index)} />
                 ))}
               </div>
 
               {task?.attachments?.length > 0 && (
                 <div className="mt-2">
-                  <label className="text-xs font-medium text-slate-500">
-                    Attachments
-                  </label>
-
+                  <label className="text-xs font-medium text-slate-500">Attachments</label>
                   {task?.attachments?.map((link, index) => (
-                    <Attachment
-                      key={`link_${index}`}
-                      link={link}
-                      index={index}
-                      onClick={() => handleLinkClick(link)}
-                    />
+                    <Attachment key={`link_${index}`} link={link} index={index} onClick={() => handleLinkClick(link)} />
                   ))}
                 </div>
               )}
             </div>
           </div>
         )}
-      </div>
+      </Modal>
     </DashboardLayout>
   );
 };
@@ -220,3 +186,5 @@ const Attachment = ({ link, index, onClick }) => {
     </div>
   );
 };
+
+
