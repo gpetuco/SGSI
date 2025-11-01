@@ -34,6 +34,7 @@ const Column = ({ title, tasks, onOpen }) => {
               completedTodoCount={item.completedTodoCount || 0}
               todoChecklist={item.todoChecklist || []}
               onClick={() => onOpen(item._id)}
+              className="h-[260px]"
             />
           ))
         )}

@@ -18,6 +18,7 @@ const TaskCard = ({
   completedTodoCount,
   todoChecklist,
   onClick,
+  className,
 }) => {
   const getStatusTagColor = () => {
     switch (status) {
@@ -59,23 +60,23 @@ const TaskCard = ({
 
   return (
     <div
-      className="bg-white rounded-xl py-4 shadow-md shadow-gray-100 border border-gray-200/50 cursor-pointer"
+      className={`bg-white rounded-xl py-4 shadow-md shadow-gray-100 border border-gray-200/50 cursor-pointer flex flex-col h-full ${className || ""}`}
       onClick={onClick}
     >
-      <div className="flex items-end gap-3 px-4">
+      <div className="flex flex-wrap items-center gap-2 px-4 min-w-0">
         <div
-          className={`text-[11px] font-medium ${getStatusTagColor()} px-4 py-0.5 rounded `}
+          className={`text-[11px] font-medium ${getStatusTagColor()} px-3 py-0.5 rounded whitespace-nowrap`}
         >
           {status}
         </div>
         <div
-          className={`text-[11px] font-medium ${getPriorityTagColor()} px-4 py-0.5 rounded`}
+          className={`text-[11px] font-medium ${getPriorityTagColor()} px-3 py-0.5 rounded whitespace-nowrap`}
         >
           {priority} Priority
         </div>
         {classification && (
           <div
-            className={`text-[11px] font-medium ${getClassificationTagColor()} px-4 py-0.5 rounded`}
+            className={`text-[11px] font-medium ${getClassificationTagColor()} px-3 py-0.5 rounded whitespace-nowrap`}
           >
             {classification}
           </div>
@@ -89,7 +90,7 @@ const TaskCard = ({
             : status === "Completed"
             ? "border-indigo-500"
             : "border-violet-500"
-        }`}
+        } flex-grow`}
       >
         <p className="text-sm font-medium text-gray-800 mt-4 line-clamp-2">
           {title}
