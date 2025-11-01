@@ -60,7 +60,7 @@ const TaskCard = ({
 
   return (
     <div
-      className={`bg-white rounded-xl py-4 shadow-md shadow-gray-100 border border-gray-200/50 cursor-pointer flex flex-col h-full ${className || ""}`}
+      className={`bg-white rounded-xl py-4 shadow-md shadow-gray-100 border border-gray-200/50 cursor-pointer flex flex-col h-full overflow-hidden ${className || ""}`}
       onClick={onClick}
     >
       <div className="flex flex-wrap items-center gap-2 px-4 min-w-0">
@@ -113,7 +113,7 @@ const TaskCard = ({
       <div className="px-4">
         <div className="flex items-center justify-between my-1">
           <div>
-            <label className="text-xs text-gray-500">Início</label>
+            <label className="text-xs text-gray-500">Inicio</label>
             <p className="text-[13px] font-medium text-gray-900">
               {moment(createdAt).format("Do MMM YYYY")}
             </p>
@@ -143,6 +143,7 @@ const TaskCard = ({
 };
 
 export default TaskCard;
+
 
 
 

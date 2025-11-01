@@ -19,6 +19,7 @@ const Column = ({ title, tasks, onOpen }) => {
           </div>
         ) : (
           tasks.map((item) => (
+            <div className="h-[280px]">
             <TaskCard
               key={item._id}
               title={item.title}
@@ -34,8 +35,9 @@ const Column = ({ title, tasks, onOpen }) => {
               completedTodoCount={item.completedTodoCount || 0}
               todoChecklist={item.todoChecklist || []}
               onClick={() => onOpen(item._id)}
-              className="h-[260px]"
+              className="h-full"
             />
+            </div>
           ))
         )}
       </div>
