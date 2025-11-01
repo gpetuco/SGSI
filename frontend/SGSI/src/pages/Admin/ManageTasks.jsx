@@ -102,10 +102,10 @@ const ManageTasks = () => {
   return (
     <DashboardLayout activeMenu="Manage Tasks">
       <div className="my-5">
-        <div className="flex flex-col lg:flex-row lg:flex-wrap lg:items-center justify-between gap-4">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           {/* Left: Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full lg:w-[520px]">
-            <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full lg:w-[440px]">
+            <div className="w-full md:w-[190px]">
               <label className="text-xs font-medium text-slate-600">User</label>
               <SelectDropdownSearch
                 options={userOptions}
@@ -115,7 +115,7 @@ const ManageTasks = () => {
                 showAvatar
               />
             </div>
-            <div>
+            <div className="w-full md:w-[190px]">
               <label className="text-xs font-medium text-slate-600">Framework</label>
               <SelectDropdown
                 options={[{ label: "All", value: "All" }, ...CLASSIFICATION_DATA]}
@@ -128,14 +128,16 @@ const ManageTasks = () => {
 
           {/* Right: Status tabs + Download */}
           {tabs?.[0]?.count > 0 && (
-            <div className="flex items-center gap-3">
-              <TaskStatusTabs
-                tabs={tabs}
-                activeTab={filterStatus}
-                setActiveTab={setFilterStatus}
-              />
+            <div className="flex items-center gap-3 lg:ml-2 lg:flex-1 lg:justify-end lg:flex-nowrap min-w-0">
+              <div className="overflow-x-auto max-w-full flex-1 min-w-0">
+                <TaskStatusTabs
+                  tabs={tabs}
+                  activeTab={filterStatus}
+                  setActiveTab={setFilterStatus}
+                />
+              </div>
 
-              <button className="hidden lg:flex download-btn" onClick={handleDownloadReport}>
+              <button className="hidden lg:flex download-btn shrink-0" onClick={handleDownloadReport}>
                 <LuFileSpreadsheet className="text-lg" />
                 Download Report
               </button>
