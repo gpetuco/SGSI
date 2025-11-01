@@ -102,7 +102,7 @@ const ManageTasks = () => {
   return (
     <DashboardLayout activeMenu="Manage Tasks">
       <div className="my-5">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="flex flex-col lg:flex-row lg:flex-wrap lg:items-center justify-between gap-4">
           {/* Left: Filters */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full lg:w-[520px]">
             <div>
