@@ -19,6 +19,7 @@ import StackedStatusByFramework from "../../components/Charts/StackedStatusByFra
 import PercentBarByFramework from "../../components/Charts/PercentBarByFramework";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
 import { CLASSIFICATION_DATA } from "../../utils/data";
+import { PieChart as RePieChart, Pie as RePie, Cell as ReCell, ResponsiveContainer as ReResponsiveContainer } from "recharts";
 
 const COLORS = ["#8D51FF", "#00B8DB", "#7BCE00"];
 
@@ -182,7 +183,57 @@ const Dashboard = () => {
             )}
             color="bg-lime-500"
           />
-        </div>
+      </div>
+    </div>
+
+      {/* Completion by framework mini-cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
+        {[
+          { label: "GRC", color: COLORS[0] },
+          { label: "ISO 27001", color: COLORS[2] },
+          { label: "NIST CSF", color: COLORS[1] },
+        ].map((fw) => {
+          const pct =
+            completionPercentData.find((i) => i.framework === fw.label)?.percent || 0;
+          const clamped = Math.max(0, Math.min(100, pct));
+          const donutData = [
+            { name: "done", value: clamped },
+            { name: "remain", value: 100 - clamped },
+          ];
+          return (
+            <div key={fw.label} className="card flex items-center justify-between p-4 min-h-[112px]">
+              <div className="pl-1">
+                <div
+                  className="text-xs md:text-sm font-bold tracking-wide uppercase"
+                  style={{ color: fw.color }}
+                >
+                  {fw.label}
+                </div>
+                <div className="text-4xl font-extrabold leading-none text-gray-900 dark:text-white mt-2">
+                  {clamped}%
+                </div>
+              </div>
+              <div className="pr-1 w-[88px] h-[88px] flex items-center justify-center">
+                <ReResponsiveContainer width="100%" height="100%">
+                  <RePieChart>
+                    <RePie
+                      data={donutData}
+                      dataKey="value"
+                      innerRadius={"60%"}
+                      outerRadius={"85%"}
+                      startAngle={90}
+                      endAngle={-270}
+                      stroke="none"
+                    >
+                      <ReCell fill={fw.color} />
+                      <ReCell fill="#CBD5E1" />
+                    </RePie>
+                  </RePieChart>
+                </ReResponsiveContainer>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-4 md:my-6">
