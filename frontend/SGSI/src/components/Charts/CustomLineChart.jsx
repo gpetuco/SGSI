@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ResponsiveContainer,
   LineChart,
@@ -9,6 +9,8 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import { LuZoomIn } from "react-icons/lu";
+import Modal from "../Modal";
 
 const DefaultTooltip = ({ active, payload, label }) => {
   if (!active || !payload || payload.length === 0) return null;
@@ -29,9 +31,11 @@ const DefaultTooltip = ({ active, payload, label }) => {
 // - data: array of objects
 // - lines: [{ dataKey, color, name }]
 // - xKey: string (default: 'name')
-const CustomLineChart = ({ data = [], lines = [{ dataKey: "value", color: "#1368ec", name: "Value" }], xKey = "name" }) => {
-  return (
-    <ResponsiveContainer width="100%" height={325}>
+const CustomLineChart = ({ data = [], lines = [{ dataKey: "value", color: "#1368ec", name: "Value" }], xKey = "name", title = "Chart" }) => {
+  const [open, setOpen] = useState(false);
+
+  const ChartBody = ({ height = 325 }) => (
+    <ResponsiveContainer width="100%" height={height}>
       <LineChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} />
         <XAxis dataKey={xKey} tick={{ fontSize: 12, fill: 'var(--sgsi-text-muted)' }} stroke="none" />
@@ -52,6 +56,24 @@ const CustomLineChart = ({ data = [], lines = [{ dataKey: "value", color: "#1368
         ))}
       </LineChart>
     </ResponsiveContainer>
+  );
+
+  return (
+    <div className="relative group">
+      <button
+        aria-label="Zoom"
+        className="chart-zoom-btn opacity-0 group-hover:opacity-100"
+        onClick={() => setOpen(true)}
+      >
+        <LuZoomIn className="text-lg" />
+      </button>
+      <ChartBody />
+      <Modal isOpen={open} onClose={() => setOpen(false)} title={title} variant="wide">
+        <div style={{ height: "65vh" }}>
+          <ChartBody height={"100%"} />
+        </div>
+      </Modal>
+    </div>
   );
 };
 

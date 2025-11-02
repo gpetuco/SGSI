@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   BarChart,
   Bar,
@@ -10,6 +10,8 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
+import { LuZoomIn } from "react-icons/lu";
+import Modal from "../Modal";
 
 const CustomBarChart = ({ data }) => {
   // Function to alternate colors
@@ -47,9 +49,10 @@ const CustomBarChart = ({ data }) => {
     return null;
   };
 
-  return (
-    <div className="bg-white mt-6">
-      <ResponsiveContainer width="100%" height={300}>
+  const [open, setOpen] = useState(false);
+
+  const ChartBody = ({ height = 300 }) => (
+      <ResponsiveContainer width="100%" height={height}>
         <BarChart data={data}>
           <CartesianGrid stroke="none" />
 
@@ -76,6 +79,23 @@ const CustomBarChart = ({ data }) => {
           </Bar>
         </BarChart>
       </ResponsiveContainer>
+  );
+
+  return (
+    <div className="relative bg-white mt-6 group">
+      <button
+        aria-label="Zoom"
+        className="chart-zoom-btn opacity-0 group-hover:opacity-100"
+        onClick={() => setOpen(true)}
+      >
+        <LuZoomIn className="text-lg" />
+      </button>
+      <ChartBody />
+      <Modal isOpen={open} onClose={() => setOpen(false)} title="Priority" variant="wide">
+        <div style={{ height: "65vh" }}>
+          <ChartBody height={"100%"} />
+        </div>
+      </Modal>
     </div>
   );
 };

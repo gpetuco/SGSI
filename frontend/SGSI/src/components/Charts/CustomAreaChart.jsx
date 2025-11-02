@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -9,6 +9,8 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import { LuZoomIn } from "react-icons/lu";
+import Modal from "../Modal";
 
 const DefaultTooltip = ({ active, payload, label }) => {
   if (!active || !payload || payload.length === 0) return null;
@@ -35,9 +37,12 @@ const CustomAreaChart = ({
   areas = [{ dataKey: "value", color: "#1368ec", name: "Value" }],
   xKey = "name",
   height = 325,
+  title = "Chart",
 }) => {
-  return (
-    <ResponsiveContainer width="100%" height={height}>
+  const [open, setOpen] = useState(false);
+
+  const ChartBody = ({ h = height }) => (
+    <ResponsiveContainer width="100%" height={h}>
       <AreaChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} />
         <XAxis dataKey={xKey} tick={{ fontSize: 12, fill: 'var(--sgsi-text-muted)' }} stroke="none" />
@@ -71,7 +76,24 @@ const CustomAreaChart = ({
       </AreaChart>
     </ResponsiveContainer>
   );
+
+  return (
+    <div className="relative group">
+      <button
+        aria-label="Zoom"
+        className="chart-zoom-btn opacity-0 group-hover:opacity-100"
+        onClick={() => setOpen(true)}
+      >
+        <LuZoomIn className="text-lg" />
+      </button>
+      <ChartBody />
+      <Modal isOpen={open} onClose={() => setOpen(false)} title={title} variant="wide">
+        <div style={{ height: "65vh" }}>
+          <ChartBody h={"100%"} />
+        </div>
+      </Modal>
+    </div>
+  );
 };
 
 export default CustomAreaChart;
-
