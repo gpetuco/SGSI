@@ -13,6 +13,7 @@ import { LuArrowRight } from "react-icons/lu";
 import TaskListTable from "../../components/TaskListTable";
 import CustomPieChart from "../../components/Charts/CustomPieChart";
 import CustomBarChart from "../../components/Charts/CustomBarChart";
+import CustomLineChart from "../../components/Charts/CustomLineChart";
 import StackedStatusByFramework from "../../components/Charts/StackedStatusByFramework";
 import PercentBarByFramework from "../../components/Charts/PercentBarByFramework";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
@@ -32,6 +33,7 @@ const Dashboard = () => {
   const [barChartData, setBarChartData] = useState([]);
   const [stackedStatusData, setStackedStatusData] = useState([]);
   const [completionPercentData, setCompletionPercentData] = useState([]);
+  const [frameworkLineData, setFrameworkLineData] = useState([]);
 
   const [classificationFilter, setClassificationFilter] = useState("All");
 
@@ -65,6 +67,30 @@ const Dashboard = () => {
       Completed: statusByFramework?.[fw]?.Completed || 0,
     }));
     setStackedStatusData(stacked);
+
+    // Line chart data by status with one line per framework
+    const frameworks = ["GRC", "NIST CSF", "ISO 27001"]; // requested order
+    const line = [
+      {
+        name: "Pending",
+        "GRC": statusByFramework?.["GRC"]?.Pending || 0,
+        "NIST CSF": statusByFramework?.["NIST CSF"]?.Pending || 0,
+        "ISO 27001": statusByFramework?.["ISO 27001"]?.Pending || 0,
+      },
+      {
+        name: "In Progress",
+        "GRC": statusByFramework?.["GRC"]?.InProgress || 0,
+        "NIST CSF": statusByFramework?.["NIST CSF"]?.InProgress || 0,
+        "ISO 27001": statusByFramework?.["ISO 27001"]?.InProgress || 0,
+      },
+      {
+        name: "Completed",
+        "GRC": statusByFramework?.["GRC"]?.Completed || 0,
+        "NIST CSF": statusByFramework?.["NIST CSF"]?.Completed || 0,
+        "ISO 27001": statusByFramework?.["ISO 27001"]?.Completed || 0,
+      },
+    ];
+    setFrameworkLineData(line);
 
     // Completion % bar by framework
     const completion = (data?.completionByFramework || []).map((i) => ({
@@ -156,9 +182,9 @@ const Dashboard = () => {
             color="bg-lime-500"
           />
         </div>
-      </div>
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-4 md:my-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-4 md:my-6">
         <div>
           <div className="card">
             <div className="flex items-center justify-between">
@@ -194,6 +220,24 @@ const Dashboard = () => {
               <h5 className="font-medium">Completion % by Framework</h5>
             </div>
             <PercentBarByFramework data={completionPercentData} />
+          </div>
+        </div>
+
+        {/* Line chart: one line per framework by status */}
+        <div className="md:col-span-2">
+          <div className="card">
+            <div className="flex items-center justify-between">
+              <h5 className="font-medium">Framework Lines by Status</h5>
+            </div>
+            <CustomLineChart
+              data={frameworkLineData}
+              xKey="name"
+              lines={[
+                { dataKey: "GRC", color: "#8D51FF", name: "GRC" },
+                { dataKey: "NIST CSF", color: "#00B8DB", name: "NIST CSF" },
+                { dataKey: "ISO 27001", color: "#7BCE00", name: "ISO 27001" },
+              ]}
+            />
           </div>
         </div>
 
