@@ -225,3 +225,6 @@ html.dark .chart-zoom-btn {
   color: #e2e8f0; /* slate-200 text */
   border-color: #475569; /* slate-600 */
 }
+
+/* Force white text in dark mode when readability is required */
+html.dark .text-white-important { color: #ffffff !important; }

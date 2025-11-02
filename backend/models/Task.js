@@ -35,4 +35,25 @@ const taskSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Recalculate progress from todoChecklist before save
+taskSchema.pre("save", function (next) {
+  try {
+    if (Array.isArray(this.todoChecklist) && this.todoChecklist.length > 0) {
+      const total = this.todoChecklist.length;
+      const done = this.todoChecklist.filter((t) => !!t.completed).length;
+      const pct = Math.round((done / total) * 100);
+      this.progress = pct;
+    } else if (this.isModified("status") && this.status === "Completed") {
+      // If marked completed and no checklist, set to 100
+      this.progress = 100;
+    } else if (!Array.isArray(this.todoChecklist) || this.todoChecklist.length === 0) {
+      // No checklist -> keep current progress or normalize to 0
+      this.progress = this.progress || 0;
+    }
+  } catch (_) {
+    // ignore and continue
+  }
+  next();
+});
+
 module.exports = mongoose.model("Task", taskSchema);

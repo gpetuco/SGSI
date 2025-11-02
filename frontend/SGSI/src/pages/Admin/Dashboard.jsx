@@ -20,6 +20,8 @@ import PercentBarByFramework from "../../components/Charts/PercentBarByFramework
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
 import { CLASSIFICATION_DATA } from "../../utils/data";
 import { PieChart as RePieChart, Pie as RePie, Cell as ReCell, ResponsiveContainer as ReResponsiveContainer } from "recharts";
+import { LuZoomIn } from "react-icons/lu";
+import Modal from "../../components/Modal";
 
 const COLORS = ["#8D51FF", "#00B8DB", "#7BCE00"];
 
@@ -36,6 +38,7 @@ const Dashboard = () => {
   const [stackedStatusData, setStackedStatusData] = useState([]);
   const [completionPercentData, setCompletionPercentData] = useState([]);
   const [frameworkLineData, setFrameworkLineData] = useState([]);
+  const [fwModal, setFwModal] = useState({ open: false, fw: null, percent: 0 });
 
   const [classificationFilter, setClassificationFilter] = useState("All");
 
@@ -201,7 +204,14 @@ const Dashboard = () => {
             { name: "remain", value: 100 - clamped },
           ];
           return (
-            <div key={fw.label} className="card flex items-center justify-between p-4 min-h-[112px]">
+            <div key={fw.label} className="card relative group flex items-center justify-between p-4 min-h-[112px]">
+              <button
+                aria-label="Zoom"
+                className="chart-zoom-btn opacity-0 group-hover:opacity-100"
+                onClick={() => setFwModal({ open: true, fw: fw.label, percent: clamped, color: fw.color })}
+              >
+                <LuZoomIn className="text-lg" />
+              </button>
               <div className="pl-1">
                 <div
                   className="text-xs md:text-sm font-bold tracking-wide uppercase"
@@ -235,6 +245,73 @@ const Dashboard = () => {
           );
         })}
       </div>
+
+      {/* Framework zoom modal */}
+      {fwModal.open && (
+        <Modal
+          isOpen={fwModal.open}
+          onClose={() => setFwModal({ open: false, fw: null, percent: 0 })}
+          title={`${fwModal.fw}`}
+          variant="wide"
+        >
+          {(() => {
+            const entry = stackedStatusData.find((e) => e.framework === fwModal.fw) || {};
+            const pending = entry.Pending || 0;
+            const inProgress = entry.InProgress || 0;
+            const completed = entry.Completed || 0;
+            const total = pending + inProgress + completed;
+            return (
+              <div>
+                <div className="flex items-center justify-center gap-10 md:gap-16 py-6">
+                  <div className="text-center">
+                    <div className="text-sm font-bold uppercase" style={{ color: fwModal.color }}>{fwModal.fw}</div>
+                    <div className="text-6xl md:text-7xl font-extrabold leading-none mt-2">{fwModal.percent}%</div>
+                  </div>
+                  <div className="w-[160px] h-[160px]">
+                    <ReResponsiveContainer width="100%" height="100%">
+                      <RePieChart>
+                        <RePie data={[
+                          { name: 'done', value: fwModal.percent },
+                          { name: 'remain', value: 100 - fwModal.percent },
+                        ]}
+                          dataKey="value"
+                          innerRadius={"60%"}
+                          outerRadius={"85%"}
+                          startAngle={90}
+                          endAngle={-270}
+                          stroke="none"
+                        >
+                          <ReCell fill={fwModal.color || '#1368ec'} />
+                          <ReCell fill="#CBD5E1" />
+                        </RePie>
+                      </RePieChart>
+                    </ReResponsiveContainer>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-center gap-8 pb-2">
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white-important">
+                    <span className="inline-block w-2.5 h-2.5 rounded-full bg-primary"></span>
+                    <span className="font-medium">{total} Total Tasks</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white-important">
+                    <span className="inline-block w-2.5 h-2.5 rounded-full bg-violet-500"></span>
+                    <span className="font-medium">{pending} Pending Tasks</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white-important">
+                    <span className="inline-block w-2.5 h-2.5 rounded-full bg-cyan-500"></span>
+                    <span className="font-medium">{inProgress} In Progress Tasks</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white-important">
+                    <span className="inline-block w-2.5 h-2.5 rounded-full bg-lime-500"></span>
+                    <span className="font-medium">{completed} Completed Tasks</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+        </Modal>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-4 md:my-6">
         <div>

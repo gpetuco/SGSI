@@ -35,13 +35,17 @@ const getTasks = async (req, res) => {
       );
     }
 
-    // Add completed todoChecklist count to each task
+    // Add completed todoChecklist count and computed progress to each task
     tasks = await Promise.all(
       tasks.map(async (task) => {
-        const completedCount = task.todoChecklist.filter(
-          (item) => item.completed
-        ).length;
-        return { ...task._doc, completedTodoCount: completedCount };
+        const total = Array.isArray(task.todoChecklist)
+          ? task.todoChecklist.length
+          : 0;
+        const completedCount = Array.isArray(task.todoChecklist)
+          ? task.todoChecklist.filter((item) => item.completed).length
+          : 0;
+        const progressPct = total > 0 ? Math.round((completedCount / total) * 100) : task.progress || 0;
+        return { ...task._doc, completedTodoCount: completedCount, progress: progressPct };
       })
     );
 
@@ -354,20 +358,47 @@ const getDashboardData = async (req, res) => {
       return acc;
     }, {});
 
-    // Completion by framework
-    const totalByFrameworkRaw = await Task.aggregate([
+    // Completion by framework (average progress from todoChecklist)
+    const completionByFrameworkAgg = await Task.aggregate([
       { $match: baseMatch },
-      { $group: { _id: "$classification", total: { $sum: 1 } } },
-    ]);
-    const completedByFrameworkRaw = await Task.aggregate([
-      { $match: { ...baseMatch, status: "Completed" } },
-      { $group: { _id: "$classification", count: { $sum: 1 } } },
+      {
+        $addFields: {
+          totalTodos: { $size: { $ifNull: ["$todoChecklist", []] } },
+          doneTodos: {
+            $size: {
+              $filter: {
+                input: { $ifNull: ["$todoChecklist", []] },
+                as: "t",
+                cond: { $eq: ["$$t.completed", true] },
+              },
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          classification: 1,
+          progress: {
+            $cond: [
+              { $gt: ["$totalTodos", 0] },
+              { $multiply: [{ $divide: ["$doneTodos", "$totalTodos"] }, 100] },
+              {
+                $cond: [
+                  { $eq: ["$status", "Completed"] },
+                  100,
+                  { $ifNull: ["$progress", 0] },
+                ],
+              },
+            ],
+          },
+        },
+      },
+      { $group: { _id: "$classification", avgProgress: { $avg: "$progress" }, total: { $sum: 1 } } },
+      { $project: { _id: 0, framework: "$_id", percent: { $round: ["$avgProgress", 0] }, total: 1 } },
     ]);
     const completionByFramework = frameworks.map((fw) => {
-      const total = totalByFrameworkRaw.find((i) => i._id === fw)?.total || 0;
-      const done = completedByFrameworkRaw.find((i) => i._id === fw)?.count || 0;
-      const percent = total > 0 ? Math.round((done / total) * 100) : 0;
-      return { framework: fw, percent, total, completed: done };
+      const row = completionByFrameworkAgg.find((i) => i.framework === fw);
+      return { framework: fw, percent: row ? row.percent : 0 };
     });
 
     // On-time rate among completed
