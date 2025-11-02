@@ -209,3 +209,8 @@ html.dark ::placeholder {
 html.dark ::-webkit-scrollbar { width: 10px; height: 10px; }
 html.dark ::-webkit-scrollbar-thumb { background: #3b475a; border-radius: 8px; }
 html.dark ::-webkit-scrollbar-track { background: #1f2631; }
+
+/* Subtle row hover for tables (light/dark) */
+.row-hover { transition: background-color 150ms ease; }
+.row-hover:hover { background-color: #f4f6f8; }
+html.dark .row-hover:hover { background-color: #364152 !important; }

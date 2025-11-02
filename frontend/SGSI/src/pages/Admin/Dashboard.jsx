@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useUserAuth } from "../../hooks/useUserAuth";
 import { useContext } from "react";
 import { UserContext } from "../../context/userContext";
@@ -13,6 +13,7 @@ import { LuArrowRight } from "react-icons/lu";
 import TaskListTable from "../../components/TaskListTable";
 import CustomPieChart from "../../components/Charts/CustomPieChart";
 import CustomBarChart from "../../components/Charts/CustomBarChart";
+import CustomAreaChart from "../../components/Charts/CustomAreaChart";
 import CustomLineChart from "../../components/Charts/CustomLineChart";
 import StackedStatusByFramework from "../../components/Charts/StackedStatusByFramework";
 import PercentBarByFramework from "../../components/Charts/PercentBarByFramework";
@@ -73,19 +74,19 @@ const Dashboard = () => {
     const line = [
       {
         name: "Pending",
-        "GRC": statusByFramework?.["GRC"]?.Pending || 0,
+        GRC: statusByFramework?.["GRC"]?.Pending || 0,
         "NIST CSF": statusByFramework?.["NIST CSF"]?.Pending || 0,
         "ISO 27001": statusByFramework?.["ISO 27001"]?.Pending || 0,
       },
       {
         name: "In Progress",
-        "GRC": statusByFramework?.["GRC"]?.InProgress || 0,
+        GRC: statusByFramework?.["GRC"]?.InProgress || 0,
         "NIST CSF": statusByFramework?.["NIST CSF"]?.InProgress || 0,
         "ISO 27001": statusByFramework?.["ISO 27001"]?.InProgress || 0,
       },
       {
         name: "Completed",
-        "GRC": statusByFramework?.["GRC"]?.Completed || 0,
+        GRC: statusByFramework?.["GRC"]?.Completed || 0,
         "NIST CSF": statusByFramework?.["NIST CSF"]?.Completed || 0,
         "ISO 27001": statusByFramework?.["ISO 27001"]?.Completed || 0,
       },
@@ -182,9 +183,9 @@ const Dashboard = () => {
             color="bg-lime-500"
           />
         </div>
-        </div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-4 md:my-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-4 md:my-6">
         <div>
           <div className="card">
             <div className="flex items-center justify-between">
@@ -198,10 +199,14 @@ const Dashboard = () => {
         <div>
           <div className="card">
             <div className="flex items-center justify-between">
-              <h5 className="font-medium">Task Priority Levels</h5>
+              <h5 className="font-medium">Priority</h5>
             </div>
 
-            <CustomBarChart data={barChartData} />
+            <CustomAreaChart
+              data={barChartData}
+              xKey="priority"
+              areas={[{ dataKey: "count", color: "#1368ec", name: "Tasks" }]}
+            />
           </div>
         </div>
 

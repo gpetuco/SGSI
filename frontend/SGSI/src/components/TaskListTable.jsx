@@ -66,9 +66,13 @@ const TaskListTable = ({ tableData }) => {
         </thead>
         <tbody>
           {tableData.map((task) => (
-            <tr key={task._id} className="border-t border-gray-200 dark:border-slate-700">
-              <td className="my-3 mx-4 text-gray-700 dark:text-white text-[13px] line-clamp-1 overflow-hidden">
-                <button className="text-left text-primary hover:underline" onClick={() => navigate(`/admin/task-details/${task._id}`)}>{task.title}</button>
+            <tr
+              key={task._id}
+              onClick={() => navigate(`/admin/task-details/${task._id}`)}
+              className="border-t border-gray-200 dark:border-slate-700 row-hover cursor-pointer"
+            >
+              <td className="py-4 px-4 text-gray-700 dark:text-white text-[13px] truncate">
+                {task.title}
               </td>
               <td className="py-4 px-4">
                 <span

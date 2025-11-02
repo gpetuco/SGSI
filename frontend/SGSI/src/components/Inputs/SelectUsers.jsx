@@ -11,6 +11,12 @@ const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tempSelectedUsers, setTempSelectedUsers] = useState([]);
 
+  const openModal = () => {
+    // Preload current selection so users appear checked in the modal
+    setTempSelectedUsers(Array.isArray(selectedUsers) ? [...selectedUsers] : []);
+    setIsModalOpen(true);
+  };
+
   const getAllUsers = async () => {
     try {
       const response = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
@@ -54,13 +60,13 @@ const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
   return (
     <div className="space-y-4 mt-2">
       {selectedUserAvatars.length === 0 && (
-        <button className="card-btn" onClick={() => setIsModalOpen(true)}>
+        <button className="card-btn" onClick={openModal}>
           <LuUsers className="text-sm" /> Add Members
         </button>
       )}
 
       {selectedUserAvatars.length > 0 && (
-        <div className="cursor-pointer" onClick={() => setIsModalOpen(true)}>
+        <div className="cursor-pointer" onClick={openModal}>
           <AvatarGroup avatars={selectedUserAvatars} maxVisible={3} />
         </div>
       )}
