@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import { LuFileSpreadsheet } from "react-icons/lu";
-import TaskStatusTabs from "../../components/TaskStatusTabs";
 import TaskCard from "../../components/Cards/TaskCard";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
 import SelectDropdownSearch from "../../components/Inputs/SelectDropdownSearch";
@@ -13,7 +12,6 @@ import { CLASSIFICATION_DATA } from "../../utils/data";
 const ManageTasks = () => {
   const [allTasks, setAllTasks] = useState([]);
 
-  const [tabs, setTabs] = useState([]);
   const [filterStatus, setFilterStatus] = useState("All");
   const [selectedUser, setSelectedUser] = useState("All");
   const [selectedFramework, setSelectedFramework] = useState("All");
@@ -33,17 +31,7 @@ const ManageTasks = () => {
 
       setAllTasks(response.data?.tasks?.length > 0 ? response.data.tasks : []);
 
-      // Map statusSummary data with fixed labels and order
-      const statusSummary = response.data?.statusSummary || {};
-
-      const statusArray = [
-        { label: "All", count: statusSummary.all || 0 },
-        { label: "Pending", count: statusSummary.pendingTasks || 0 },
-        { label: "In Progress", count: statusSummary.inProgressTasks || 0 },
-        { label: "Completed", count: statusSummary.completedTasks || 0 },
-      ];
-
-      setTabs(statusArray);
+      // no tabs; dropdown handles status filter
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -104,7 +92,7 @@ const ManageTasks = () => {
       <div className="my-5">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           {/* Left: Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full lg:w-[440px]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 w-full lg:w-[660px]">
             <div className="w-full md:w-[190px]">
               <label className="text-xs font-medium text-slate-600">User</label>
               <SelectDropdownSearch
@@ -124,25 +112,29 @@ const ManageTasks = () => {
                 placeholder="All Frameworks"
               />
             </div>
+            <div className="w-full md:w-[190px]">
+              <label className="text-xs font-medium text-slate-600">Status</label>
+              <SelectDropdown
+                options={[
+                  { label: "All", value: "All" },
+                  { label: "Pending", value: "Pending" },
+                  { label: "In Progress", value: "In Progress" },
+                  { label: "Completed", value: "Completed" },
+                ]}
+                value={filterStatus}
+                onChange={setFilterStatus}
+                placeholder="All Statuses"
+              />
+            </div>
           </div>
 
-          {/* Right: Status tabs + Download */}
-          {tabs?.[0]?.count > 0 && (
-            <div className="flex items-center gap-3 lg:ml-2 lg:flex-1 lg:justify-end lg:flex-nowrap min-w-0">
-              <div className="overflow-x-auto max-w-full flex-1 min-w-0">
-                <TaskStatusTabs
-                  tabs={tabs}
-                  activeTab={filterStatus}
-                  setActiveTab={setFilterStatus}
-                />
-              </div>
-
-              <button className="hidden lg:flex download-btn shrink-0" onClick={handleDownloadReport}>
-                <LuFileSpreadsheet className="text-lg" />
-                Download Report
-              </button>
-            </div>
-          )}
+          {/* Right: Download */}
+          <div className="flex items-center gap-3 lg:ml-2 lg:flex-1 lg:justify-end lg:flex-nowrap min-w-0">
+            <button className="hidden lg:flex download-btn shrink-0" onClick={handleDownloadReport}>
+              <LuFileSpreadsheet className="text-lg" />
+              Download Report
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">

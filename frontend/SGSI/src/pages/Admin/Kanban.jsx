@@ -20,23 +20,23 @@ const Column = ({ title, tasks, onOpen }) => {
         ) : (
           tasks.map((item) => (
             <div className="h-[280px]">
-            <TaskCard
-              key={item._id}
-              title={item.title}
-              description={item.description}
-              priority={item.priority}
-              classification={item.classification}
-              status={item.status}
-              progress={item.progress}
-              createdAt={item.createdAt}
-              dueDate={item.dueDate}
-              assignedTo={item.assignedTo?.map((p) => p.profileImageUrl)}
-              attachmentCount={item.attachments?.length || 0}
-              completedTodoCount={item.completedTodoCount || 0}
-              todoChecklist={item.todoChecklist || []}
-              onClick={() => onOpen(item._id)}
-              className="h-full"
-            />
+              <TaskCard
+                key={item._id}
+                title={item.title}
+                description={item.description}
+                priority={item.priority}
+                classification={item.classification}
+                status={item.status}
+                progress={item.progress}
+                createdAt={item.createdAt}
+                dueDate={item.dueDate}
+                assignedTo={item.assignedTo?.map((p) => p.profileImageUrl)}
+                attachmentCount={item.attachments?.length || 0}
+                completedTodoCount={item.completedTodoCount || 0}
+                todoChecklist={item.todoChecklist || []}
+                onClick={() => onOpen(item._id)}
+                className="h-full"
+              />
             </div>
           ))
         )}
@@ -66,9 +66,10 @@ const Kanban = () => {
   }, []);
 
   const grouped = useMemo(() => {
-    const by = { Pending: [], "In Progress": [], Completed: [] };
+    const by = { GRC: [], "ISO 27001": [], "NIST CSF": [] };
     for (const t of tasks) {
-      if (by[t.status]) by[t.status].push(t);
+      const key = t.classification;
+      if (by[key]) by[key].push(t);
     }
     return by;
   }, [tasks]);
@@ -85,9 +86,17 @@ const Kanban = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-          <Column title="Pending" tasks={grouped["Pending"]} onOpen={handleOpen} />
-          <Column title="In Progress" tasks={grouped["In Progress"]} onOpen={handleOpen} />
-          <Column title="Completed" tasks={grouped["Completed"]} onOpen={handleOpen} />
+          <Column title="GRC" tasks={grouped["GRC"]} onOpen={handleOpen} />
+          <Column
+            title="ISO 27001"
+            tasks={grouped["ISO 27001"]}
+            onOpen={handleOpen}
+          />
+          <Column
+            title="NIST CSF"
+            tasks={grouped["NIST CSF"]}
+            onOpen={handleOpen}
+          />
         </div>
       </div>
     </DashboardLayout>
@@ -95,4 +104,3 @@ const Kanban = () => {
 };
 
 export default Kanban;
-
