@@ -253,22 +253,21 @@ const updateTaskChecklist = async (req, res) => {
     task.todoChecklist = todoChecklist; // Replace with updated checklist
 
     // Auto-update progress based on checklist completion
-    const completedCount = task.todoChecklist.filter(
-      (item) => item.completed
-    ).length;
+    const completedCount = task.todoChecklist.filter((item) => item.completed).length;
     const totalItems = task.todoChecklist.length;
-    task.progress =
-      totalItems > 0 ? Math.round((completedCount / totalItems) * 100) : 0;
+    task.progress = totalItems > 0 ? Math.round((completedCount / totalItems) * 100) : 0;
 
-    // Auto-mark task as completed if all items are checked
-    if (task.progress === 100) {
+    // Derive status directly from counts to avoid rounding issues
+    if (totalItems === 0) {
+      // No checklist: preserve status unless explicitly set elsewhere
+    } else if (completedCount === 0) {
+      task.status = "Pending";
+      if (task.completedAt) task.completedAt = undefined;
+    } else if (completedCount === totalItems) {
       task.status = "Completed";
       if (!task.completedAt) task.completedAt = new Date();
-    } else if (task.progress > 0) {
-      task.status = "In Progress";
-      if (task.completedAt) task.completedAt = undefined;
     } else {
-      task.status = "Pending";
+      task.status = "In Progress";
       if (task.completedAt) task.completedAt = undefined;
     }
 
@@ -406,9 +405,47 @@ const getDashboardData = async (req, res) => {
     const onTime = completedInScope.filter((t) => t.completedAt && t.dueDate && t.completedAt <= t.dueDate).length;
     const onTimeRate = completedInScope.length > 0 ? Math.round((onTime / completedInScope.length) * 100) : 0;
 
+    // Tasks by user (Top 5)
+    const tasksByUserAgg = await Task.aggregate([
+      { $match: baseMatch },
+      { $unwind: "$assignedTo" },
+      {
+        $group: {
+          _id: "$assignedTo",
+          Pending: { $sum: { $cond: [{ $eq: ["$status", "Pending"] }, 1, 0] } },
+          InProgress: { $sum: { $cond: [{ $eq: ["$status", "In Progress"] }, 1, 0] } },
+          Completed: { $sum: { $cond: [{ $eq: ["$status", "Completed"] }, 1, 0] } },
+        },
+      },
+      { $addFields: { total: { $add: ["$Pending", "$InProgress", "$Completed"] } } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "_id",
+          foreignField: "_id",
+          as: "userDoc",
+        },
+      },
+      { $addFields: { user: { $ifNull: [{ $arrayElemAt: ["$userDoc.name", 0] }, "Unknown"] } } },
+      { $project: { userDoc: 0 } },
+      { $sort: { total: -1 } },
+      { $limit: 5 },
+      {
+        $project: {
+          _id: 0,
+          userId: "$_id",
+          user: 1,
+          Pending: 1,
+          InProgress: 1,
+          Completed: 1,
+          total: 1,
+        },
+      },
+    ]);
+
     res.status(200).json({
       statistics: { totalTasks, pendingTasks, completedTasks, overdueTasks, onTimeRate },
-      charts: { taskDistribution, taskPriorityLevels, statusByFramework, completionByFramework },
+      charts: { taskDistribution, taskPriorityLevels, statusByFramework, completionByFramework, tasksByUser: tasksByUserAgg },
       recentTasks,
     });
   } catch (error) {

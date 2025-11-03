@@ -17,6 +17,7 @@ import CustomAreaChart from "../../components/Charts/CustomAreaChart";
 import CustomLineChart from "../../components/Charts/CustomLineChart";
 import StackedStatusByFramework from "../../components/Charts/StackedStatusByFramework";
 import PercentBarByFramework from "../../components/Charts/PercentBarByFramework";
+import StackedStatusByUser from "../../components/Charts/StackedStatusByUser";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
 import { CLASSIFICATION_DATA } from "../../utils/data";
 import { PieChart as RePieChart, Pie as RePie, Cell as ReCell, ResponsiveContainer as ReResponsiveContainer } from "recharts";
@@ -38,6 +39,7 @@ const Dashboard = () => {
   const [stackedStatusData, setStackedStatusData] = useState([]);
   const [completionPercentData, setCompletionPercentData] = useState([]);
   const [frameworkLineData, setFrameworkLineData] = useState([]);
+  const [tasksByUserData, setTasksByUserData] = useState([]);
   const [fwModal, setFwModal] = useState({ open: false, fw: null, percent: 0 });
 
   const [classificationFilter, setClassificationFilter] = useState("All");
@@ -103,6 +105,17 @@ const Dashboard = () => {
       percent: i.percent,
     }));
     setCompletionPercentData(completion);
+
+    // Tasks by user (Top 5)
+    const tbu = (data?.tasksByUser || []).map((i) => ({
+      user: i.user,
+      userId: i.userId,
+      Pending: i.Pending || 0,
+      InProgress: i.InProgress || 0,
+      Completed: i.Completed || 0,
+      total: i.total || 0,
+    }));
+    setTasksByUserData(tbu);
   };
 
   const getDashboardData = async () => {
@@ -371,6 +384,16 @@ const Dashboard = () => {
                 { dataKey: "ISO 27001", color: "#7BCE00", name: "ISO 27001" },
               ]}
             />
+          </div>
+        </div>
+
+        {/* Tasks by User (Top 5) - grouped bars */}
+        <div className="md:col-span-2">
+          <div className="card">
+            <div className="flex items-center justify-between">
+              <h5 className="font-medium">Tasks by User (Top 5)</h5>
+            </div>
+            <StackedStatusByUser data={tasksByUserData} />
           </div>
         </div>
 

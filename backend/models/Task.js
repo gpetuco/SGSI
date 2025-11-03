@@ -45,12 +45,16 @@ taskSchema.pre("save", function (next) {
       const pct = Math.round((done / total) * 100);
       this.progress = pct;
 
-      if (done < total) {
-        if (this.status === "Completed" || this.status === "Pending") {
-          this.status = "In Progress";
-        }
+      if (done === 0) {
+        // No items completed: keep task as Pending
+        if (this.status !== "Pending") this.status = "Pending";
+        if (this.completedAt) this.completedAt = null;
+      } else if (done < total) {
+        // Some items completed, not all: In Progress
+        if (this.status !== "In Progress") this.status = "In Progress";
         if (this.completedAt) this.completedAt = null;
       } else {
+        // All items completed
         this.status = "Completed";
         if (!this.completedAt) this.completedAt = new Date();
       }
