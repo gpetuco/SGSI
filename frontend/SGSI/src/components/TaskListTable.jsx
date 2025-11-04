@@ -68,7 +68,7 @@ const TaskListTable = ({ tableData }) => {
           {tableData.map((task) => (
             <tr
               key={task._id}
-              onClick={() => navigate(`/admin/task-details/${task._id}`)}
+              onClick={() => navigate(`/admin/create-task`, { state: { taskId: task._id } })}
               className="border-t border-gray-200 dark:border-slate-700 row-hover cursor-pointer"
             >
               <td className="py-4 px-4 text-gray-700 dark:text-white text-[13px] truncate">

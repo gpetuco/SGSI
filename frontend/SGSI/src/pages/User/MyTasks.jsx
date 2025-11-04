@@ -42,7 +42,7 @@ const MyTasks = () => {
   };
 
   const handleClick = (taskId) => {
-    navigate(`/user/task-details/${taskId}`);
+    navigate(`/admin/create-task`, { state: { taskId } });
   };
 
   useEffect(() => {

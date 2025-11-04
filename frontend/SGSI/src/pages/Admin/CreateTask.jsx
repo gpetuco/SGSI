@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { PRIORITY_DATA, CLASSIFICATION_DATA } from "../../utils/data";
 import axiosInstance from "../../utils/axiosInstance";
@@ -7,12 +7,24 @@ import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { LuTrash2 } from "react-icons/lu";
+import { HiOutlineTrash, HiMiniPlus } from "react-icons/hi2";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
 import SelectUsers from "../../components/Inputs/SelectUsers";
 import TodoListInput from "../../components/Inputs/TodoListInput";
 import AddAttachmentsInput from "../../components/Inputs/AddAttachmentsInput";
 import DeleteAlert from "../../components/DeleteAlert";
 import Modal from "../../components/Modal";
+
+const getStatusTagColor = (status) => {
+  switch (status) {
+    case "In Progress":
+      return "text-cyan-500 bg-cyan-50 border border-cyan-500/10";
+    case "Completed":
+      return "text-lime-500 bg-lime-50 border border-lime-500/20";
+    default:
+      return "text-violet-500 bg-violet-50 border border-violet-500/10";
+  }
+};
 
 const CreateTask = () => {
   const location = useLocation();
@@ -32,6 +44,9 @@ const CreateTask = () => {
   });
 
   const [currentTask, setCurrentTask] = useState(null);
+  const [checklistEditMode, setChecklistEditMode] = useState(false);
+  const editChecklistRef = useRef(null);
+  const [newTodoText, setNewTodoText] = useState("");
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -116,6 +131,35 @@ const CreateTask = () => {
     }
   };
 
+  // Toggle a checklist item completed state (update status accordingly)
+  const toggleChecklistItem = async (index) => {
+    if (!taskId) return;
+    try {
+      const next = Array.isArray(currentTask?.todoChecklist)
+        ? [...currentTask.todoChecklist]
+        : [];
+      if (!next[index]) return;
+      next[index] = { ...next[index], completed: !next[index].completed };
+
+      const response = await axiosInstance.put(
+        API_PATHS.TASKS.UPDATE_TODO_CHECKLIST(taskId),
+        { todoChecklist: next }
+      );
+      if (response.status === 200) {
+        const updated = response.data?.task;
+        setCurrentTask(updated);
+        setTaskData((prev) => ({
+          ...prev,
+          todoChecklist: Array.isArray(updated?.todoChecklist)
+            ? updated.todoChecklist.map((i) => i.text)
+            : [],
+        }));
+      }
+    } catch (e) {
+      // silent
+    }
+  };
+
   const handleSubmit = async () => {
     setError(null);
 
@@ -181,6 +225,71 @@ const CreateTask = () => {
     }
   };
 
+  // Commit checklist edits when clicking outside of edit block
+  useEffect(() => {
+    if (!checklistEditMode) return;
+    const handleClickOutside = (e) => {
+      if (editChecklistRef.current && !editChecklistRef.current.contains(e.target)) {
+        commitChecklistChanges();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [checklistEditMode, taskData.todoChecklist, currentTask]);
+
+
+  const commitChecklistChanges = async () => {
+    if (!taskId) return;
+    try {
+      const old = Array.isArray(currentTask?.todoChecklist) ? currentTask.todoChecklist : [];
+      const byText = new Map(old.map((o) => [o.text, !!o.completed]));
+      const updated = (taskData?.todoChecklist || []).map((txt, idx) => ({
+        text: txt,
+        completed: byText.has(txt) ? byText.get(txt) : !!old[idx]?.completed,
+      }));
+      const res = await axiosInstance.put(
+        API_PATHS.TASKS.UPDATE_TODO_CHECKLIST(taskId),
+        { todoChecklist: updated }
+      );
+      if (res.status === 200) {
+        setCurrentTask(res.data?.task);
+      }
+    } catch (e) {
+      // ignore
+    } finally {
+      setChecklistEditMode(false);
+      setNewTodoText("");
+    }
+  };
+
+  const handleEditItemChange = (index, value) => {
+    setTaskData((prev) => {
+      const next = [...(prev.todoChecklist || [])];
+      next[index] = value;
+      return { ...prev, todoChecklist: next };
+    });
+  };
+
+  const handleDeleteItem = (index) => {
+    setTaskData((prev) => {
+      const next = (prev.todoChecklist || []).filter((_, i) => i !== index);
+      return { ...prev, todoChecklist: next };
+    });
+  };
+
+  const handleAddItem = () => {
+    const v = newTodoText.trim();
+    if (!v) return;
+    setTaskData((prev) => ({
+      ...prev,
+      todoChecklist: [...(prev.todoChecklist || []), v],
+    }));
+    setNewTodoText("");
+  };
+
+  // no-op helpers from previous revert
+
   // Delete Task
   const deleteTask = async () => {
     try {
@@ -234,7 +343,16 @@ const CreateTask = () => {
       >
         <div className="grid grid-cols-1 mt-1">
           <div className="form-card">
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-between">
+              {taskId && (
+                <div
+                  className={`text-[11px] md:text-[13px] font-medium ${getStatusTagColor(
+                    currentTask?.status || "Pending"
+                  )} px-3 py-1 rounded`}
+                >
+                  {currentTask?.status || "Pending"}
+                </div>
+              )}
               {taskId && (
                 <button
                   className="flex items-center gap-1.5 text-[13px] font-medium text-rose-500 bg-rose-50 rounded px-2 py-1 border border-rose-100 hover:border-rose-300 cursor-pointer"
@@ -336,16 +454,80 @@ const CreateTask = () => {
             </div>
 
             <div className="mt-3">
-              <label className="text-xs font-medium text-slate-600">
-                TODO Checklist
-              </label>
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-medium text-slate-600">TODO Checklist</label>
+              </div>
 
-              <TodoListInput
-                todoList={taskData?.todoChecklist}
-                setTodoList={(value) =>
-                  handleValueChange("todoChecklist", value)
-                }
-              />
+              {taskId ? (
+                !checklistEditMode ? (
+                  <div className="mt-1">
+                    {Array.isArray(currentTask?.todoChecklist) && currentTask.todoChecklist.map((item, index) => (
+                      <div key={`todo_view_${index}`} className="flex items-center gap-3 mt-2">
+                        <input
+                          readOnly
+                          onFocus={() => {
+                            setTaskData((prev) => ({
+                              ...prev,
+                              todoChecklist: Array.isArray(currentTask?.todoChecklist)
+                                ? currentTask.todoChecklist.map((i) => i.text)
+                                : prev.todoChecklist,
+                            }));
+                            setChecklistEditMode(true);
+                          }}
+                          value={item.text}
+                          className="form-input flex-1 cursor-text"
+                        />
+                        <input
+                          type="checkbox"
+                          checked={!!item.completed}
+                          onChange={() => toggleChecklistItem(index)}
+                          className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none cursor-pointer"
+                        />
+                      </div>
+                    ))}
+                    {(!currentTask?.todoChecklist || currentTask.todoChecklist.length === 0) && (
+                      <p className="text-xs text-gray-500 mt-1">No checklist items.</p>
+                    )}
+                  </div>
+                ) : (
+                  <div className="mt-1" ref={editChecklistRef}>
+                    {(taskData?.todoChecklist || []).map((text, index) => (
+                      <div key={`todo_edit_${index}`} className="flex items-center gap-2 mt-2">
+                        <input
+                          className="form-input flex-1 mt-0"
+                          value={text}
+                          onChange={(e) => handleEditItemChange(index, e.target.value)}
+                        />
+                        <button className="cursor-pointer mt-2" onClick={() => handleDeleteItem(index)} title="Remove">
+                          <HiOutlineTrash className="text-lg text-red-500" />
+                        </button>
+                      </div>
+                    ))}
+
+                    <div className="flex items-center gap-2 mt-2">
+                      <input
+                        type="text"
+                        placeholder="Enter Task"
+                        value={newTodoText}
+                        onChange={(e) => setNewTodoText(e.target.value)}
+                        className="form-input flex-1 mt-0"
+                      />
+                      <button className="card-btn text-nowrap dark:!text-white mt-2" onClick={handleAddItem}>
+                        <HiMiniPlus className="text-lg" /> Add
+                      </button>
+                    </div>
+                  </div>
+                )
+              ) : (
+                <div className="mt-1">
+                  <TodoListInput
+                    todoList={taskData?.todoChecklist}
+                    setTodoList={(value) => handleValueChange("todoChecklist", value)}
+                  />
+                </div>
+              )}
+
+              {/* no quick-add in view mode after revert */}
             </div>
 
             <div className="mt-3">

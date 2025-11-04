@@ -104,7 +104,7 @@ const Kanban = () => {
   }, [tasks]);
 
   const handleOpen = (taskId) => {
-    navigate(`/admin/task-details/${taskId}`);
+    navigate(`/admin/create-task`, { state: { taskId } });
   };
 
   return (
