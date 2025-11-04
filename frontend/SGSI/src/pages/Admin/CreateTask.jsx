@@ -236,12 +236,16 @@ const CreateTask = () => {
         setSuppressOutsideOnce(false);
         return;
       }
-      if (editChecklistRef.current && !editChecklistRef.current.contains(e.target)) {
+      if (
+        editChecklistRef.current &&
+        !editChecklistRef.current.contains(e.target)
+      ) {
         commitChecklistChanges();
       }
     };
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checklistEditMode, suppressOutsideOnce]);
 
   // After entering edit mode, focus the targeted input
@@ -253,18 +257,22 @@ const CreateTask = () => {
           el.focus();
           // place caret at end
           const val = el.value;
-          try { el.setSelectionRange(val.length, val.length); } catch (_) {}
+          try {
+            el.setSelectionRange(val.length, val.length);
+            // eslint-disable-next-line no-empty
+          } catch (_) {}
         }
       };
       setTimeout(focus, 0);
     }
   }, [checklistEditMode, editFocusIndex]);
 
-
   const commitChecklistChanges = async () => {
     if (!taskId) return;
     try {
-      const old = Array.isArray(currentTask?.todoChecklist) ? currentTask.todoChecklist : [];
+      const old = Array.isArray(currentTask?.todoChecklist)
+        ? currentTask.todoChecklist
+        : [];
       const byText = new Map(old.map((o) => [o.text, !!o.completed]));
       const updated = (taskData?.todoChecklist || []).map((txt, idx) => ({
         text: txt,
@@ -490,43 +498,61 @@ const CreateTask = () => {
 
             <div className="mt-3">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-medium text-slate-600">TODO Checklist</label>
+                <label className="text-xs font-medium text-slate-600">
+                  TODO Checklist
+                </label>
               </div>
 
               {taskId ? (
                 !checklistEditMode ? (
                   <div className="mt-1">
-                    {Array.isArray(currentTask?.todoChecklist) && currentTask.todoChecklist.map((item, index) => (
-                      <div key={`todo_view_${index}`} className="flex items-center gap-3 mt-2">
-                        <input
-                          readOnly
-                          onClick={() => enterEditAtIndex(index)}
-                          value={item.text}
-                          className="form-input flex-1 cursor-text"
-                        />
-                        <input
-                          type="checkbox"
-                          checked={!!item.completed}
-                          onChange={() => toggleChecklistItem(index)}
-                          className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none cursor-pointer"
-                        />
-                      </div>
-                    ))}
-                    {(!currentTask?.todoChecklist || currentTask.todoChecklist.length === 0) && (
-                      <p className="text-xs text-gray-500 mt-1">No checklist items.</p>
+                    {Array.isArray(currentTask?.todoChecklist) &&
+                      currentTask.todoChecklist.map((item, index) => (
+                        <div
+                          key={`todo_view_${index}`}
+                          className="flex items-center gap-3 mt-2"
+                        >
+                          <input
+                            readOnly
+                            onClick={() => enterEditAtIndex(index)}
+                            value={item.text}
+                            className="form-input flex-1 cursor-text"
+                          />
+                          <input
+                            type="checkbox"
+                            checked={!!item.completed}
+                            onChange={() => toggleChecklistItem(index)}
+                            className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none cursor-pointer"
+                          />
+                        </div>
+                      ))}
+                    {(!currentTask?.todoChecklist ||
+                      currentTask.todoChecklist.length === 0) && (
+                      <p className="text-xs text-gray-500 mt-1">
+                        No checklist items.
+                      </p>
                     )}
                   </div>
                 ) : (
                   <div className="mt-1" ref={editChecklistRef}>
                     {(taskData?.todoChecklist || []).map((text, index) => (
-                      <div key={`todo_edit_${index}`} className="flex items-center gap-2 mt-2">
+                      <div
+                        key={`todo_edit_${index}`}
+                        className="flex items-center gap-2 mt-2"
+                      >
                         <input
                           className="form-input flex-1 mt-0"
                           value={text}
-                          onChange={(e) => handleEditItemChange(index, e.target.value)}
+                          onChange={(e) =>
+                            handleEditItemChange(index, e.target.value)
+                          }
                           ref={(el) => (editInputsRef.current[index] = el)}
                         />
-                        <button className="cursor-pointer mt-2" onClick={() => handleDeleteItem(index)} title="Remove">
+                        <button
+                          className="cursor-pointer mt-2"
+                          onClick={() => handleDeleteItem(index)}
+                          title="Remove"
+                        >
                           <HiOutlineTrash className="text-lg text-red-500" />
                         </button>
                       </div>
@@ -540,7 +566,10 @@ const CreateTask = () => {
                         onChange={(e) => setNewTodoText(e.target.value)}
                         className="form-input flex-1 mt-0"
                       />
-                      <button className="card-btn text-nowrap dark:!text-white mt-2" onClick={handleAddItem}>
+                      <button
+                        className="card-btn text-nowrap dark:!text-white mt-2"
+                        onClick={handleAddItem}
+                      >
                         <HiMiniPlus className="text-lg" /> Add
                       </button>
                     </div>
@@ -550,7 +579,9 @@ const CreateTask = () => {
                 <div className="mt-1">
                   <TodoListInput
                     todoList={taskData?.todoChecklist}
-                    setTodoList={(value) => handleValueChange("todoChecklist", value)}
+                    setTodoList={(value) =>
+                      handleValueChange("todoChecklist", value)
+                    }
                   />
                 </div>
               )}
