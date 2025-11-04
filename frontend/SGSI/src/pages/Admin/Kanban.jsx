@@ -4,6 +4,8 @@ import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import TaskCard from "../../components/Cards/TaskCard";
 import { useNavigate } from "react-router-dom";
+import SelectDropdown from "../../components/Inputs/SelectDropdown";
+import SelectDropdownSearch from "../../components/Inputs/SelectDropdownSearch";
 
 const Column = ({ title, tasks, onOpen }) => {
   return (
@@ -47,12 +49,20 @@ const Column = ({ title, tasks, onOpen }) => {
 
 const Kanban = () => {
   const [tasks, setTasks] = useState([]);
+  const [filterStatus, setFilterStatus] = useState("All");
+  const [selectedUser, setSelectedUser] = useState("All");
+  const [userOptions, setUserOptions] = useState([{ label: "All", value: "All" }]);
   const navigate = useNavigate();
 
   const getAllTasks = async () => {
     try {
+      const params = {
+        status: filterStatus === "All" ? "" : filterStatus,
+      };
+      if (selectedUser !== "All") params.assignedTo = selectedUser;
+
       const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, {
-        params: { status: "" },
+        params,
       });
       setTasks(response.data?.tasks || []);
     } catch (error) {
@@ -60,10 +70,29 @@ const Kanban = () => {
     }
   };
 
+  // initial tasks fetch happens via dependency effect below
+
+  // fetch users for dropdown
+  const fetchUsers = async () => {
+    try {
+      const res = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
+      const opts = [{ label: "All", value: "All" }].concat(
+        (res.data || []).map((u) => ({ label: u.name, value: u._id, avatar: u.profileImageUrl }))
+      );
+      setUserOptions(opts);
+    } catch (e) {
+      console.error("Error fetching users:", e);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   useEffect(() => {
     getAllTasks();
-    return () => {};
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterStatus, selectedUser]);
 
   const grouped = useMemo(() => {
     const by = { GRC: [], "ISO 27001": [], "NIST CSF": [] };
@@ -81,8 +110,34 @@ const Kanban = () => {
   return (
     <DashboardLayout activeMenu="Kanban">
       <div className="my-5">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-medium">Kanban</h2>
+        <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+          {/* Filters */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full lg:w-[440px]">
+            <div className="w-full md:w-[210px]">
+              <label className="text-xs font-medium text-slate-600">User</label>
+              <SelectDropdownSearch
+                options={userOptions}
+                value={selectedUser}
+                onChange={setSelectedUser}
+                placeholder="All Users"
+                showAvatar
+              />
+            </div>
+            <div className="w-full md:w-[210px]">
+              <label className="text-xs font-medium text-slate-600">Status</label>
+              <SelectDropdown
+                options={[
+                  { label: "All", value: "All" },
+                  { label: "Pending", value: "Pending" },
+                  { label: "In Progress", value: "In Progress" },
+                  { label: "Completed", value: "Completed" },
+                ]}
+                value={filterStatus}
+                onChange={setFilterStatus}
+                placeholder="All Statuses"
+              />
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
