@@ -46,6 +46,9 @@ const CreateTask = () => {
   const [currentTask, setCurrentTask] = useState(null);
   const [checklistEditMode, setChecklistEditMode] = useState(false);
   const editChecklistRef = useRef(null);
+  const editInputsRef = useRef([]);
+  const [editFocusIndex, setEditFocusIndex] = useState(null);
+  const [suppressOutsideOnce, setSuppressOutsideOnce] = useState(false);
   const [newTodoText, setNewTodoText] = useState("");
 
   const [error, setError] = useState("");
@@ -229,14 +232,33 @@ const CreateTask = () => {
   useEffect(() => {
     if (!checklistEditMode) return;
     const handleClickOutside = (e) => {
+      if (suppressOutsideOnce) {
+        setSuppressOutsideOnce(false);
+        return;
+      }
       if (editChecklistRef.current && !editChecklistRef.current.contains(e.target)) {
         commitChecklistChanges();
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checklistEditMode, taskData.todoChecklist, currentTask]);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [checklistEditMode, suppressOutsideOnce]);
+
+  // After entering edit mode, focus the targeted input
+  useEffect(() => {
+    if (checklistEditMode && editFocusIndex !== null) {
+      const focus = () => {
+        const el = editInputsRef.current?.[editFocusIndex];
+        if (el && typeof el.focus === "function") {
+          el.focus();
+          // place caret at end
+          const val = el.value;
+          try { el.setSelectionRange(val.length, val.length); } catch (_) {}
+        }
+      };
+      setTimeout(focus, 0);
+    }
+  }, [checklistEditMode, editFocusIndex]);
 
 
   const commitChecklistChanges = async () => {
@@ -259,6 +281,7 @@ const CreateTask = () => {
       // ignore
     } finally {
       setChecklistEditMode(false);
+      setEditFocusIndex(null);
       setNewTodoText("");
     }
   };
@@ -269,6 +292,18 @@ const CreateTask = () => {
       next[index] = value;
       return { ...prev, todoChecklist: next };
     });
+  };
+
+  const enterEditAtIndex = (index) => {
+    setTaskData((prev) => ({
+      ...prev,
+      todoChecklist: Array.isArray(currentTask?.todoChecklist)
+        ? currentTask.todoChecklist.map((i) => i.text)
+        : prev.todoChecklist,
+    }));
+    setSuppressOutsideOnce(true);
+    setEditFocusIndex(index);
+    setChecklistEditMode(true);
   };
 
   const handleDeleteItem = (index) => {
@@ -465,15 +500,7 @@ const CreateTask = () => {
                       <div key={`todo_view_${index}`} className="flex items-center gap-3 mt-2">
                         <input
                           readOnly
-                          onFocus={() => {
-                            setTaskData((prev) => ({
-                              ...prev,
-                              todoChecklist: Array.isArray(currentTask?.todoChecklist)
-                                ? currentTask.todoChecklist.map((i) => i.text)
-                                : prev.todoChecklist,
-                            }));
-                            setChecklistEditMode(true);
-                          }}
+                          onClick={() => enterEditAtIndex(index)}
                           value={item.text}
                           className="form-input flex-1 cursor-text"
                         />
@@ -497,6 +524,7 @@ const CreateTask = () => {
                           className="form-input flex-1 mt-0"
                           value={text}
                           onChange={(e) => handleEditItemChange(index, e.target.value)}
+                          ref={(el) => (editInputsRef.current[index] = el)}
                         />
                         <button className="cursor-pointer mt-2" onClick={() => handleDeleteItem(index)} title="Remove">
                           <HiOutlineTrash className="text-lg text-red-500" />
