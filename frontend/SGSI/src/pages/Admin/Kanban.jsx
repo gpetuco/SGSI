@@ -6,6 +6,7 @@ import TaskCard from "../../components/Cards/TaskCard";
 import { useNavigate } from "react-router-dom";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
 import SelectDropdownSearch from "../../components/Inputs/SelectDropdownSearch";
+import { PRIORITY_DATA } from "../../utils/data";
 
 const Column = ({ title, tasks, onOpen }) => {
   return (
@@ -51,6 +52,7 @@ const Kanban = () => {
   const [tasks, setTasks] = useState([]);
   const [filterStatus, setFilterStatus] = useState("All");
   const [selectedUser, setSelectedUser] = useState("All");
+  const [selectedPriority, setSelectedPriority] = useState("All");
   const [userOptions, setUserOptions] = useState([{ label: "All", value: "All" }]);
   const navigate = useNavigate();
 
@@ -95,13 +97,14 @@ const Kanban = () => {
   }, [filterStatus, selectedUser]);
 
   const grouped = useMemo(() => {
+    const source = selectedPriority === "All" ? tasks : tasks.filter((t) => t.priority === selectedPriority);
     const by = { GRC: [], "ISO 27001": [], "NIST CSF": [] };
-    for (const t of tasks) {
+    for (const t of source) {
       const key = t.classification;
       if (by[key]) by[key].push(t);
     }
     return by;
-  }, [tasks]);
+  }, [tasks, selectedPriority]);
 
   const handleOpen = (taskId) => {
     navigate(`/admin/create-task`, { state: { taskId } });
@@ -112,7 +115,7 @@ const Kanban = () => {
       <div className="my-5">
         <div className="flex flex-col lg:flex-row lg:items-center gap-4">
           {/* Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full lg:w-[440px]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 w-full lg:w-[660px]">
             <div className="w-full md:w-[210px]">
               <label className="text-xs font-medium text-slate-600">User</label>
               <SelectDropdownSearch
@@ -135,6 +138,15 @@ const Kanban = () => {
                 value={filterStatus}
                 onChange={setFilterStatus}
                 placeholder="All Statuses"
+              />
+            </div>
+            <div className="w-full md:w-[210px]">
+              <label className="text-xs font-medium text-slate-600">Priority</label>
+              <SelectDropdown
+                options={[{ label: "All", value: "All" }, ...PRIORITY_DATA]}
+                value={selectedPriority}
+                onChange={setSelectedPriority}
+                placeholder="All Priorities"
               />
             </div>
           </div>

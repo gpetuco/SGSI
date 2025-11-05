@@ -6,12 +6,15 @@ import { API_PATHS } from "../../utils/apiPaths";
 import { LuFileSpreadsheet } from "react-icons/lu";
 import TaskStatusTabs from "../../components/TaskStatusTabs";
 import TaskCard from "../../components/Cards/TaskCard";
+import SelectDropdown from "../../components/Inputs/SelectDropdown";
+import { PRIORITY_DATA } from "../../utils/data";
 
 const MyTasks = () => {
   const [allTasks, setAllTasks] = useState([]);
 
   const [tabs, setTabs] = useState([]);
   const [filterStatus, setFilterStatus] = useState("All");
+  const [selectedPriority, setSelectedPriority] = useState("All");
 
   const navigate = useNavigate();
 
@@ -66,8 +69,23 @@ const MyTasks = () => {
           )}
         </div>
 
+        <div className="grid grid-cols-1 md:grid-cols-1 gap-2 mt-3 w-full md:w-[220px]">
+          <div className="w-full md:w-[210px]">
+            <label className="text-xs font-medium text-slate-600">Priority</label>
+            <SelectDropdown
+              options={[{ label: "All", value: "All" }, ...PRIORITY_DATA]}
+              value={selectedPriority}
+              onChange={setSelectedPriority}
+              placeholder="All Priorities"
+            />
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-          {allTasks?.map((item, index) => (
+          {(selectedPriority === "All"
+            ? allTasks
+            : allTasks.filter((t) => t.priority === selectedPriority)
+          )?.map((item, index) => (
             <TaskCard
               key={item._id}
               title={item.title}

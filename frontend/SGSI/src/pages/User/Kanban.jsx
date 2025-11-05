@@ -4,6 +4,8 @@ import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import TaskCard from "../../components/Cards/TaskCard";
 import { useNavigate } from "react-router-dom";
+import SelectDropdown from "../../components/Inputs/SelectDropdown";
+import { PRIORITY_DATA } from "../../utils/data";
 
 const Column = ({ title, tasks, onOpen }) => {
   return (
@@ -47,6 +49,7 @@ const Column = ({ title, tasks, onOpen }) => {
 
 const Kanban = () => {
   const [tasks, setTasks] = useState([]);
+  const [selectedPriority, setSelectedPriority] = useState("All");
   const navigate = useNavigate();
 
   const getMyTasks = async () => {
@@ -64,12 +67,13 @@ const Kanban = () => {
   }, []);
 
   const grouped = useMemo(() => {
+    const source = selectedPriority === "All" ? tasks : tasks.filter((t) => t.priority === selectedPriority);
     const by = { Pending: [], "In Progress": [], Completed: [] };
-    for (const t of tasks) {
+    for (const t of source) {
       if (by[t.status]) by[t.status].push(t);
     }
     return by;
-  }, [tasks]);
+  }, [tasks, selectedPriority]);
 
   const handleOpen = (taskId) => {
     navigate(`/user/task-details/${taskId}`);
@@ -78,8 +82,22 @@ const Kanban = () => {
   return (
     <DashboardLayout activeMenu="Kanban">
       <div className="my-5">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-medium">Kanban</h2>
+        <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-medium">Kanban</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-2 w-full md:w-[220px]">
+            <div className="w-full md:w-[210px]">
+              <label className="text-xs font-medium text-slate-600">Priority</label>
+              <SelectDropdown
+                options={[{ label: "All", value: "All" }, ...PRIORITY_DATA]}
+                value={selectedPriority}
+                onChange={setSelectedPriority}
+                placeholder="All Priorities"
+              />
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">

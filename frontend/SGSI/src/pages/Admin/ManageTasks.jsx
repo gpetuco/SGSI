@@ -7,7 +7,7 @@ import { LuFileSpreadsheet } from "react-icons/lu";
 import TaskCard from "../../components/Cards/TaskCard";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
 import SelectDropdownSearch from "../../components/Inputs/SelectDropdownSearch";
-import { CLASSIFICATION_DATA } from "../../utils/data";
+import { CLASSIFICATION_DATA, PRIORITY_DATA } from "../../utils/data";
 
 const ManageTasks = () => {
   const [allTasks, setAllTasks] = useState([]);
@@ -15,6 +15,7 @@ const ManageTasks = () => {
   const [filterStatus, setFilterStatus] = useState("All");
   const [selectedUser, setSelectedUser] = useState("All");
   const [selectedFramework, setSelectedFramework] = useState("All");
+  const [selectedPriority, setSelectedPriority] = useState("All");
   const [userOptions, setUserOptions] = useState([{ label: "All", value: "All" }]);
 
   const navigate = useNavigate();
@@ -92,7 +93,7 @@ const ManageTasks = () => {
       <div className="my-5">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           {/* Left: Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 w-full lg:w-[660px]">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-2 w-full lg:w-[880px]">
             <div className="w-full md:w-[190px]">
               <label className="text-xs font-medium text-slate-600">User</label>
               <SelectDropdownSearch
@@ -126,6 +127,15 @@ const ManageTasks = () => {
                 placeholder="All Statuses"
               />
             </div>
+            <div className="w-full md:w-[190px]">
+              <label className="text-xs font-medium text-slate-600">Priority</label>
+              <SelectDropdown
+                options={[{ label: "All", value: "All" }, ...PRIORITY_DATA]}
+                value={selectedPriority}
+                onChange={setSelectedPriority}
+                placeholder="All Priorities"
+              />
+            </div>
           </div>
 
           {/* Right: Download */}
@@ -138,7 +148,10 @@ const ManageTasks = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-          {allTasks?.map((item, index) => (
+          {(selectedPriority === "All"
+            ? allTasks
+            : allTasks.filter((t) => t.priority === selectedPriority)
+          )?.map((item, index) => (
             <TaskCard
               key={item._id}
               title={item.title}
