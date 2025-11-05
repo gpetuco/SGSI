@@ -71,7 +71,9 @@ const MyTasks = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-1 gap-2 mt-3 w-full md:w-[220px]">
           <div className="w-full md:w-[210px]">
-            <label className="text-xs font-medium text-slate-600">Priority</label>
+            <label className="text-xs font-medium text-slate-600">
+              Priority
+            </label>
             <SelectDropdown
               options={[{ label: "All", value: "All" }, ...PRIORITY_DATA]}
               value={selectedPriority}
@@ -96,7 +98,9 @@ const MyTasks = () => {
               progress={item.progress}
               createdAt={item.createdAt}
               dueDate={item.dueDate}
-              assignedTo={item.assignedTo?.map((member) => member.profileImageUrl)}
+              assignedTo={item.assignedTo?.map(
+                (member) => member.profileImageUrl
+              )}
               attachmentCount={item.attachments?.length || 0}
               completedTodoCount={item.completedTodoCount || 0}
               todoChecklist={item.todoChecklist || []}
@@ -112,6 +116,3 @@ const MyTasks = () => {
 };
 
 export default MyTasks;
-
-
-

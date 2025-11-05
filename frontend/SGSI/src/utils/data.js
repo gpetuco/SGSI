@@ -102,15 +102,15 @@ export const SIDE_MENU_USER_DATA = [
 ];
 
 export const PRIORITY_DATA = [
-  { label: "Low", value: "Low" },
-  { label: "Medium", value: "Medium" },
-  { label: "High", value: "High" },
+  { label: "Baixa", value: "Low" },
+  { label: "Média", value: "Medium" },
+  { label: "Alta", value: "High" },
 ];
 
 export const STATUS_DATA = [
-  { label: "Pending", value: "Pending" },
-  { label: "In Progress", value: "In Progress" },
-  { label: "Completed", value: "Completed" },
+  { label: "Pendente", value: "Pending" },
+  { label: "Em Andamento", value: "In Progress" },
+  { label: "Concluído", value: "Completed" },
 ];
 
 export const CLASSIFICATION_DATA = [

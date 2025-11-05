@@ -13,7 +13,9 @@ const GrcTasks = () => {
   const [filterStatus, setFilterStatus] = useState("All");
   const [selectedPriority, setSelectedPriority] = useState("All");
   const [selectedUser, setSelectedUser] = useState("All");
-  const [userOptions, setUserOptions] = useState([{ label: "All", value: "All" }]);
+  const [userOptions, setUserOptions] = useState([
+    { label: "All", value: "All" },
+  ]);
   const navigate = useNavigate();
 
   const getAllTasks = async () => {
@@ -23,11 +25,11 @@ const GrcTasks = () => {
         classification: "GRC",
       };
       if (selectedUser !== "All") params.assignedTo = selectedUser;
-      const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, { params });
+      const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, {
+        params,
+      });
 
       setAllTasks(response.data?.tasks?.length > 0 ? response.data.tasks : []);
-
-      // removed TaskStatusTabs; no tab computation needed
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
@@ -38,7 +40,11 @@ const GrcTasks = () => {
     try {
       const res = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
       const opts = [{ label: "All", value: "All" }].concat(
-        (res.data || []).map((u) => ({ label: u.name, value: u._id, avatar: u.profileImageUrl }))
+        (res.data || []).map((u) => ({
+          label: u.name,
+          value: u._id,
+          avatar: u.profileImageUrl,
+        }))
       );
       setUserOptions(opts);
     } catch (e) {
@@ -81,10 +87,10 @@ const GrcTasks = () => {
             <label className="text-xs font-medium text-slate-600">Status</label>
             <SelectDropdown
               options={[
-                { label: "All", value: "All" },
-                { label: "Pending", value: "Pending" },
-                { label: "In Progress", value: "In Progress" },
-                { label: "Completed", value: "Completed" },
+                { label: "Todos", value: "All" },
+                { label: "Pendente", value: "Pending" },
+                { label: "Em Andamento", value: "In Progress" },
+                { label: "Concluído", value: "Completed" },
               ]}
               value={filterStatus}
               onChange={setFilterStatus}
@@ -92,7 +98,9 @@ const GrcTasks = () => {
             />
           </div>
           <div className="w-full md:w-[210px]">
-            <label className="text-xs font-medium text-slate-600">Priority</label>
+            <label className="text-xs font-medium text-slate-600">
+              Priority
+            </label>
             <SelectDropdown
               options={[{ label: "All", value: "All" }, ...PRIORITY_DATA]}
               value={selectedPriority}
@@ -131,4 +139,3 @@ const GrcTasks = () => {
 };
 
 export default GrcTasks;
-

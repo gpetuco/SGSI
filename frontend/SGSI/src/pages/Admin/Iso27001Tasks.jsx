@@ -30,8 +30,6 @@ const Iso27001Tasks = () => {
       });
 
       setAllTasks(response.data?.tasks?.length > 0 ? response.data.tasks : []);
-
-      // removed TaskStatusTabs; no tab computation needed
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
@@ -89,10 +87,10 @@ const Iso27001Tasks = () => {
             <label className="text-xs font-medium text-slate-600">Status</label>
             <SelectDropdown
               options={[
-                { label: "All", value: "All" },
-                { label: "Pending", value: "Pending" },
-                { label: "In Progress", value: "In Progress" },
-                { label: "Completed", value: "Completed" },
+                { label: "Todos", value: "All" },
+                { label: "Pendente", value: "Pending" },
+                { label: "Em Andamento", value: "In Progress" },
+                { label: "Concluído", value: "Completed" },
               ]}
               value={filterStatus}
               onChange={setFilterStatus}
@@ -101,7 +99,7 @@ const Iso27001Tasks = () => {
           </div>
           <div className="w-full md:w-[210px]">
             <label className="text-xs font-medium text-slate-600">
-              Priority
+              Prioridade
             </label>
             <SelectDropdown
               options={[{ label: "All", value: "All" }, ...PRIORITY_DATA]}

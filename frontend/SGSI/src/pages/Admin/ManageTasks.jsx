@@ -163,7 +163,7 @@ const ManageTasks = () => {
               onClick={handleDownloadReport}
             >
               <LuFileSpreadsheet className="text-lg" />
-              Download Report
+              Baixar PDF
             </button>
           </div>
         </div>

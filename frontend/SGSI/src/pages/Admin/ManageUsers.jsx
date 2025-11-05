@@ -59,7 +59,7 @@ const ManageUsers = () => {
             onClick={handleDownloadReport}
           >
             <LuFileSpreadsheet className="text-lg" />
-            Download Report
+            Baixar PDF
           </button>
         </div>
 
