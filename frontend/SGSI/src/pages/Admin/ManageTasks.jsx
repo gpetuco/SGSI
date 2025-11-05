@@ -17,7 +17,7 @@ const ManageTasks = () => {
   const [selectedFramework, setSelectedFramework] = useState("All");
   const [selectedPriority, setSelectedPriority] = useState("All");
   const [userOptions, setUserOptions] = useState([
-    { label: "All", value: "All" },
+    { label: "Todos", value: "All" },
   ]);
 
   const navigate = useNavigate();
@@ -74,7 +74,7 @@ const ManageTasks = () => {
   const fetchUsers = async () => {
     try {
       const res = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
-      const opts = [{ label: "All", value: "All" }].concat(
+      const opts = [{ label: "Todos", value: "All" }].concat(
         (res.data || []).map((u) => ({
           label: u.name,
           value: u._id,
@@ -104,7 +104,9 @@ const ManageTasks = () => {
           {/* Left: Filters */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-2 w-full lg:w-[880px]">
             <div className="w-full md:w-[190px]">
-              <label className="text-xs font-medium text-slate-600">User</label>
+              <label className="text-xs font-medium text-slate-600">
+                Responsável
+              </label>
               <SelectDropdownSearch
                 options={userOptions}
                 value={selectedUser}
@@ -119,7 +121,7 @@ const ManageTasks = () => {
               </label>
               <SelectDropdown
                 options={[
-                  { label: "All", value: "All" },
+                  { label: "Todos", value: "All" },
                   ...CLASSIFICATION_DATA,
                 ]}
                 value={selectedFramework}
@@ -133,10 +135,10 @@ const ManageTasks = () => {
               </label>
               <SelectDropdown
                 options={[
-                  { label: "All", value: "All" },
-                  { label: "Pending", value: "Pending" },
-                  { label: "In Progress", value: "In Progress" },
-                  { label: "Completed", value: "Completed" },
+                  { label: "Todos", value: "All" },
+                  { label: "Pendente", value: "Pending" },
+                  { label: "Em Andamento", value: "In Progress" },
+                  { label: "Concluído", value: "Completed" },
                 ]}
                 value={filterStatus}
                 onChange={setFilterStatus}
@@ -145,10 +147,10 @@ const ManageTasks = () => {
             </div>
             <div className="w-full md:w-[190px]">
               <label className="text-xs font-medium text-slate-600">
-                Priority
+                Prioridade
               </label>
               <SelectDropdown
-                options={[{ label: "All", value: "All" }, ...PRIORITY_DATA]}
+                options={[{ label: "Todos", value: "All" }, ...PRIORITY_DATA]}
                 value={selectedPriority}
                 onChange={setSelectedPriority}
                 placeholder="All Priorities"

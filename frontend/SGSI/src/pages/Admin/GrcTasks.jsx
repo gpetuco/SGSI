@@ -14,7 +14,7 @@ const GrcTasks = () => {
   const [selectedPriority, setSelectedPriority] = useState("All");
   const [selectedUser, setSelectedUser] = useState("All");
   const [userOptions, setUserOptions] = useState([
-    { label: "All", value: "All" },
+    { label: "Todos", value: "All" },
   ]);
   const navigate = useNavigate();
 
@@ -39,7 +39,7 @@ const GrcTasks = () => {
   const fetchUsers = async () => {
     try {
       const res = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
-      const opts = [{ label: "All", value: "All" }].concat(
+      const opts = [{ label: "Todos", value: "All" }].concat(
         (res.data || []).map((u) => ({
           label: u.name,
           value: u._id,
@@ -74,7 +74,9 @@ const GrcTasks = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-3 w-full lg:w-[660px]">
           <div className="w-full md:w-[210px]">
-            <label className="text-xs font-medium text-slate-600">User</label>
+            <label className="text-xs font-medium text-slate-600">
+              Responsável
+            </label>
             <SelectDropdownSearch
               options={userOptions}
               value={selectedUser}
@@ -99,10 +101,10 @@ const GrcTasks = () => {
           </div>
           <div className="w-full md:w-[210px]">
             <label className="text-xs font-medium text-slate-600">
-              Priority
+              Prioridade
             </label>
             <SelectDropdown
-              options={[{ label: "All", value: "All" }, ...PRIORITY_DATA]}
+              options={[{ label: "Todos", value: "All" }, ...PRIORITY_DATA]}
               value={selectedPriority}
               onChange={setSelectedPriority}
               placeholder="All Priorities"

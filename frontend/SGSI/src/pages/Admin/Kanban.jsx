@@ -53,7 +53,9 @@ const Kanban = () => {
   const [filterStatus, setFilterStatus] = useState("All");
   const [selectedUser, setSelectedUser] = useState("All");
   const [selectedPriority, setSelectedPriority] = useState("All");
-  const [userOptions, setUserOptions] = useState([{ label: "All", value: "All" }]);
+  const [userOptions, setUserOptions] = useState([
+    { label: "Todos", value: "All" },
+  ]);
   const navigate = useNavigate();
 
   const getAllTasks = async () => {
@@ -78,8 +80,12 @@ const Kanban = () => {
   const fetchUsers = async () => {
     try {
       const res = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
-      const opts = [{ label: "All", value: "All" }].concat(
-        (res.data || []).map((u) => ({ label: u.name, value: u._id, avatar: u.profileImageUrl }))
+      const opts = [{ label: "Todos", value: "All" }].concat(
+        (res.data || []).map((u) => ({
+          label: u.name,
+          value: u._id,
+          avatar: u.profileImageUrl,
+        }))
       );
       setUserOptions(opts);
     } catch (e) {
@@ -97,7 +103,10 @@ const Kanban = () => {
   }, [filterStatus, selectedUser]);
 
   const grouped = useMemo(() => {
-    const source = selectedPriority === "All" ? tasks : tasks.filter((t) => t.priority === selectedPriority);
+    const source =
+      selectedPriority === "All"
+        ? tasks
+        : tasks.filter((t) => t.priority === selectedPriority);
     const by = { GRC: [], "ISO 27001": [], "NIST CSF": [] };
     for (const t of source) {
       const key = t.classification;
@@ -117,7 +126,9 @@ const Kanban = () => {
           {/* Filters */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 w-full lg:w-[660px]">
             <div className="w-full md:w-[210px]">
-              <label className="text-xs font-medium text-slate-600">User</label>
+              <label className="text-xs font-medium text-slate-600">
+                Responsável
+              </label>
               <SelectDropdownSearch
                 options={userOptions}
                 value={selectedUser}
@@ -127,13 +138,15 @@ const Kanban = () => {
               />
             </div>
             <div className="w-full md:w-[210px]">
-              <label className="text-xs font-medium text-slate-600">Status</label>
+              <label className="text-xs font-medium text-slate-600">
+                Status
+              </label>
               <SelectDropdown
                 options={[
-                  { label: "All", value: "All" },
-                  { label: "Pending", value: "Pending" },
-                  { label: "In Progress", value: "In Progress" },
-                  { label: "Completed", value: "Completed" },
+                  { label: "Todos", value: "All" },
+                  { label: "Pendente", value: "Pending" },
+                  { label: "Em Andamento", value: "In Progress" },
+                  { label: "Concluído", value: "Completed" },
                 ]}
                 value={filterStatus}
                 onChange={setFilterStatus}
@@ -141,9 +154,11 @@ const Kanban = () => {
               />
             </div>
             <div className="w-full md:w-[210px]">
-              <label className="text-xs font-medium text-slate-600">Priority</label>
+              <label className="text-xs font-medium text-slate-600">
+                Prioridade
+              </label>
               <SelectDropdown
-                options={[{ label: "All", value: "All" }, ...PRIORITY_DATA]}
+                options={[{ label: "Todos", value: "All" }, ...PRIORITY_DATA]}
                 value={selectedPriority}
                 onChange={setSelectedPriority}
                 placeholder="All Priorities"

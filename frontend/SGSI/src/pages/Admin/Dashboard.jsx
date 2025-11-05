@@ -55,17 +55,17 @@ const Dashboard = () => {
     const taskPriorityLevels = data?.taskPriorityLevels || null;
 
     const taskDistributionData = [
-      { status: "Pending", count: taskDistribution?.Pending || 0 },
-      { status: "In Progress", count: taskDistribution?.InProgress || 0 },
-      { status: "Completed", count: taskDistribution?.Completed || 0 },
+      { status: "Pendente", count: taskDistribution?.Pending || 0 },
+      { status: "Em Andamento", count: taskDistribution?.InProgress || 0 },
+      { status: "Concluído", count: taskDistribution?.Completed || 0 },
     ];
 
     setPieChartData(taskDistributionData);
 
     const PriorityLevelData = [
-      { priority: "Low", count: taskPriorityLevels?.Low || 0 },
-      { priority: "Medium", count: taskPriorityLevels?.Medium || 0 },
-      { priority: "High", count: taskPriorityLevels?.High || 0 },
+      { priority: "Baixa", count: taskPriorityLevels?.Low || 0 },
+      { priority: "Média", count: taskPriorityLevels?.Medium || 0 },
+      { priority: "Alta", count: taskPriorityLevels?.High || 0 },
     ];
 
     setBarChartData(PriorityLevelData);
@@ -84,19 +84,19 @@ const Dashboard = () => {
     const frameworks = ["GRC", "NIST CSF", "ISO 27001"]; // requested order
     const line = [
       {
-        name: "Pending",
+        name: "Pendente",
         GRC: statusByFramework?.["GRC"]?.Pending || 0,
         "NIST CSF": statusByFramework?.["NIST CSF"]?.Pending || 0,
         "ISO 27001": statusByFramework?.["ISO 27001"]?.Pending || 0,
       },
       {
-        name: "In Progress",
+        name: "Em Andamento",
         GRC: statusByFramework?.["GRC"]?.InProgress || 0,
         "NIST CSF": statusByFramework?.["NIST CSF"]?.InProgress || 0,
         "ISO 27001": statusByFramework?.["ISO 27001"]?.InProgress || 0,
       },
       {
-        name: "Completed",
+        name: "Concluído",
         GRC: statusByFramework?.["GRC"]?.Completed || 0,
         "NIST CSF": statusByFramework?.["NIST CSF"]?.Completed || 0,
         "ISO 27001": statusByFramework?.["ISO 27001"]?.Completed || 0,
@@ -172,19 +172,11 @@ const Dashboard = () => {
               {formatLongPtBr()}
             </p>
           </div>
-          <div className="grid grid-cols-1 gap-3 w-full lg:w-auto lg:min-w-[240px]">
-            <SelectDropdown
-              options={[{ label: "All", value: "All" }, ...CLASSIFICATION_DATA]}
-              value={classificationFilter}
-              onChange={setClassificationFilter}
-              placeholder="Classification"
-            />
-          </div>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-5">
           <InfoCard
-            label="Total Tasks"
+            label="Total de Ações"
             value={addThousandsSeparator(
               dashboardData?.charts?.taskDistribution?.All || 0
             )}
@@ -192,7 +184,7 @@ const Dashboard = () => {
           />
 
           <InfoCard
-            label="Pending Tasks"
+            label="Ações Pendentes"
             value={addThousandsSeparator(
               dashboardData?.charts?.taskDistribution?.Pending || 0
             )}
@@ -200,7 +192,7 @@ const Dashboard = () => {
           />
 
           <InfoCard
-            label="In Progress Tasks"
+            label="Ações Em Andamento"
             value={addThousandsSeparator(
               dashboardData?.charts?.taskDistribution?.InProgress || 0
             )}
@@ -208,7 +200,7 @@ const Dashboard = () => {
           />
 
           <InfoCard
-            label="Completed Tasks"
+            label="Ações Concluídas"
             value={addThousandsSeparator(
               dashboardData?.charts?.taskDistribution?.Completed || 0
             )}
@@ -340,22 +332,24 @@ const Dashboard = () => {
                 <div className="flex flex-wrap items-center justify-center gap-8 pb-2">
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white-important">
                     <span className="inline-block w-2.5 h-2.5 rounded-full bg-primary"></span>
-                    <span className="font-medium">{total} Total Tasks</span>
+                    <span className="font-medium">{total} Total</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white-important">
                     <span className="inline-block w-2.5 h-2.5 rounded-full bg-violet-500"></span>
-                    <span className="font-medium">{pending} Pending Tasks</span>
+                    <span className="font-medium">
+                      {pending} Ações Pendentes
+                    </span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white-important">
                     <span className="inline-block w-2.5 h-2.5 rounded-full bg-cyan-500"></span>
                     <span className="font-medium">
-                      {inProgress} In Progress Tasks
+                      {inProgress} Ações Em Andamento
                     </span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white-important">
                     <span className="inline-block w-2.5 h-2.5 rounded-full bg-lime-500"></span>
                     <span className="font-medium">
-                      {completed} Completed Tasks
+                      {completed} Ações Concluídas
                     </span>
                   </div>
                 </div>

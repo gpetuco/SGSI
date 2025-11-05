@@ -14,7 +14,7 @@ const NistCsfTasks = () => {
   const [selectedPriority, setSelectedPriority] = useState("All");
   const [selectedUser, setSelectedUser] = useState("All");
   const [userOptions, setUserOptions] = useState([
-    { label: "All", value: "All" },
+    { label: "Todos", value: "All" },
   ]);
   const navigate = useNavigate();
 
@@ -39,7 +39,7 @@ const NistCsfTasks = () => {
   const fetchUsers = async () => {
     try {
       const res = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
-      const opts = [{ label: "All", value: "All" }].concat(
+      const opts = [{ label: "Todos", value: "All" }].concat(
         (res.data || []).map((u) => ({
           label: u.name,
           value: u._id,
@@ -105,7 +105,7 @@ const NistCsfTasks = () => {
               Prioridade
             </label>
             <SelectDropdown
-              options={[{ label: "All", value: "All" }, ...PRIORITY_DATA]}
+              options={[{ label: "Todos", value: "All" }, ...PRIORITY_DATA]}
               value={selectedPriority}
               onChange={setSelectedPriority}
               placeholder="All Priorities"
