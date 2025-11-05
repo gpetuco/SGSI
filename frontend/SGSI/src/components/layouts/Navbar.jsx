@@ -1,24 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
-import { FiMoon, FiSun } from "react-icons/fi";
 import SideMenu from "./SideMenu";
 
 const Navbar = ({ activeMenu }) => {
   const [openSideMenu, setOpenSideMenu] = useState(false);
-  const [theme, setTheme] = useState(
-    () => localStorage.getItem("theme") || "light"
-  );
-
-  // Apply theme to <html> as class (Tailwind/classic dark strategy)
+  // Ensure dark mode is applied (single theme only)
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-    localStorage.setItem("theme", theme);
-  }, [theme]);
+    if (!root.classList.contains("dark")) root.classList.add("dark");
+    try {
+      localStorage.setItem("theme", "dark");
+      // eslint-disable-next-line no-empty
+    } catch (_) {}
+  }, []);
 
   return (
     <div className="flex items-center justify-between gap-5 bg-white border boredr-b border-gray-200/50 backdrop-blur-[2px] py-4 px-7 sticky top-0 z-30">
@@ -36,21 +30,12 @@ const Navbar = ({ activeMenu }) => {
           )}
         </button>
 
-        <h2 className="text-lg font-medium text-black dark:text-white">Task Manager</h2>
+        <h2 className="text-lg font-medium text-black dark:text-white">
+          Task Manager
+        </h2>
       </div>
 
-      <button
-        aria-label="Alternar tema"
-        className="ml-auto inline-flex items-center justify-center w-9 h-9 rounded-full border border-gray-200/50 bg-gray-50 text-black hover:bg-blue-50 hover:text-primary transition-colors"
-        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        title={theme === "dark" ? "Ativar modo dia" : "Ativar modo noite"}
-      >
-        {theme === "dark" ? (
-          <FiSun className="text-xl" />
-        ) : (
-          <FiMoon className="text-xl" />
-        )}
-      </button>
+      {/* Theme toggle removed to keep only dark mode */}
 
       {openSideMenu && (
         <div className="fixed top-[61px] -ml-4 bg-white">

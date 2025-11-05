@@ -64,7 +64,7 @@ const Login = () => {
     <AuthLayout>
       <div className="lg:w-[70%] h-3/4 md:h-full flex flex-col justify-center">
         <h3 className="text-xl font-semibold text-black">Bem-vindo!</h3>
-        <p className="text-xs text-slate-700 mt-[5px] mb-6">
+        <p className="text-[14px] text-white mt-[5px] mb-6">
           Digite seu email e senha para iniciar sessão
         </p>
 
@@ -91,7 +91,7 @@ const Login = () => {
             Entrar
           </button>
 
-          <p className="text-[13px] text-slate-800 mt-3">
+          <p className="text-[13px] text-slate-100 mt-3">
             Não tem uma conta?{" "}
             <Link className="font-medium text-primary underline" to="/signup">
               Cadastre-se

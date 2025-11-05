@@ -86,7 +86,7 @@ const SignUp = () => {
     <AuthLayout>
       <div className="lg:w-[100%] h-auto md:h-full mt-10 md:mt-0 flex flex-col justify-center">
         <h3 className="text-xl font-semibold text-black">Criar nova conta</h3>
-        <p className="text-xs text-slate-700 mt-[5px] mb-6">
+        <p className="text-[14px] text-white mt-[5px] mb-6">
           Cadastre-se inserindo suas informações.
         </p>
 
@@ -133,7 +133,7 @@ const SignUp = () => {
             Cadastre-se
           </button>
 
-          <p className="text-[13px] text-slate-800 mt-3">
+          <p className="text-[13px] text-slate-100 mt-3">
             Já tem uma conta?{" "}
             <Link className="font-medium text-primary underline" to="/login">
               Entrar
