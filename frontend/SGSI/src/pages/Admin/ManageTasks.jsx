@@ -16,7 +16,9 @@ const ManageTasks = () => {
   const [selectedUser, setSelectedUser] = useState("All");
   const [selectedFramework, setSelectedFramework] = useState("All");
   const [selectedPriority, setSelectedPriority] = useState("All");
-  const [userOptions, setUserOptions] = useState([{ label: "All", value: "All" }]);
+  const [userOptions, setUserOptions] = useState([
+    { label: "All", value: "All" },
+  ]);
 
   const navigate = useNavigate();
 
@@ -25,10 +27,13 @@ const ManageTasks = () => {
       const params = {
         status: filterStatus === "All" ? "" : filterStatus,
       };
-      if (selectedFramework !== "All") params.classification = selectedFramework;
+      if (selectedFramework !== "All")
+        params.classification = selectedFramework;
       if (selectedUser !== "All") params.assignedTo = selectedUser;
 
-      const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, { params });
+      const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, {
+        params,
+      });
 
       setAllTasks(response.data?.tasks?.length > 0 ? response.data.tasks : []);
 
@@ -70,7 +75,11 @@ const ManageTasks = () => {
     try {
       const res = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
       const opts = [{ label: "All", value: "All" }].concat(
-        (res.data || []).map((u) => ({ label: u.name, value: u._id, avatar: u.profileImageUrl }))
+        (res.data || []).map((u) => ({
+          label: u.name,
+          value: u._id,
+          avatar: u.profileImageUrl,
+        }))
       );
       setUserOptions(opts);
     } catch (e) {
@@ -89,7 +98,7 @@ const ManageTasks = () => {
   }, [filterStatus, selectedFramework, selectedUser]);
 
   return (
-    <DashboardLayout activeMenu="Manage Tasks">
+    <DashboardLayout activeMenu="Ações">
       <div className="my-5">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           {/* Left: Filters */}
@@ -105,16 +114,23 @@ const ManageTasks = () => {
               />
             </div>
             <div className="w-full md:w-[190px]">
-              <label className="text-xs font-medium text-slate-600">Framework</label>
+              <label className="text-xs font-medium text-slate-600">
+                Framework
+              </label>
               <SelectDropdown
-                options={[{ label: "All", value: "All" }, ...CLASSIFICATION_DATA]}
+                options={[
+                  { label: "All", value: "All" },
+                  ...CLASSIFICATION_DATA,
+                ]}
                 value={selectedFramework}
                 onChange={setSelectedFramework}
                 placeholder="All Frameworks"
               />
             </div>
             <div className="w-full md:w-[190px]">
-              <label className="text-xs font-medium text-slate-600">Status</label>
+              <label className="text-xs font-medium text-slate-600">
+                Status
+              </label>
               <SelectDropdown
                 options={[
                   { label: "All", value: "All" },
@@ -128,7 +144,9 @@ const ManageTasks = () => {
               />
             </div>
             <div className="w-full md:w-[190px]">
-              <label className="text-xs font-medium text-slate-600">Priority</label>
+              <label className="text-xs font-medium text-slate-600">
+                Priority
+              </label>
               <SelectDropdown
                 options={[{ label: "All", value: "All" }, ...PRIORITY_DATA]}
                 value={selectedPriority}
@@ -140,7 +158,10 @@ const ManageTasks = () => {
 
           {/* Right: Download */}
           <div className="flex items-center gap-3 lg:ml-2 lg:flex-1 lg:justify-end lg:flex-nowrap min-w-0">
-            <button className="hidden lg:flex download-btn shrink-0" onClick={handleDownloadReport}>
+            <button
+              className="hidden lg:flex download-btn shrink-0"
+              onClick={handleDownloadReport}
+            >
               <LuFileSpreadsheet className="text-lg" />
               Download Report
             </button>
@@ -162,7 +183,9 @@ const ManageTasks = () => {
               progress={item.progress}
               createdAt={item.createdAt}
               dueDate={item.dueDate}
-              assignedTo={item.assignedTo?.map((member) => member.profileImageUrl)}
+              assignedTo={item.assignedTo?.map(
+                (member) => member.profileImageUrl
+              )}
               attachmentCount={item.attachments?.length || 0}
               completedTodoCount={item.completedTodoCount || 0}
               todoChecklist={item.todoChecklist || []}
@@ -178,5 +201,3 @@ const ManageTasks = () => {
 };
 
 export default ManageTasks;
-
-

@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import { LuFileSpreadsheet } from "react-icons/lu";
-import TaskStatusTabs from "../../components/TaskStatusTabs";
 import TaskCard from "../../components/Cards/TaskCard";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
 import { PRIORITY_DATA, CLASSIFICATION_DATA } from "../../utils/data";
@@ -12,7 +11,6 @@ import { PRIORITY_DATA, CLASSIFICATION_DATA } from "../../utils/data";
 const MyTasks = () => {
   const [allTasks, setAllTasks] = useState([]);
 
-  const [tabs, setTabs] = useState([]);
   const [filterStatus, setFilterStatus] = useState("All");
   const [selectedPriority, setSelectedPriority] = useState("All");
   const [selectedFramework, setSelectedFramework] = useState("All");
@@ -25,22 +23,15 @@ const MyTasks = () => {
         status: filterStatus === "All" ? "" : filterStatus,
         assignedTo: "me",
       };
-      if (selectedFramework !== "All") params.classification = selectedFramework;
-      const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, { params });
+      if (selectedFramework !== "All")
+        params.classification = selectedFramework;
+      const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, {
+        params,
+      });
 
       setAllTasks(response.data?.tasks?.length > 0 ? response.data.tasks : []);
 
-      // Map statusSummary data with fixed labels and order
-      const statusSummary = response.data?.statusSummary || {};
-
-      const statusArray = [
-        { label: "All", count: statusSummary.all || 0 },
-        { label: "Pending", count: statusSummary.pendingTasks || 0 },
-        { label: "In Progress", count: statusSummary.inProgressTasks || 0 },
-        { label: "Completed", count: statusSummary.completedTasks || 0 },
-      ];
-
-      setTabs(statusArray);
+      // removed TaskStatusTabs, no need to compute tabs
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -61,20 +52,14 @@ const MyTasks = () => {
       <div className="my-5">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between">
           <h2 className="text-xl md:text-xl font-medium">My Tasks</h2>
-
-          {tabs?.[0]?.count > 0 && (
-            <TaskStatusTabs
-              tabs={tabs}
-              activeTab={filterStatus}
-              setActiveTab={setFilterStatus}
-            />
-          )}
         </div>
 
         {/* Filters: Framework, Status, Priority (no User here) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-3 w-full lg:w-[660px]">
           <div className="w-full md:w-[210px]">
-            <label className="text-xs font-medium text-slate-600">Framework</label>
+            <label className="text-xs font-medium text-slate-600">
+              Framework
+            </label>
             <SelectDropdown
               options={[{ label: "All", value: "All" }, ...CLASSIFICATION_DATA]}
               value={selectedFramework}
@@ -97,7 +82,9 @@ const MyTasks = () => {
             />
           </div>
           <div className="w-full md:w-[210px]">
-            <label className="text-xs font-medium text-slate-600">Priority</label>
+            <label className="text-xs font-medium text-slate-600">
+              Priority
+            </label>
             <SelectDropdown
               options={[{ label: "All", value: "All" }, ...PRIORITY_DATA]}
               value={selectedPriority}
@@ -122,7 +109,9 @@ const MyTasks = () => {
               progress={item.progress}
               createdAt={item.createdAt}
               dueDate={item.dueDate}
-              assignedTo={item.assignedTo?.map((member) => member.profileImageUrl)}
+              assignedTo={item.assignedTo?.map(
+                (member) => member.profileImageUrl
+              )}
               attachmentCount={item.attachments?.length || 0}
               completedTodoCount={item.completedTodoCount || 0}
               todoChecklist={item.todoChecklist || []}
@@ -138,6 +127,3 @@ const MyTasks = () => {
 };
 
 export default MyTasks;
-
-
-

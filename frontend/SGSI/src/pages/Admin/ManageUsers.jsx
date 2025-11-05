@@ -49,10 +49,10 @@ const ManageUsers = () => {
   }, []);
 
   return (
-    <DashboardLayout activeMenu="Team Members">
+    <DashboardLayout activeMenu="Membros">
       <div className="mt-5 mb-10">
         <div className="flex md:flex-row md:items-center justify-between">
-          <h2 className="text-xl md:text-xl font-medium">Team Members</h2>
+          <h2 className="text-xl md:text-xl font-medium">Membros</h2>
 
           <button
             className="flex md:flex download-btn"

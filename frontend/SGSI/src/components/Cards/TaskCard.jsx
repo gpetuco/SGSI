@@ -100,8 +100,8 @@ const TaskCard = ({
           {description}
         </p>
 
-        <p className="text-[13px] text-gray-700/80 dark:text-slate-200 font-medium mt-2 mb-2 leading-[18px]">
-          Task Done:{" "}
+        <p className="text-[13px] font-medium mt-2 mb-2 leading-[18px]">
+          <span className="text-white">Task Done:</span>{" "}
           <span className="font-semibold text-gray-700 dark:text-white">
             {completedTodoCount} / {todoChecklist.length || 0}
           </span>
@@ -115,14 +115,14 @@ const TaskCard = ({
           <div>
             <label className="text-xs text-gray-500">Inicio</label>
             <p className="text-[13px] font-medium text-gray-900">
-              {moment(createdAt).format("Do MMM YYYY")}
+              {moment(createdAt).format("DD/MM/YYYY")}
             </p>
           </div>
 
           <div>
             <label className="text-xs text-gray-500">Previsto</label>
             <p className="text-[13px] font-medium text-gray-900">
-              {moment(dueDate).format("Do MMM YYYY")}
+              {moment(dueDate).format("DD/MM/YYYY")}
             </p>
           </div>
         </div>

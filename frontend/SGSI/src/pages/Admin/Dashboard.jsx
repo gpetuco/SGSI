@@ -6,7 +6,7 @@ import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
-import moment from "moment";
+// Use Intl for pt-BR date formatting
 import { addThousandsSeparator } from "../../utils/helper";
 import InfoCard from "../../components/Cards/InfoCard";
 import { LuArrowRight } from "react-icons/lu";
@@ -147,6 +147,16 @@ const Dashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [classificationFilter]);
 
+  const formatLongPtBr = () => {
+    const s = new Intl.DateTimeFormat("pt-BR", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(new Date());
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
+
   return (
     <DashboardLayout activeMenu="Dashboard">
       <div className="card my-5">
@@ -154,7 +164,7 @@ const Dashboard = () => {
           <div>
             <h2 className="text-xl md:text-2xl">Bem-vindo, {user?.name}!</h2>
             <p className="text-xs md:text-[13px] text-gray-400 mt-1.5">
-              {moment().format("dddd Do MMM YYYY")}
+              {formatLongPtBr()}
             </p>
           </div>
           <div className="grid grid-cols-1 gap-3 w-full lg:w-auto lg:min-w-[240px]">
