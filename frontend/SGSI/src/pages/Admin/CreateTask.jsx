@@ -484,7 +484,7 @@ const CreateTask = () => {
 
               <div className="col-span-12 md:col-span-3">
                 <label className="text-xs font-medium text-slate-600">
-                  Assign To
+                  Responsável
                 </label>
 
                 <SelectUsers

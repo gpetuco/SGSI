@@ -20,7 +20,12 @@ import PercentBarByFramework from "../../components/Charts/PercentBarByFramework
 import StackedStatusByUser from "../../components/Charts/StackedStatusByUser";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
 import { CLASSIFICATION_DATA } from "../../utils/data";
-import { PieChart as RePieChart, Pie as RePie, Cell as ReCell, ResponsiveContainer as ReResponsiveContainer } from "recharts";
+import {
+  PieChart as RePieChart,
+  Pie as RePie,
+  Cell as ReCell,
+  ResponsiveContainer as ReResponsiveContainer,
+} from "recharts";
 import { LuZoomIn } from "react-icons/lu";
 import Modal from "../../components/Modal";
 
@@ -209,8 +214,8 @@ const Dashboard = () => {
             )}
             color="bg-lime-500"
           />
+        </div>
       </div>
-    </div>
 
       {/* Completion by framework mini-cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
@@ -220,18 +225,29 @@ const Dashboard = () => {
           { label: "NIST CSF", color: COLORS[1] },
         ].map((fw) => {
           const pct =
-            completionPercentData.find((i) => i.framework === fw.label)?.percent || 0;
+            completionPercentData.find((i) => i.framework === fw.label)
+              ?.percent || 0;
           const clamped = Math.max(0, Math.min(100, pct));
           const donutData = [
             { name: "done", value: clamped },
             { name: "remain", value: 100 - clamped },
           ];
           return (
-            <div key={fw.label} className="card relative group flex items-center justify-between p-4 min-h-[112px]">
+            <div
+              key={fw.label}
+              className="card relative group flex items-center justify-between p-4 min-h-[112px]"
+            >
               <button
                 aria-label="Zoom"
                 className="chart-zoom-btn opacity-0 group-hover:opacity-100"
-                onClick={() => setFwModal({ open: true, fw: fw.label, percent: clamped, color: fw.color })}
+                onClick={() =>
+                  setFwModal({
+                    open: true,
+                    fw: fw.label,
+                    percent: clamped,
+                    color: fw.color,
+                  })
+                }
               >
                 <LuZoomIn className="text-lg" />
               </button>
@@ -278,7 +294,8 @@ const Dashboard = () => {
           variant="wide"
         >
           {(() => {
-            const entry = stackedStatusData.find((e) => e.framework === fwModal.fw) || {};
+            const entry =
+              stackedStatusData.find((e) => e.framework === fwModal.fw) || {};
             const pending = entry.Pending || 0;
             const inProgress = entry.InProgress || 0;
             const completed = entry.Completed || 0;
@@ -287,16 +304,24 @@ const Dashboard = () => {
               <div>
                 <div className="flex items-center justify-center gap-10 md:gap-16 py-6">
                   <div className="text-center">
-                    <div className="text-sm font-bold uppercase" style={{ color: fwModal.color }}>{fwModal.fw}</div>
-                    <div className="text-6xl md:text-7xl font-extrabold leading-none mt-2">{fwModal.percent}%</div>
+                    <div
+                      className="text-sm font-bold uppercase"
+                      style={{ color: fwModal.color }}
+                    >
+                      {fwModal.fw}
+                    </div>
+                    <div className="text-6xl md:text-7xl font-extrabold leading-none mt-2">
+                      {fwModal.percent}%
+                    </div>
                   </div>
                   <div className="w-[160px] h-[160px]">
                     <ReResponsiveContainer width="100%" height="100%">
                       <RePieChart>
-                        <RePie data={[
-                          { name: 'done', value: fwModal.percent },
-                          { name: 'remain', value: 100 - fwModal.percent },
-                        ]}
+                        <RePie
+                          data={[
+                            { name: "done", value: fwModal.percent },
+                            { name: "remain", value: 100 - fwModal.percent },
+                          ]}
                           dataKey="value"
                           innerRadius={"60%"}
                           outerRadius={"85%"}
@@ -304,7 +329,7 @@ const Dashboard = () => {
                           endAngle={-270}
                           stroke="none"
                         >
-                          <ReCell fill={fwModal.color || '#1368ec'} />
+                          <ReCell fill={fwModal.color || "#1368ec"} />
                           <ReCell fill="#CBD5E1" />
                         </RePie>
                       </RePieChart>
@@ -323,11 +348,15 @@ const Dashboard = () => {
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white-important">
                     <span className="inline-block w-2.5 h-2.5 rounded-full bg-cyan-500"></span>
-                    <span className="font-medium">{inProgress} In Progress Tasks</span>
+                    <span className="font-medium">
+                      {inProgress} In Progress Tasks
+                    </span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white-important">
                     <span className="inline-block w-2.5 h-2.5 rounded-full bg-lime-500"></span>
-                    <span className="font-medium">{completed} Completed Tasks</span>
+                    <span className="font-medium">
+                      {completed} Completed Tasks
+                    </span>
                   </div>
                 </div>
               </div>
@@ -340,7 +369,7 @@ const Dashboard = () => {
         <div>
           <div className="card">
             <div className="flex items-center justify-between">
-              <h5 className="font-medium">Task Distribution</h5>
+              <h5 className="font-medium">Status</h5>
             </div>
 
             <CustomPieChart data={pieChartData} colors={COLORS} />
@@ -350,7 +379,7 @@ const Dashboard = () => {
         <div>
           <div className="card">
             <div className="flex items-center justify-between">
-              <h5 className="font-medium">Priority</h5>
+              <h5 className="font-medium">Prioridade</h5>
             </div>
 
             <CustomAreaChart
@@ -364,7 +393,7 @@ const Dashboard = () => {
         <div>
           <div className="card">
             <div className="flex items-center justify-between">
-              <h5 className="font-medium">Status by Framework</h5>
+              <h5 className="font-medium">Status por Framework</h5>
             </div>
             <StackedStatusByFramework data={stackedStatusData} />
           </div>
@@ -373,17 +402,16 @@ const Dashboard = () => {
         <div>
           <div className="card">
             <div className="flex items-center justify-between">
-              <h5 className="font-medium">Completion % by Framework</h5>
+              <h5 className="font-medium">Progresso (%)</h5>
             </div>
             <PercentBarByFramework data={completionPercentData} />
           </div>
         </div>
 
-        {/* Line chart: one line per framework by status */}
         <div className="md:col-span-2">
           <div className="card">
             <div className="flex items-center justify-between">
-              <h5 className="font-medium">Framework Lines by Status</h5>
+              <h5 className="font-medium">Status por Framework</h5>
             </div>
             <CustomLineChart
               data={frameworkLineData}
@@ -397,11 +425,10 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Tasks by User (Top 5) - grouped bars */}
         <div className="md:col-span-2">
           <div className="card">
             <div className="flex items-center justify-between">
-              <h5 className="font-medium">Tasks by User (Top 5)</h5>
+              <h5 className="font-medium">Top 5 (Membros)</h5>
             </div>
             <StackedStatusByUser data={tasksByUserData} />
           </div>
@@ -410,10 +437,10 @@ const Dashboard = () => {
         <div className="md:col-span-2">
           <div className="card">
             <div className="flex items-center justify-between ">
-              <h5 className="text-lg">Recent Tasks</h5>
+              <h5 className="text-lg">Ações Recentes</h5>
 
               <button className="card-btn" onClick={onSeeMore}>
-                See All <LuArrowRight className="text-base" />
+                Ver mais <LuArrowRight className="text-base" />
               </button>
             </div>
 

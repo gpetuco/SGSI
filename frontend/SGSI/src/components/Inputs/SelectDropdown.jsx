@@ -35,7 +35,7 @@ const SelectDropdown = ({ options, value, onChange, placeholder }) => {
             <div
               key={option.value}
               onClick={() => handleSelect(option.value)}
-              className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-700"
+              className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600 text-black dark:text-slate-100"
             >
               {option.label}
             </div>

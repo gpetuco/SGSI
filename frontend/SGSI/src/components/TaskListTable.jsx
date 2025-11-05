@@ -50,25 +50,29 @@ const TaskListTable = ({ tableData }) => {
         <thead>
           <tr className="text-left">
             <th className="py-3 px-4 text-gray-800 dark:text-white font-medium text-[13px]">
-              Name
+              Ação
             </th>
             <th className="py-3 px-4 text-gray-800 dark:text-white font-medium text-[13px]">
               Status
             </th>
             <th className="py-3 px-4 text-gray-800 dark:text-white font-medium text-[13px]">
-              Priority
+              Prioridade
             </th>
             <th className="py-3 px-4 text-gray-800 dark:text-white font-medium text-[13px]">
               Framework
             </th>
-            <th className="py-3 px-4 text-gray-800 dark:text-white font-medium text-[13px]">Assign To</th>
+            <th className="py-3 px-4 text-gray-800 dark:text-white font-medium text-[13px]">
+              Responsável
+            </th>
           </tr>
         </thead>
         <tbody>
           {tableData.map((task) => (
             <tr
               key={task._id}
-              onClick={() => navigate(`/admin/create-task`, { state: { taskId: task._id } })}
+              onClick={() =>
+                navigate(`/admin/create-task`, { state: { taskId: task._id } })
+              }
               className="border-t border-gray-200 dark:border-slate-700 row-hover cursor-pointer"
             >
               <td className="py-4 px-4 text-gray-700 dark:text-white text-[13px] truncate">
@@ -93,11 +97,33 @@ const TaskListTable = ({ tableData }) => {
                 </span>
               </td>
               <td className="py-4 px-4">
-                <span className={`px-2 py-1 text-xs rounded inline-block ${getFrameworkBadgeColor(task.classification)}`}>
-                  {task.classification || '-'}
+                <span
+                  className={`px-2 py-1 text-xs rounded inline-block ${getFrameworkBadgeColor(
+                    task.classification
+                  )}`}
+                >
+                  {task.classification || "-"}
                 </span>
               </td>
-              <td className="py-4 px-4">{Array.isArray(task.assignedTo) && task.assignedTo.length > 0 ? (<div className="flex items-center gap-2"><UserAvatar src={task.assignedTo[0]?.profileImageUrl} name={task.assignedTo[0]?.name} size="w-6 h-6" /><span className="text-[13px] text-gray-700 dark:text-white">{task.assignedTo[0]?.name}</span></div>) : (<span className="text-[13px] text-gray-500 dark:text-slate-300">-</span>)}</td>
+              <td className="py-4 px-4">
+                {Array.isArray(task.assignedTo) &&
+                task.assignedTo.length > 0 ? (
+                  <div className="flex items-center gap-2">
+                    <UserAvatar
+                      src={task.assignedTo[0]?.profileImageUrl}
+                      name={task.assignedTo[0]?.name}
+                      size="w-6 h-6"
+                    />
+                    <span className="text-[13px] text-gray-700 dark:text-white">
+                      {task.assignedTo[0]?.name}
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-[13px] text-gray-500 dark:text-slate-300">
+                    -
+                  </span>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -107,9 +133,3 @@ const TaskListTable = ({ tableData }) => {
 };
 
 export default TaskListTable;
-
-
-
-
-
-

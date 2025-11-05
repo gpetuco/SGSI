@@ -57,7 +57,7 @@ const SelectDropdownSearch = ({ options = [], value, onChange, placeholder, show
               <div
                 key={option.value}
                 onClick={() => handleSelect(option.value)}
-                className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-700 flex items-center gap-2"
+                className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600 flex items-center gap-2"
               >
                 {showAvatar && (
                   <UserAvatar src={option.avatar} name={option.label} size="w-6 h-6" />

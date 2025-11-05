@@ -3,7 +3,6 @@ import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
-import TaskStatusTabs from "../../components/TaskStatusTabs";
 import TaskCard from "../../components/Cards/TaskCard";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
 import SelectDropdownSearch from "../../components/Inputs/SelectDropdownSearch";
@@ -11,11 +10,12 @@ import { PRIORITY_DATA } from "../../utils/data";
 
 const Iso27001Tasks = () => {
   const [allTasks, setAllTasks] = useState([]);
-  const [tabs, setTabs] = useState([]);
   const [filterStatus, setFilterStatus] = useState("All");
   const [selectedPriority, setSelectedPriority] = useState("All");
   const [selectedUser, setSelectedUser] = useState("All");
-  const [userOptions, setUserOptions] = useState([{ label: "All", value: "All" }]);
+  const [userOptions, setUserOptions] = useState([
+    { label: "All", value: "All" },
+  ]);
   const navigate = useNavigate();
 
   const getAllTasks = async () => {
@@ -25,18 +25,13 @@ const Iso27001Tasks = () => {
         classification: "ISO 27001",
       };
       if (selectedUser !== "All") params.assignedTo = selectedUser;
-      const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, { params });
+      const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, {
+        params,
+      });
 
       setAllTasks(response.data?.tasks?.length > 0 ? response.data.tasks : []);
 
-      const statusSummary = response.data?.statusSummary || {};
-      const statusArray = [
-        { label: "All", count: statusSummary.all || 0 },
-        { label: "Pending", count: statusSummary.pendingTasks || 0 },
-        { label: "In Progress", count: statusSummary.inProgressTasks || 0 },
-        { label: "Completed", count: statusSummary.completedTasks || 0 },
-      ];
-      setTabs(statusArray);
+      // removed TaskStatusTabs; no tab computation needed
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
@@ -51,7 +46,11 @@ const Iso27001Tasks = () => {
     try {
       const res = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
       const opts = [{ label: "All", value: "All" }].concat(
-        (res.data || []).map((u) => ({ label: u.name, value: u._id, avatar: u.profileImageUrl }))
+        (res.data || []).map((u) => ({
+          label: u.name,
+          value: u._id,
+          avatar: u.profileImageUrl,
+        }))
       );
       setUserOptions(opts);
     } catch (e) {
@@ -73,17 +72,8 @@ const Iso27001Tasks = () => {
       <div className="my-5">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between">
           <h2 className="text-xl md:text-xl font-medium">ISO 27001</h2>
-
-          {tabs?.[0]?.count > 0 && (
-            <TaskStatusTabs
-              tabs={tabs}
-              activeTab={filterStatus}
-              setActiveTab={setFilterStatus}
-            />
-          )}
         </div>
 
-        {/* Filters: User, Status, Priority (no Framework here) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-3 w-full lg:w-[660px]">
           <div className="w-full md:w-[210px]">
             <label className="text-xs font-medium text-slate-600">User</label>
@@ -110,7 +100,9 @@ const Iso27001Tasks = () => {
             />
           </div>
           <div className="w-full md:w-[210px]">
-            <label className="text-xs font-medium text-slate-600">Priority</label>
+            <label className="text-xs font-medium text-slate-600">
+              Priority
+            </label>
             <SelectDropdown
               options={[{ label: "All", value: "All" }, ...PRIORITY_DATA]}
               value={selectedPriority}
@@ -149,4 +141,3 @@ const Iso27001Tasks = () => {
 };
 
 export default Iso27001Tasks;
-

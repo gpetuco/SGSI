@@ -60,7 +60,9 @@ const TaskCard = ({
 
   return (
     <div
-      className={`bg-white rounded-xl py-4 shadow-md shadow-gray-100 border border-gray-200/50 cursor-pointer flex flex-col h-full overflow-hidden ${className || ""}`}
+      className={`bg-white rounded-xl py-4 shadow-md shadow-gray-100 border border-gray-200/50 cursor-pointer flex flex-col h-full overflow-hidden ${
+        className || ""
+      }`}
       onClick={onClick}
     >
       <div className="flex flex-wrap items-center gap-2 px-4 min-w-0">
@@ -101,9 +103,11 @@ const TaskCard = ({
         </p>
 
         <p className="text-[13px] font-medium mt-2 mb-2 leading-[18px]">
-          <span className="text-white">Task Done:</span>{" "}
+          <span className="text-white">Progresso:</span>{" "}
           <span className="font-semibold text-gray-700 dark:text-white">
+            {`${progress}% (`}
             {completedTodoCount} / {todoChecklist.length || 0}
+            {")"}
           </span>
         </p>
 
@@ -133,7 +137,9 @@ const TaskCard = ({
           {attachmentCount > 0 && (
             <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 px-2.5 py-1.5 rounded-lg">
               <LuPaperclip className="text-primary" />{" "}
-              <span className="text-xs text-gray-900 dark:text-blue-200">{attachmentCount}</span>
+              <span className="text-xs text-gray-900 dark:text-blue-200">
+                {attachmentCount}
+              </span>
             </div>
           )}
         </div>
@@ -143,8 +149,3 @@ const TaskCard = ({
 };
 
 export default TaskCard;
-
-
-
-
-
