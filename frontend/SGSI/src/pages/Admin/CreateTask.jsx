@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+﻿import React, { useEffect, useRef, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { PRIORITY_DATA, CLASSIFICATION_DATA } from "../../utils/data";
 import axiosInstance from "../../utils/axiosInstance";
@@ -267,14 +267,17 @@ const CreateTask = () => {
     }
   }, [checklistEditMode, editFocusIndex]);
 
-  const commitChecklistChanges = async () => {
+  const commitChecklistChanges = async (nextTexts) => {
     if (!taskId) return;
     try {
       const old = Array.isArray(currentTask?.todoChecklist)
         ? currentTask.todoChecklist
         : [];
       const byText = new Map(old.map((o) => [o.text, !!o.completed]));
-      const updated = (taskData?.todoChecklist || []).map((txt, idx) => ({
+      const source = Array.isArray(nextTexts)
+        ? nextTexts
+        : taskData?.todoChecklist || [];
+      const updated = source.map((txt, idx) => ({
         text: txt,
         completed: byText.has(txt) ? byText.get(txt) : !!old[idx]?.completed,
       }));
@@ -317,6 +320,8 @@ const CreateTask = () => {
   const handleDeleteItem = (index) => {
     setTaskData((prev) => {
       const next = (prev.todoChecklist || []).filter((_, i) => i !== index);
+      // Persist immediately in update mode to keep indices aligned
+      commitChecklistChanges(next);
       return { ...prev, todoChecklist: next };
     });
   };
@@ -324,10 +329,12 @@ const CreateTask = () => {
   const handleAddItem = () => {
     const v = newTodoText.trim();
     if (!v) return;
-    setTaskData((prev) => ({
-      ...prev,
-      todoChecklist: [...(prev.todoChecklist || []), v],
-    }));
+    setTaskData((prev) => {
+      const next = [...(prev.todoChecklist || []), v];
+      // Persist immediately in update mode
+      commitChecklistChanges(next);
+      return { ...prev, todoChecklist: next };
+    });
     setNewTodoText("");
   };
 
@@ -406,37 +413,6 @@ const CreateTask = () => {
               )}
             </div>
 
-            <div className="mt-4">
-              <label className="text-xs font-medium text-slate-600">
-                Task Title
-              </label>
-
-              <input
-                placeholder="Create App UI"
-                className="form-input"
-                value={taskData.title}
-                onChange={({ target }) =>
-                  handleValueChange("title", target.value)
-                }
-              />
-            </div>
-
-            <div className="mt-3">
-              <label className="text-xs font-medium text-slate-600">
-                Description
-              </label>
-
-              <textarea
-                placeholder="Describe task"
-                className="form-input"
-                rows={4}
-                value={taskData.description}
-                onChange={({ target }) =>
-                  handleValueChange("description", target.value)
-                }
-              />
-            </div>
-
             <div className="grid grid-cols-12 gap-4 mt-2">
               <div className="col-span-6 md:col-span-4">
                 <label className="text-xs font-medium text-slate-600">
@@ -481,19 +457,37 @@ const CreateTask = () => {
                   type="date"
                 />
               </div>
+            </div>
 
-              <div className="col-span-12 md:col-span-3">
-                <label className="text-xs font-medium text-slate-600">
-                  Responsável
-                </label>
+            <div className="mt-4">
+              <label className="text-xs font-medium text-slate-600">
+                Task Title
+              </label>
 
-                <SelectUsers
-                  selectedUsers={taskData.assignedTo}
-                  setSelectedUsers={(value) => {
-                    handleValueChange("assignedTo", value);
-                  }}
-                />
-              </div>
+              <input
+                placeholder="Create App UI"
+                className="form-input"
+                value={taskData.title}
+                onChange={({ target }) =>
+                  handleValueChange("title", target.value)
+                }
+              />
+            </div>
+
+            <div className="mt-3">
+              <label className="text-xs font-medium text-slate-600">
+                Description
+              </label>
+
+              <textarea
+                placeholder="Describe task"
+                className="form-input"
+                rows={4}
+                value={taskData.description}
+                onChange={({ target }) =>
+                  handleValueChange("description", target.value)
+                }
+              />
             </div>
 
             <div className="mt-3">
@@ -504,77 +498,64 @@ const CreateTask = () => {
               </div>
 
               {taskId ? (
-                !checklistEditMode ? (
-                  <div className="mt-1">
-                    {Array.isArray(currentTask?.todoChecklist) &&
-                      currentTask.todoChecklist.map((item, index) => (
-                        <div
-                          key={`todo_view_${index}`}
-                          className="flex items-center gap-3 mt-2"
-                        >
-                          <input
-                            readOnly
-                            onClick={() => enterEditAtIndex(index)}
-                            value={item.text}
-                            className="form-input flex-1 cursor-text"
-                          />
-                          <input
-                            type="checkbox"
-                            checked={!!item.completed}
-                            onChange={() => toggleChecklistItem(index)}
-                            className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none cursor-pointer"
-                          />
-                        </div>
-                      ))}
-                    {(!currentTask?.todoChecklist ||
-                      currentTask.todoChecklist.length === 0) && (
-                      <p className="text-xs text-gray-500 mt-1">
-                        No checklist items.
-                      </p>
-                    )}
-                  </div>
-                ) : (
-                  <div className="mt-1" ref={editChecklistRef}>
-                    {(taskData?.todoChecklist || []).map((text, index) => (
-                      <div
-                        key={`todo_edit_${index}`}
-                        className="flex items-center gap-2 mt-2"
-                      >
+                <div className="mt-1" ref={editChecklistRef}>
+                  {(taskData?.todoChecklist || []).map((text, index) => (
+                    <div
+                      key={`todo_row_${index}`}
+                      className="flex items-center gap-3 mt-2"
+                    >
+                      <input
+                        className="form-input flex-1 mt-0"
+                        value={text}
+                        onChange={(e) =>
+                          handleEditItemChange(index, e.target.value)
+                        }
+                        onBlur={(e) => {
+                          const next = (taskData?.todoChecklist || []).map(
+                            (t, i) => (i === index ? e.target.value : t)
+                          );
+                          commitChecklistChanges(next);
+                        }}
+                        ref={(el) => (editInputsRef.current[index] = el)}
+                      />
+                      <div className="flex items-center justify-end gap-10 w-24">
                         <input
-                          className="form-input flex-1 mt-0"
-                          value={text}
-                          onChange={(e) =>
-                            handleEditItemChange(index, e.target.value)
+                          type="checkbox"
+                          checked={
+                            !!currentTask?.todoChecklist?.[index]?.completed
                           }
-                          ref={(el) => (editInputsRef.current[index] = el)}
+                          onChange={() => toggleChecklistItem(index)}
+                          className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none cursor-pointer shrink-0"
                         />
                         <button
-                          className="cursor-pointer mt-2"
+                          className="cursor-pointer shrink-0"
                           onClick={() => handleDeleteItem(index)}
                           title="Remove"
                         >
                           <HiOutlineTrash className="text-lg text-red-500" />
                         </button>
                       </div>
-                    ))}
+                    </div>
+                  ))}
 
-                    <div className="flex items-center gap-2 mt-2">
-                      <input
-                        type="text"
-                        placeholder="Enter Task"
-                        value={newTodoText}
-                        onChange={(e) => setNewTodoText(e.target.value)}
-                        className="form-input flex-1 mt-0"
-                      />
+                  <div className="flex items-center gap-3 mt-2">
+                    <input
+                      type="text"
+                      placeholder="Enter Task"
+                      value={newTodoText}
+                      onChange={(e) => setNewTodoText(e.target.value)}
+                      className="form-input flex-1 mt-0"
+                    />
+                    <div className="flex items-center justify-end w-24">
                       <button
-                        className="card-btn text-nowrap dark:!text-white mt-2"
+                        className="card-btn text-nowrap dark:!text-white"
                         onClick={handleAddItem}
                       >
                         <HiMiniPlus className="text-lg" /> Add
                       </button>
                     </div>
                   </div>
-                )
+                </div>
               ) : (
                 <div className="mt-1">
                   <TodoListInput
@@ -587,6 +568,19 @@ const CreateTask = () => {
               )}
 
               {/* no quick-add in view mode after revert */}
+            </div>
+
+            <div className="mt-3">
+              <label className="text-xs font-medium text-slate-600">
+                Responsável
+              </label>
+
+              <SelectUsers
+                selectedUsers={taskData.assignedTo}
+                setSelectedUsers={(value) => {
+                  handleValueChange("assignedTo", value);
+                }}
+              />
             </div>
 
             <div className="mt-3">
