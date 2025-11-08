@@ -9,6 +9,7 @@ import moment from "moment";
 import { LuTrash2 } from "react-icons/lu";
 import { HiOutlineTrash, HiMiniPlus } from "react-icons/hi2";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
+import { NIST_CSF_DATA } from "../../utils/nistCsfData";
 import SelectUsers from "../../components/Inputs/SelectUsers";
 import TodoListInput from "../../components/Inputs/TodoListInput";
 import AddAttachmentsInput from "../../components/Inputs/AddAttachmentsInput";
@@ -56,8 +57,57 @@ const CreateTask = () => {
 
   const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
 
+  // Helpers for NIST CSF cascade
+  const isNist = taskData.classification === "NIST CSF";
+  const nistFunctionOptions = NIST_CSF_DATA.functions.map((f) => ({
+    label: f.name,
+    value: f.name,
+  }));
+  const selectedFunction = isNist
+    ? NIST_CSF_DATA.functions.find((f) => f.name === taskData.title)
+    : null;
+  const nistCategoryOptions = selectedFunction
+    ? selectedFunction.categories.map((c) => ({ label: c.name, value: c.name }))
+    : [];
+  const selectedCategory = selectedFunction
+    ? selectedFunction.categories.find((c) => c.name === taskData.description)
+    : null;
+  const nistSubcategoryOptions = selectedCategory
+    ? selectedCategory.subcategories.map((s) => ({ label: s.name, value: s.name }))
+    : [];
+
   const handleValueChange = (key, value) => {
     setTaskData((prevData) => ({ ...prevData, [key]: value }));
+  };
+
+  const handleClassificationChange = (value) => {
+    // reset cascade when classification changes
+    setTaskData((prev) => ({
+      ...prev,
+      classification: value,
+      title: "",
+      description: "",
+      todoChecklist: [],
+    }));
+  };
+
+  const handleNistTitleChange = (value) => {
+    // when function changes, clear dependent fields
+    setTaskData((prev) => ({
+      ...prev,
+      title: value,
+      description: "",
+      todoChecklist: [],
+    }));
+  };
+
+  const handleNistDescriptionChange = (value) => {
+    // when category changes, clear checklist selections
+    setTaskData((prev) => ({
+      ...prev,
+      description: value,
+      todoChecklist: [],
+    }));
   };
 
   const clearData = () => {
@@ -327,10 +377,11 @@ const CreateTask = () => {
   };
 
   const handleAddItem = () => {
-    const v = newTodoText.trim();
+    const v = (newTodoText || "").trim();
     if (!v) return;
     setTaskData((prev) => {
-      const next = [...(prev.todoChecklist || []), v];
+      const exists = (prev.todoChecklist || []).some((t) => t === v);
+      const next = exists ? prev.todoChecklist : [...(prev.todoChecklist || []), v];
       // Persist immediately in update mode
       commitChecklistChanges(next);
       return { ...prev, todoChecklist: next };
@@ -422,9 +473,7 @@ const CreateTask = () => {
                 <SelectDropdown
                   options={CLASSIFICATION_DATA}
                   value={taskData.classification}
-                  onChange={(value) =>
-                    handleValueChange("classification", value)
-                  }
+                  onChange={(value) => handleClassificationChange(value)}
                   placeholder="Select Classification"
                 />
               </div>
@@ -464,14 +513,25 @@ const CreateTask = () => {
                 Task Title
               </label>
 
-              <input
-                placeholder="Create App UI"
-                className="form-input"
-                value={taskData.title}
-                onChange={({ target }) =>
-                  handleValueChange("title", target.value)
-                }
-              />
+              {isNist ? (
+                <div className="relative">
+                  <SelectDropdown
+                    options={nistFunctionOptions}
+                    value={taskData.title}
+                    onChange={(value) => handleNistTitleChange(value)}
+                    placeholder="Select Function"
+                  />
+                </div>
+              ) : (
+                <input
+                  placeholder="Create App UI"
+                  className="form-input"
+                  value={taskData.title}
+                  onChange={({ target }) =>
+                    handleValueChange("title", target.value)
+                  }
+                />
+              )}
             </div>
 
             <div className="mt-3">
@@ -479,15 +539,32 @@ const CreateTask = () => {
                 Description
               </label>
 
-              <textarea
-                placeholder="Describe task"
-                className="form-input"
-                rows={4}
-                value={taskData.description}
-                onChange={({ target }) =>
-                  handleValueChange("description", target.value)
-                }
-              />
+              {isNist ? (
+                <div className="relative opacity-100">
+                  {/* Disabled overlay when no function selected */}
+                  {!taskData.title && (
+                    <div className="absolute inset-0 z-10 cursor-not-allowed rounded-md"></div>
+                  )}
+                  <div className={!taskData.title ? "opacity-50" : "opacity-100"}>
+                    <SelectDropdown
+                      options={nistCategoryOptions}
+                      value={taskData.description}
+                      onChange={(value) => handleNistDescriptionChange(value)}
+                      placeholder={taskData.title ? "Select Category" : "Select a Function first"}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <textarea
+                  placeholder="Describe task"
+                  className="form-input"
+                  rows={4}
+                  value={taskData.description}
+                  onChange={({ target }) =>
+                    handleValueChange("description", target.value)
+                  }
+                />
+              )}
             </div>
 
             <div className="mt-3">
@@ -502,51 +579,84 @@ const CreateTask = () => {
                   {(taskData?.todoChecklist || []).map((text, index) => (
                     <div
                       key={`todo_row_${index}`}
-                      className="flex items-center gap-3 mt-2"
+                      className="grid grid-cols-[1fr_auto_auto] items-center gap-x-3 mt-2 pr-3"
                     >
                       <input
                         className="form-input flex-1 mt-0"
                         value={text}
-                        onChange={(e) =>
-                          handleEditItemChange(index, e.target.value)
+                        readOnly={isNist}
+                        onChange={
+                          isNist
+                            ? undefined
+                            : (e) => handleEditItemChange(index, e.target.value)
                         }
-                        onBlur={(e) => {
-                          const next = (taskData?.todoChecklist || []).map(
-                            (t, i) => (i === index ? e.target.value : t)
-                          );
-                          commitChecklistChanges(next);
-                        }}
+                        onBlur={
+                          isNist
+                            ? undefined
+                            : (e) => {
+                                const next = (taskData?.todoChecklist || []).map((t, i) =>
+                                  i === index ? e.target.value : t
+                                );
+                                commitChecklistChanges(next);
+                              }
+                        }
                         ref={(el) => (editInputsRef.current[index] = el)}
                       />
-                      <div className="flex items-center justify-end gap-10 w-24">
-                        <input
-                          type="checkbox"
-                          checked={
-                            !!currentTask?.todoChecklist?.[index]?.completed
-                          }
-                          onChange={() => toggleChecklistItem(index)}
-                          className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none cursor-pointer shrink-0"
-                        />
-                        <button
-                          className="cursor-pointer shrink-0"
-                          onClick={() => handleDeleteItem(index)}
-                          title="Remove"
-                        >
-                          <HiOutlineTrash className="text-lg text-red-500" />
-                        </button>
-                      </div>
+                      <input
+                        type="checkbox"
+                        checked={!!currentTask?.todoChecklist?.[index]?.completed}
+                        onChange={() => toggleChecklistItem(index)}
+                        className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none cursor-pointer"
+                      />
+                      <button
+                        className="cursor-pointer"
+                        onClick={() => handleDeleteItem(index)}
+                        title="Remove"
+                      >
+                        <HiOutlineTrash className="text-lg text-red-500" />
+                      </button>
                     </div>
                   ))}
 
-                  <div className="flex items-center gap-3 mt-2">
-                    <input
-                      type="text"
-                      placeholder="Enter Task"
-                      value={newTodoText}
-                      onChange={(e) => setNewTodoText(e.target.value)}
-                      className="form-input flex-1 mt-0"
-                    />
-                    <div className="flex items-center justify-end w-24">
+                  {/* Add row */}
+                  {isNist ? (
+                    <div className="grid grid-cols-[1fr_auto] items-center gap-x-3 mt-2 pr-3">
+                      <div className="relative">
+                        {(!taskData.title || !taskData.description) && (
+                          <div className="absolute inset-0 z-10 cursor-not-allowed rounded-md"></div>
+                        )}
+                        <div className={!taskData.title || !taskData.description ? "opacity-50" : "opacity-100"}>
+                          <SelectDropdown
+                            options={nistSubcategoryOptions}
+                            value={newTodoText}
+                            onChange={(value) => setNewTodoText(value)}
+                            placeholder={
+                              taskData.description
+                                ? "Select Subcategory"
+                                : taskData.title
+                                ? "Select a Category first"
+                                : "Select a Function first"
+                            }
+                          />
+                        </div>
+                      </div>
+                      <button
+                        className="card-btn text-nowrap dark:!text-white"
+                        onClick={handleAddItem}
+                        disabled={!newTodoText}
+                      >
+                        <HiMiniPlus className="text-lg" /> Add
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-[1fr_auto] items-center gap-x-3 mt-2 pr-3">
+                      <input
+                        type="text"
+                        placeholder="Enter Task"
+                        value={newTodoText}
+                        onChange={(e) => setNewTodoText(e.target.value)}
+                        className="form-input flex-1 mt-0"
+                      />
                       <button
                         className="card-btn text-nowrap dark:!text-white"
                         onClick={handleAddItem}
@@ -554,16 +664,69 @@ const CreateTask = () => {
                         <HiMiniPlus className="text-lg" /> Add
                       </button>
                     </div>
-                  </div>
+                  )}
                 </div>
               ) : (
                 <div className="mt-1">
-                  <TodoListInput
-                    todoList={taskData?.todoChecklist}
-                    setTodoList={(value) =>
-                      handleValueChange("todoChecklist", value)
-                    }
-                  />
+                  {isNist ? (
+                    <>
+                      {(taskData?.todoChecklist || []).map((text, index) => (
+                        <div
+                          key={`todo_row_create_${index}`}
+                          className="grid grid-cols-[1fr_auto_auto] items-center gap-x-3 mt-2 pr-3"
+                        >
+                          <input
+                            className="form-input flex-1 mt-0"
+                            value={text}
+                            readOnly
+                          />
+                          <input type="checkbox" disabled className="w-4 h-4 opacity-50" />
+                          <button
+                            className="cursor-pointer"
+                            onClick={() => handleDeleteItem(index)}
+                            title="Remove"
+                          >
+                            <HiOutlineTrash className="text-lg text-red-500" />
+                          </button>
+                        </div>
+                      ))}
+                      <div className="grid grid-cols-[1fr_auto] items-center gap-x-3 mt-2 pr-3">
+                        <div className="relative">
+                          {(!taskData.title || !taskData.description) && (
+                            <div className="absolute inset-0 z-10 cursor-not-allowed rounded-md"></div>
+                          )}
+                          <div className={!taskData.title || !taskData.description ? "opacity-50" : "opacity-100"}>
+                            <SelectDropdown
+                              options={nistSubcategoryOptions}
+                              value={newTodoText}
+                              onChange={(value) => setNewTodoText(value)}
+                              placeholder={
+                                taskData.description
+                                  ? "Select Subcategory"
+                                  : taskData.title
+                                  ? "Select a Category first"
+                                  : "Select a Function first"
+                              }
+                            />
+                          </div>
+                        </div>
+                        <button
+                          className="card-btn text-nowrap dark:!text-white"
+                          onClick={handleAddItem}
+                          disabled={!newTodoText}
+                        >
+                          <HiMiniPlus className="text-lg" /> Add
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <TodoListInput
+                      todoList={taskData?.todoChecklist}
+                      setTodoList={(value) =>
+                        handleValueChange("todoChecklist", value)
+                      }
+                    />
+                  )}
                 </div>
               )}
 
