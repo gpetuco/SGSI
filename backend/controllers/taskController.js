@@ -24,15 +24,13 @@ const getTasks = async (req, res) => {
       if (assignedTo && assignedTo !== "me") {
         filter.assignedTo = assignedTo;
       }
-      tasks = await Task.find(filter).populate(
-        "assignedTo",
-        "name email profileImageUrl"
-      );
+      tasks = await Task.find(filter)
+        .populate("assignedTo", "name email profileImageUrl")
+        .populate("cliente", "name");
     } else {
-      tasks = await Task.find({ ...filter, assignedTo: req.user._id }).populate(
-        "assignedTo",
-        "name email profileImageUrl"
-      );
+      tasks = await Task.find({ ...filter, assignedTo: req.user._id })
+        .populate("assignedTo", "name email profileImageUrl")
+        .populate("cliente", "name");
     }
 
     // Add completed todoChecklist count and computed progress to each task
@@ -96,10 +94,9 @@ const getTasks = async (req, res) => {
 // @access  Private
 const getTaskById = async (req, res) => {
   try {
-    const task = await Task.findById(req.params.id).populate(
-      "assignedTo",
-      "name email profileImageUrl"
-    );
+    const task = await Task.findById(req.params.id)
+      .populate("assignedTo", "name email profileImageUrl")
+      .populate("cliente", "name");
 
     if (!task) return res.status(404).json({ message: "Task not found" });
 
@@ -123,12 +120,26 @@ const createTask = async (req, res) => {
       assignedTo,
       attachments,
       todoChecklist,
+      cliente,
     } = req.body;
 
     if (!Array.isArray(assignedTo)) {
       return res
         .status(400)
         .json({ message: "assignedTo must be an array of user IDs" });
+    }
+
+    // Validate cliente if provided
+    let clienteId = null;
+    if (cliente) {
+      try {
+        const Company = require("../models/Company");
+        const comp = await Company.findById(cliente);
+        if (!comp) return res.status(400).json({ message: "Cliente inválido" });
+        clienteId = comp._id;
+      } catch (_) {
+        return res.status(400).json({ message: "Cliente inválido" });
+      }
     }
 
     const task = await Task.create({
@@ -141,6 +152,7 @@ const createTask = async (req, res) => {
       createdBy: req.user._id,
       todoChecklist,
       attachments,
+      cliente: clienteId,
     });
 
     res.status(201).json({ message: "Task created successfully", task });
@@ -164,6 +176,20 @@ const updateTask = async (req, res) => {
     task.classification = req.body.classification || task.classification;
     task.dueDate = req.body.dueDate || task.dueDate;
     task.todoChecklist = req.body.todoChecklist || task.todoChecklist;
+    if (Object.prototype.hasOwnProperty.call(req.body, "cliente")) {
+      if (!req.body.cliente) {
+        task.cliente = null;
+      } else {
+        try {
+          const Company = require("../models/Company");
+          const comp = await Company.findById(req.body.cliente);
+          if (!comp) return res.status(400).json({ message: "Cliente inválido" });
+          task.cliente = comp._id;
+        } catch (_) {
+          return res.status(400).json({ message: "Cliente inválido" });
+        }
+      }
+    }
     task.attachments = req.body.attachments || task.attachments;
 
     if (req.body.assignedTo) {

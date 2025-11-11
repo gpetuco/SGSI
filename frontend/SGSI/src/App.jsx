@@ -18,6 +18,7 @@ import Iso27001Tasks from "./pages/Admin/Iso27001Tasks";
 import NistCsfTasks from "./pages/Admin/NistCsfTasks";
 import CreateTask from "./pages/Admin/CreateTask";
 import ManageUsers from "./pages/Admin/ManageUsers";
+import Clients from "./pages/Admin/Clients";
 
 import UserDashboard from "./pages/User/UserDashboard";
 import MyTasks from "./pages/User/MyTasks";
@@ -47,6 +48,7 @@ const App = () => {
               <Route path="/admin/tasks/nist-csf" element={<NistCsfTasks />} />
               <Route path="/admin/create-task" element={<CreateTask />} />
               <Route path="/admin/users" element={<ManageUsers />} />
+              <Route path="/admin/clients" element={<Clients />} />
               <Route path="/admin/my-tasks" element={<AdminMyTasks />} />
               <Route path="/admin/task-details/:id" element={<AdminViewTaskDetails />} />
             </Route>

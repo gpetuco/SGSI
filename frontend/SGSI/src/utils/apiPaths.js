@@ -8,6 +8,11 @@ export const API_PATHS = {
     GET_PROFILE: "/api/auth/profile", // Get logged-in user details
   },
 
+  COMPANIES: {
+    LIST: "/api/companies",
+    CREATE: "/api/companies",
+  },
+
   USERS: {
     GET_ALL_USERS: "/api/users", // Get all users (Admin only)
     GET_USER_BY_ID: (userId) => `/api/users/${userId}`, // Get user by ID

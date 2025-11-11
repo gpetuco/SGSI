@@ -11,6 +11,7 @@ import { HiOutlineTrash, HiMiniPlus } from "react-icons/hi2";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
 import { NIST_CSF_DATA } from "../../utils/nistCsfData";
 import SelectUsers from "../../components/Inputs/SelectUsers";
+import SelectCompany from "../../components/Inputs/SelectCompany";
 import TodoListInput from "../../components/Inputs/TodoListInput";
 import AddAttachmentsInput from "../../components/Inputs/AddAttachmentsInput";
 import DeleteAlert from "../../components/DeleteAlert";
@@ -40,6 +41,7 @@ const CreateTask = () => {
     priority: "Low",
     dueDate: null,
     assignedTo: [],
+    cliente: "",
     todoChecklist: [],
     attachments: [],
   });
@@ -73,7 +75,10 @@ const CreateTask = () => {
     ? selectedFunction.categories.find((c) => c.name === taskData.description)
     : null;
   const nistSubcategoryOptions = selectedCategory
-    ? selectedCategory.subcategories.map((s) => ({ label: s.name, value: s.name }))
+    ? selectedCategory.subcategories.map((s) => ({
+        label: s.name,
+        value: s.name,
+      }))
     : [];
 
   const handleValueChange = (key, value) => {
@@ -119,6 +124,7 @@ const CreateTask = () => {
       priority: "Low",
       dueDate: null,
       assignedTo: [],
+      cliente: "",
       todoChecklist: [],
       attachments: [],
     });
@@ -225,6 +231,10 @@ const CreateTask = () => {
       setError("Description is required.");
       return;
     }
+    if (!taskData.cliente) {
+      setError("Selecione um cliente.");
+      return;
+    }
     if (!taskData.dueDate) {
       setError("Previsto is required.");
       return;
@@ -268,6 +278,10 @@ const CreateTask = () => {
             ? moment(taskInfo.dueDate).format("YYYY-MM-DD")
             : null,
           assignedTo: taskInfo?.assignedTo?.map((item) => item?._id) || [],
+          cliente:
+            (taskInfo?.cliente && taskInfo?.cliente?._id) ||
+            taskInfo?.cliente ||
+            "",
           todoChecklist:
             taskInfo?.todoChecklist?.map((item) => item?.text) || [],
           attachments: taskInfo?.attachments || [],
@@ -381,7 +395,9 @@ const CreateTask = () => {
     if (!v) return;
     setTaskData((prev) => {
       const exists = (prev.todoChecklist || []).some((t) => t === v);
-      const next = exists ? prev.todoChecklist : [...(prev.todoChecklist || []), v];
+      const next = exists
+        ? prev.todoChecklist
+        : [...(prev.todoChecklist || []), v];
       // Persist immediately in update mode
       commitChecklistChanges(next);
       return { ...prev, todoChecklist: next };
@@ -545,12 +561,18 @@ const CreateTask = () => {
                   {!taskData.title && (
                     <div className="absolute inset-0 z-10 cursor-not-allowed rounded-md"></div>
                   )}
-                  <div className={!taskData.title ? "opacity-50" : "opacity-100"}>
+                  <div
+                    className={!taskData.title ? "opacity-50" : "opacity-100"}
+                  >
                     <SelectDropdown
                       options={nistCategoryOptions}
                       value={taskData.description}
                       onChange={(value) => handleNistDescriptionChange(value)}
-                      placeholder={taskData.title ? "Select Category" : "Select a Function first"}
+                      placeholder={
+                        taskData.title
+                          ? "Select Category"
+                          : "Select a Function first"
+                      }
                     />
                   </div>
                 </div>
@@ -594,7 +616,9 @@ const CreateTask = () => {
                           isNist
                             ? undefined
                             : (e) => {
-                                const next = (taskData?.todoChecklist || []).map((t, i) =>
+                                const next = (
+                                  taskData?.todoChecklist || []
+                                ).map((t, i) =>
                                   i === index ? e.target.value : t
                                 );
                                 commitChecklistChanges(next);
@@ -604,7 +628,9 @@ const CreateTask = () => {
                       />
                       <input
                         type="checkbox"
-                        checked={!!currentTask?.todoChecklist?.[index]?.completed}
+                        checked={
+                          !!currentTask?.todoChecklist?.[index]?.completed
+                        }
                         onChange={() => toggleChecklistItem(index)}
                         className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none cursor-pointer"
                       />
@@ -625,7 +651,13 @@ const CreateTask = () => {
                         {(!taskData.title || !taskData.description) && (
                           <div className="absolute inset-0 z-10 cursor-not-allowed rounded-md"></div>
                         )}
-                        <div className={!taskData.title || !taskData.description ? "opacity-50" : "opacity-100"}>
+                        <div
+                          className={
+                            !taskData.title || !taskData.description
+                              ? "opacity-50"
+                              : "opacity-100"
+                          }
+                        >
                           <SelectDropdown
                             options={nistSubcategoryOptions}
                             value={newTodoText}
@@ -680,7 +712,11 @@ const CreateTask = () => {
                             value={text}
                             readOnly
                           />
-                          <input type="checkbox" disabled className="w-4 h-4 opacity-50" />
+                          <input
+                            type="checkbox"
+                            disabled
+                            className="w-4 h-4 opacity-50"
+                          />
                           <button
                             className="cursor-pointer"
                             onClick={() => handleDeleteItem(index)}
@@ -695,7 +731,13 @@ const CreateTask = () => {
                           {(!taskData.title || !taskData.description) && (
                             <div className="absolute inset-0 z-10 cursor-not-allowed rounded-md"></div>
                           )}
-                          <div className={!taskData.title || !taskData.description ? "opacity-50" : "opacity-100"}>
+                          <div
+                            className={
+                              !taskData.title || !taskData.description
+                                ? "opacity-50"
+                                : "opacity-100"
+                            }
+                          >
                             <SelectDropdown
                               options={nistSubcategoryOptions}
                               value={newTodoText}
@@ -731,6 +773,15 @@ const CreateTask = () => {
               )}
 
               {/* no quick-add in view mode after revert */}
+            </div>
+            <div className="mt-3">
+              <label className="text-xs font-medium text-slate-600">
+                Cliente
+              </label>
+              <SelectCompany
+                value={taskData.cliente}
+                onChange={(value) => handleValueChange("cliente", value)}
+              />
             </div>
 
             <div className="mt-3">

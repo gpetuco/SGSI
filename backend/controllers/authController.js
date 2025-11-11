@@ -12,8 +12,14 @@ const generateToken = (userId) => {
 // @access  Public
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password, profileImageUrl, adminInviteToken } =
-      req.body;
+    const {
+      name,
+      email,
+      password,
+      profileImageUrl,
+      adminInviteToken,
+      empresaId,
+    } = req.body;
 
     // Check if user already exists
     const userExists = await User.findOne({ email });
@@ -21,9 +27,20 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // Determine user role: Admin if correct token is provided, otherwise Member
+    // Determine registration type
+    // If empresaId is provided, validate company and set as member of that empresa.
+    // Otherwise, fall back to existing admin token flow.
     let role = "member";
-    if (
+    let empresa = null;
+
+    if (empresaId) {
+      const Company = require("../models/Company");
+      const company = await Company.findById(empresaId);
+      if (!company) {
+        return res.status(400).json({ message: "Empresa inválida" });
+      }
+      empresa = company._id;
+    } else if (
       adminInviteToken &&
       adminInviteToken == process.env.ADMIN_INVITE_TOKEN
     ) {
@@ -41,6 +58,7 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
       profileImageUrl,
       role,
+      empresa,
     });
 
     // Return user data with JWT
@@ -49,6 +67,7 @@ const registerUser = async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      empresa: user.empresa,
       profileImageUrl: user.profileImageUrl,
       token: generateToken(user._id),
     });
@@ -81,6 +100,7 @@ const loginUser = async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      empresa: user.empresa,
       profileImageUrl: user.profileImageUrl,
       token: generateToken(user._id),
     });

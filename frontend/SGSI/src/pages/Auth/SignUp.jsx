@@ -15,6 +15,8 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [adminInviteToken, setAdminInviteToken] = useState("");
+  const [empresaId, setEmpresaId] = useState("");
+  const [userType, setUserType] = useState("security");
 
   const [error, setError] = useState(null);
 
@@ -52,13 +54,25 @@ const SignUp = () => {
         profileImageUrl = imgUploadRes.imageUrl || "";
       }
 
-      const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
+      const payload = {
         name: fullName,
         email,
         password,
         profileImageUrl,
-        adminInviteToken,
-      });
+      };
+      if (userType === "security") {
+        payload.adminInviteToken = adminInviteToken;
+      } else if (userType === "company") {
+        if (!empresaId) {
+          setError("Informe o ID da empresa cliente.");
+          return;
+        }
+        payload.empresaId = empresaId;
+      }
+      const response = await axiosInstance.post(
+        API_PATHS.AUTH.REGISTER,
+        payload
+      );
 
       const { token, role } = response.data;
 
@@ -91,6 +105,33 @@ const SignUp = () => {
         </p>
 
         <form onSubmit={handleSignUp}>
+          {/* Tipo de cadastro */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div className="flex items-center gap-3">
+              <input
+                type="radio"
+                id="type_security"
+                name="signup_type"
+                checked={userType === "security"}
+                onChange={() => setUserType("security")}
+              />
+              <label htmlFor="type_security" className="text-sm text-white">
+                Membro do time de segurança
+              </label>
+            </div>
+            <div className="flex items-center gap-3">
+              <input
+                type="radio"
+                id="type_company"
+                name="signup_type"
+                checked={userType === "company"}
+                onChange={() => setUserType("company")}
+              />
+              <label htmlFor="type_company" className="text-sm text-white">
+                Membro de empresa cliente
+              </label>
+            </div>
+          </div>
           <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -119,12 +160,22 @@ const SignUp = () => {
             />
 
             <Input
+              hidden={userType === "company"}
               value={adminInviteToken}
               onChange={({ target }) => setAdminInviteToken(target.value)}
               label="Token de Admin (opcional)"
               placeholder="Digite o token se você for administrador"
               type="text"
             />
+            {userType === "company" && (
+              <Input
+                value={empresaId}
+                onChange={({ target }) => setEmpresaId(target.value)}
+                label="ID da Empresa Cliente"
+                placeholder="Digite o ID da empresa fornecido pelo admin"
+                type="text"
+              />
+            )}
           </div>
 
           {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}

@@ -67,6 +67,12 @@ export const SIDE_MENU_DATA = [
     path: "/admin/users",
   },
   {
+    id: "04b",
+    label: "Clientes",
+    icon: LuUsers,
+    path: "/admin/clients",
+  },
+  {
     id: "05",
     label: "Sair",
     icon: LuLogOut,
