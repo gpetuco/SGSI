@@ -82,15 +82,7 @@ const TaskCard = ({
         )}
       </div>
 
-      <div
-        className={`px-4 border-l-[3px] ${
-          status === "In Progress"
-            ? "border-cyan-500"
-            : status === "Completed"
-            ? "border-indigo-500"
-            : "border-violet-500"
-        } flex-grow`}
-      >
+      <div className={`px-4   flex-grow`}>
         <p className="text-sm font-medium text-gray-800 mt-4 line-clamp-2">
           {title}
         </p>
@@ -114,22 +106,15 @@ const TaskCard = ({
       <div className="px-4">
         <div className="flex items-center justify-between my-1">
           <div>
-            <label className="text-xs text-gray-500">Inicio</label>
-            <p className="text-[13px] font-medium text-gray-900">
-              {moment(createdAt).format("DD/MM/YYYY")}
-            </p>
-          </div>
-
-          <div>
             <label className="text-xs text-gray-500">Previsto</label>
             <p className="text-[13px] font-medium text-gray-900">
               {moment(dueDate).format("DD/MM/YYYY")}
             </p>
           </div>
-        </div>
 
-        <div className="flex items-center justify-between mt-3">
-          <AvatarGroup avatars={assignedTo || []} />
+          <div className="flex items-center justify-between mt-3">
+            <AvatarGroup avatars={assignedTo || []} />
+          </div>
         </div>
       </div>
     </div>

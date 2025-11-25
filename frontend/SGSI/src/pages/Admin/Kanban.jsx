@@ -15,7 +15,7 @@ const Column = ({ title, tasks, onOpen }) => {
         <h3 className="text-sm font-semibold text-gray-700">{title}</h3>
         <span className="text-xs text-gray-500">{tasks.length}</span>
       </div>
-      <div className="flex-1 flex flex-col gap-3 max-h-[70vh] overflow-y-auto pr-1">
+      <div className="flex-1 flex flex-col gap-3 max-h-[calc(100vh-260px)] overflow-y-auto pr-1">
         {tasks.length === 0 ? (
           <div className="text-xs text-gray-400 py-6 text-center border border-dashed border-gray-200 rounded">
             No tasks
