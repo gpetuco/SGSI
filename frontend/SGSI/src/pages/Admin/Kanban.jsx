@@ -10,21 +10,20 @@ import { PRIORITY_DATA } from "../../utils/data";
 
 const Column = ({ title, tasks, onOpen }) => {
   return (
-    <div className="bg-white border border-gray-200/60 rounded-lg p-3">
+    <div className="bg-white border border-gray-200/60 rounded-lg p-3 flex flex-col">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-semibold text-gray-700">{title}</h3>
         <span className="text-xs text-gray-500">{tasks.length}</span>
       </div>
-      <div className="flex flex-col gap-3">
+      <div className="flex-1 flex flex-col gap-3 max-h-[70vh] overflow-y-auto pr-1">
         {tasks.length === 0 ? (
           <div className="text-xs text-gray-400 py-6 text-center border border-dashed border-gray-200 rounded">
             No tasks
           </div>
         ) : (
           tasks.map((item) => (
-            <div className="h-[280px]">
+            <div key={item._id} className="h-[280px]">
               <TaskCard
-                key={item._id}
                 title={item.title}
                 description={item.description}
                 priority={item.priority}
