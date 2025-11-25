@@ -190,7 +190,7 @@ const Dashboard = () => {
 
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-5">
           <InfoCard
-            label="Total de Ações"
+            label="Ações"
             value={addThousandsSeparator(
               dashboardData?.charts?.taskDistribution?.All || 0
             )}
@@ -198,7 +198,7 @@ const Dashboard = () => {
           />
 
           <InfoCard
-            label="Ações Pendentes"
+            label="Pendentes"
             value={addThousandsSeparator(
               dashboardData?.charts?.taskDistribution?.Pending || 0
             )}
@@ -206,7 +206,7 @@ const Dashboard = () => {
           />
 
           <InfoCard
-            label="Ações Em Andamento"
+            label="Em Andamento"
             value={addThousandsSeparator(
               dashboardData?.charts?.taskDistribution?.InProgress || 0
             )}
@@ -214,7 +214,7 @@ const Dashboard = () => {
           />
 
           <InfoCard
-            label="Ações Concluídas"
+            label="Concluídas"
             value={addThousandsSeparator(
               dashboardData?.charts?.taskDistribution?.Completed || 0
             )}
@@ -505,20 +505,6 @@ const Dashboard = () => {
               <h5 className="font-medium">Top 5 (Membros)</h5>
             </div>
             <StackedStatusByUser data={tasksByUserData} />
-          </div>
-        </div>
-
-        <div className="md:col-span-2">
-          <div className="card">
-            <div className="flex items-center justify-between ">
-              <h5 className="text-lg">Ações Recentes</h5>
-
-              <button className="card-btn" onClick={onSeeMore}>
-                Ver mais <LuArrowRight className="text-base" />
-              </button>
-            </div>
-
-            <TaskListTable tableData={dashboardData?.recentTasks || []} />
           </div>
         </div>
       </div>
