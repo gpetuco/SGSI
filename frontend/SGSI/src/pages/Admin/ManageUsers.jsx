@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { API_PATHS } from "../../utils/apiPaths";
 import axiosInstance from "../../utils/axiosInstance";
-import { LuFileSpreadsheet } from "react-icons/lu";
-import UserCard from "../../components/Cards/UserCard";
+import UserAvatar from "../../components/UserAvatar";
 
 const ManageUsers = () => {
   const [allUsers, setAllUsers] = useState([]);
@@ -32,10 +31,61 @@ const ManageUsers = () => {
           <h2 className="text-xl md:text-xl font-medium">Membros</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-          {allUsers?.map((user) => (
-            <UserCard key={user._id} userInfo={user} />
-          ))}
+        <div className="card mt-4 overflow-x-auto">
+          <table className="min-w-full">
+            <thead>
+              <tr className="text-left">
+                <th className="py-3 px-4 text-gray-800 dark:text-white font-medium text-[14px]">
+                  Membro
+                </th>
+                <th className="py-3 px-4 text-gray-800 dark:text-white font-medium text-[14px]">
+                  Email
+                </th>
+                <th className="py-3 px-4 text-gray-800 dark:text-white font-medium text-[14px]">
+                  Pendentes
+                </th>
+                <th className="py-3 px-4 text-gray-800 dark:text-white font-medium text-[14px]">
+                  Em andamento
+                </th>
+                <th className="py-3 px-4 text-gray-800 dark:text-white font-medium text-[14px]">
+                  Concluídas
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {allUsers?.map((user) => (
+                <tr
+                  key={user._id}
+                  className="border-t border-gray-200 dark:border-slate-700"
+                >
+                  <td className="py-3 px-4">
+                    <div className="flex items-center gap-2">
+                      <UserAvatar
+                        src={user.profileImageUrl}
+                        name={user.name}
+                        size="w-7 h-7"
+                      />
+                      <span className="text-[14px] text-gray-800 dark:text-white">
+                        {user.name}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="py-3 px-4 text-[14px] text-white">
+                    {user.email}
+                  </td>
+                  <td className="py-3 px-4 text-[14px] text-gray-800 dark:text-white">
+                    {user.pendingTasks ?? 0}
+                  </td>
+                  <td className="py-3 px-4 text-[14px] text-gray-800 dark:text-white">
+                    {user.inProgressTasks ?? 0}
+                  </td>
+                  <td className="py-3 px-4 text-[14px] text-gray-800 dark:text-white">
+                    {user.completedTasks ?? 0}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </DashboardLayout>
@@ -43,3 +93,4 @@ const ManageUsers = () => {
 };
 
 export default ManageUsers;
+
