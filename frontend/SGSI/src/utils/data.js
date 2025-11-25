@@ -25,22 +25,16 @@ export const SIDE_MENU_DATA = [
     path: "/admin/tasks",
   },
   {
-    id: "02d",
-    label: "GRC",
-    icon: LuShieldCheck,
-    path: "/admin/tasks/grc",
+    id: "02f",
+    label: "NIST CSF",
+    icon: LuNetwork,
+    path: "/admin/tasks/nist-csf",
   },
   {
     id: "02e",
     label: "ISO 27001",
     icon: LuBadgeCheck,
     path: "/admin/tasks/iso-27001",
-  },
-  {
-    id: "02f",
-    label: "NIST CSF",
-    icon: LuNetwork,
-    path: "/admin/tasks/nist-csf",
   },
   {
     id: "02c",
@@ -120,7 +114,6 @@ export const STATUS_DATA = [
 ];
 
 export const CLASSIFICATION_DATA = [
-  { label: "GRC", value: "GRC" },
-  { label: "ISO 27001", value: "ISO 27001" },
   { label: "NIST CSF", value: "NIST CSF" },
+  { label: "ISO 27001", value: "ISO 27001" },
 ];

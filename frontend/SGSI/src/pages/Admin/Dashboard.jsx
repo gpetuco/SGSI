@@ -72,7 +72,7 @@ const Dashboard = () => {
 
     // Stacked status by framework
     const statusByFramework = data?.statusByFramework || {};
-    const stacked = ["GRC", "ISO 27001", "NIST CSF"].map((fw) => ({
+    const stacked = ["ISO 27001", "NIST CSF"].map((fw) => ({
       framework: fw,
       Pending: statusByFramework?.[fw]?.Pending || 0,
       InProgress: statusByFramework?.[fw]?.InProgress || 0,
@@ -81,23 +81,20 @@ const Dashboard = () => {
     setStackedStatusData(stacked);
 
     // Line chart data by status with one line per framework
-    const frameworks = ["GRC", "NIST CSF", "ISO 27001"]; // requested order
+    const frameworks = ["NIST CSF", "ISO 27001"]; // requested order
     const line = [
       {
         name: "Pendente",
-        GRC: statusByFramework?.["GRC"]?.Pending || 0,
         "NIST CSF": statusByFramework?.["NIST CSF"]?.Pending || 0,
         "ISO 27001": statusByFramework?.["ISO 27001"]?.Pending || 0,
       },
       {
         name: "Em Andamento",
-        GRC: statusByFramework?.["GRC"]?.InProgress || 0,
         "NIST CSF": statusByFramework?.["NIST CSF"]?.InProgress || 0,
         "ISO 27001": statusByFramework?.["ISO 27001"]?.InProgress || 0,
       },
       {
         name: "Concluído",
-        GRC: statusByFramework?.["GRC"]?.Completed || 0,
         "NIST CSF": statusByFramework?.["NIST CSF"]?.Completed || 0,
         "ISO 27001": statusByFramework?.["ISO 27001"]?.Completed || 0,
       },
@@ -210,11 +207,10 @@ const Dashboard = () => {
       </div>
 
       {/* Completion by framework mini-cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
         {[
-          { label: "GRC", color: COLORS[0] },
-          { label: "ISO 27001", color: COLORS[2] },
           { label: "NIST CSF", color: COLORS[1] },
+          { label: "ISO 27001", color: COLORS[2] },
         ].map((fw) => {
           const pct =
             completionPercentData.find((i) => i.framework === fw.label)
@@ -227,7 +223,7 @@ const Dashboard = () => {
           return (
             <div
               key={fw.label}
-              className="card relative group flex items-center justify-between p-4 min-h-[112px]"
+              className="card relative group flex items-center justify-between p-3 md:p-4 min-h-[96px]"
             >
               <button
                 aria-label="Zoom"
@@ -250,11 +246,11 @@ const Dashboard = () => {
                 >
                   {fw.label}
                 </div>
-                <div className="text-4xl font-extrabold leading-none text-gray-900 dark:text-white mt-2">
+                <div className="text-3xl md:text-4xl font-extrabold leading-none text-gray-900 dark:text-white mt-2">
                   {clamped}%
                 </div>
               </div>
-              <div className="pr-1 w-[88px] h-[88px] flex items-center justify-center">
+              <div className="pr-1 w-[72px] h-[72px] md:w-[88px] md:h-[88px] flex items-center justify-center">
                 <ReResponsiveContainer width="100%" height="100%">
                   <RePieChart>
                     <RePie
@@ -411,7 +407,6 @@ const Dashboard = () => {
               data={frameworkLineData}
               xKey="name"
               lines={[
-                { dataKey: "GRC", color: "#8D51FF", name: "GRC" },
                 { dataKey: "NIST CSF", color: "#00B8DB", name: "NIST CSF" },
                 { dataKey: "ISO 27001", color: "#7BCE00", name: "ISO 27001" },
               ]}

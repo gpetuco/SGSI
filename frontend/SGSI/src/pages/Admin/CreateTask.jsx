@@ -37,7 +37,7 @@ const CreateTask = () => {
   const [taskData, setTaskData] = useState({
     title: "",
     description: "",
-    classification: "GRC",
+    classification: "NIST CSF",
     priority: "Low",
     dueDate: null,
     assignedTo: [],
@@ -120,7 +120,7 @@ const CreateTask = () => {
     setTaskData({
       title: "",
       description: "",
-      classification: "GRC",
+      classification: "NIST CSF",
       priority: "Low",
       dueDate: null,
       assignedTo: [],
@@ -272,7 +272,7 @@ const CreateTask = () => {
         setTaskData((prevState) => ({
           title: taskInfo.title,
           description: taskInfo.description,
-          classification: taskInfo.classification || "GRC",
+          classification: taskInfo.classification || "NIST CSF",
           priority: taskInfo.priority,
           dueDate: taskInfo.dueDate
             ? moment(taskInfo.dueDate).format("YYYY-MM-DD")

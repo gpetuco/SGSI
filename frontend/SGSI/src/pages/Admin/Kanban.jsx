@@ -107,7 +107,7 @@ const Kanban = () => {
       selectedPriority === "All"
         ? tasks
         : tasks.filter((t) => t.priority === selectedPriority);
-    const by = { GRC: [], "ISO 27001": [], "NIST CSF": [] };
+    const by = { "NIST CSF": [], "ISO 27001": [] };
     for (const t of source) {
       const key = t.classification;
       if (by[key]) by[key].push(t);
@@ -168,15 +168,14 @@ const Kanban = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-          <Column title="GRC" tasks={grouped["GRC"]} onOpen={handleOpen} />
-          <Column
-            title="ISO 27001"
-            tasks={grouped["ISO 27001"]}
-            onOpen={handleOpen}
-          />
           <Column
             title="NIST CSF"
             tasks={grouped["NIST CSF"]}
+            onOpen={handleOpen}
+          />
+          <Column
+            title="ISO 27001"
+            tasks={grouped["ISO 27001"]}
             onOpen={handleOpen}
           />
         </div>

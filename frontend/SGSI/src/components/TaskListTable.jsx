@@ -36,7 +36,6 @@ const TaskListTable = ({ tableData }) => {
         return "text-emerald-600 bg-emerald-50 border border-emerald-500/10 dark:text-emerald-300 dark:bg-emerald-900/25 dark:border-emerald-400/20";
       case "NIST CSF":
         return "text-blue-600 bg-blue-50 border border-blue-500/10 dark:text-blue-300 dark:bg-blue-900/25 dark:border-blue-400/20";
-      case "GRC":
       default:
         return "text-violet-600 bg-violet-50 border border-violet-500/10 dark:text-violet-300 dark:bg-violet-900/30 dark:border-violet-400/20";
     }

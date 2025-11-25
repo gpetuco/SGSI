@@ -11,8 +11,8 @@ const taskSchema = new mongoose.Schema(
     description: { type: String },
     classification: {
       type: String,
-      enum: ["GRC", "ISO 27001", "NIST CSF"],
-      default: "GRC",
+      enum: ["NIST CSF", "ISO 27001"],
+      default: "NIST CSF",
     },
     priority: {
       type: String,
@@ -27,7 +27,11 @@ const taskSchema = new mongoose.Schema(
     dueDate: { type: Date, required: true },
     assignedTo: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    cliente: { type: mongoose.Schema.Types.ObjectId, ref: "Company", default: null },
+    cliente: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company",
+      default: null,
+    },
     attachments: [{ type: String }],
     todoChecklist: [todoSchema],
     progress: { type: Number, default: 0 },
@@ -39,7 +43,8 @@ const taskSchema = new mongoose.Schema(
 // Recalculate progress from todoChecklist before save
 taskSchema.pre("save", function (next) {
   try {
-    const hasChecklist = Array.isArray(this.todoChecklist) && this.todoChecklist.length > 0;
+    const hasChecklist =
+      Array.isArray(this.todoChecklist) && this.todoChecklist.length > 0;
     if (hasChecklist) {
       const total = this.todoChecklist.length;
       const done = this.todoChecklist.filter((t) => !!t.completed).length;
