@@ -1,9 +1,8 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
-import { LuFileSpreadsheet } from "react-icons/lu";
 import TaskCard from "../../components/Cards/TaskCard";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
 import SelectDropdownSearch from "../../components/Inputs/SelectDropdownSearch";
@@ -36,8 +35,6 @@ const ManageTasks = () => {
       });
 
       setAllTasks(response.data?.tasks?.length > 0 ? response.data.tasks : []);
-
-      // no tabs; dropdown handles status filter
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -77,8 +74,10 @@ const ManageTasks = () => {
   return (
     <DashboardLayout activeMenu="Ações">
       <div className="my-5">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          {/* Left: Filters */}
+        <h2 className="text-xl md:text-xl font-medium">Ações</h2>
+
+        <div className="mt-3 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-3">
+          {/* Filtros */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-2 w-full lg:w-[880px]">
             <div className="w-full md:w-[190px]">
               <label className="text-xs font-medium text-slate-600">
@@ -88,7 +87,7 @@ const ManageTasks = () => {
                 options={userOptions}
                 value={selectedUser}
                 onChange={setSelectedUser}
-                placeholder="All Users"
+                placeholder="Todos"
                 showAvatar
               />
             </div>
@@ -103,7 +102,7 @@ const ManageTasks = () => {
                 ]}
                 value={selectedFramework}
                 onChange={setSelectedFramework}
-                placeholder="All Frameworks"
+                placeholder="Todos"
               />
             </div>
             <div className="w-full md:w-[190px]">
@@ -119,7 +118,7 @@ const ManageTasks = () => {
                 ]}
                 value={filterStatus}
                 onChange={setFilterStatus}
-                placeholder="All Statuses"
+                placeholder="Todos"
               />
             </div>
             <div className="w-full md:w-[190px]">
@@ -130,9 +129,19 @@ const ManageTasks = () => {
                 options={[{ label: "Todos", value: "All" }, ...PRIORITY_DATA]}
                 value={selectedPriority}
                 onChange={setSelectedPriority}
-                placeholder="All Priorities"
+                placeholder="Todas"
               />
             </div>
+          </div>
+
+          {/* Botão Criar alinhado à direita, mesmo tamanho dos selects */}
+          <div className="w-full md:w-[190px]">
+            <button
+              className="w-full text-sm font-medium text-white bg-primary px-2.5 py-3 rounded-md mt-2 hover:bg-primary/90 transition-colors"
+              onClick={() => navigate("/admin/create-task")}
+            >
+              + Criar
+            </button>
           </div>
         </div>
 
@@ -140,7 +149,7 @@ const ManageTasks = () => {
           {(selectedPriority === "All"
             ? allTasks
             : allTasks.filter((t) => t.priority === selectedPriority)
-          )?.map((item, index) => (
+          )?.map((item) => (
             <TaskCard
               key={item._id}
               title={item.title}
@@ -156,9 +165,7 @@ const ManageTasks = () => {
               )}
               completedTodoCount={item.completedTodoCount || 0}
               todoChecklist={item.todoChecklist || []}
-              onClick={() => {
-                handleClick(item);
-              }}
+              onClick={() => handleClick(item)}
             />
           ))}
         </div>

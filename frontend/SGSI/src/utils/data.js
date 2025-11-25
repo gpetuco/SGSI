@@ -43,12 +43,6 @@ export const SIDE_MENU_DATA = [
     path: "/admin/kanban",
   },
   {
-    id: "03",
-    label: "Create Task",
-    icon: LuSquarePlus,
-    path: "/admin/create-task",
-  },
-  {
     id: "04",
     label: "Membros",
     icon: LuUsers,
@@ -76,12 +70,18 @@ export const SIDE_MENU_USER_DATA = [
     path: "/user/dashboard",
   },
   {
-    id: "02",
-    label: "My Tasks",
-    icon: LuClipboardCheck,
-    path: "/user/tasks",
+    id: "02f",
+    label: "NIST CSF",
+    icon: LuNetwork,
+    path: "/user/tasks/nist-csf",
   },
   {
+    id: "02e",
+    label: "ISO 27001",
+    icon: LuBadgeCheck,
+    path: "/user/tasks/iso-27001",
+  },
+   {
     id: "02c",
     label: "Kanban",
     icon: LuColumns3,
@@ -89,7 +89,7 @@ export const SIDE_MENU_USER_DATA = [
   },
   {
     id: "05",
-    label: "Logout",
+    label: "Sair",
     icon: LuLogOut,
     path: "logout",
   },
