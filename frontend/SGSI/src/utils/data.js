@@ -43,12 +43,6 @@ export const SIDE_MENU_DATA = [
     path: "/admin/kanban",
   },
   {
-    id: "02b",
-    label: "My Tasks",
-    icon: LuClipboardCheck,
-    path: "/admin/my-tasks",
-  },
-  {
     id: "03",
     label: "Create Task",
     icon: LuSquarePlus,
