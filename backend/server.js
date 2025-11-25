@@ -7,7 +7,6 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const taskRoutes = require("./routes/taskRoutes");
-const reportRoutes = require("./routes/reportRoutes");
 const companyRoutes = require("./routes/companyRoutes");
 
 const app = express();
@@ -31,7 +30,6 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/tasks", taskRoutes);
-app.use("/api/reports", reportRoutes);
 app.use("/api/companies", companyRoutes);
 
 // Serve uploads folder

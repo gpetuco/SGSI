@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
@@ -45,29 +45,6 @@ const ManageTasks = () => {
 
   const handleClick = (taskData) => {
     navigate(`/admin/create-task`, { state: { taskId: taskData._id } });
-  };
-
-  // download task report
-  const handleDownloadReport = async () => {
-    try {
-      const response = await axiosInstance.get(API_PATHS.REPORTS.EXPORT_TASKS, {
-        responseType: "blob",
-      });
-
-      // Create a URL for the blob
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "task_details.xlsx");
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Error downloading details:", error);
-      // eslint-disable-next-line no-undef
-      toast.error("Failed to download details. Please try again.");
-    }
   };
 
   // fetch users for dropdown
@@ -156,17 +133,6 @@ const ManageTasks = () => {
                 placeholder="All Priorities"
               />
             </div>
-          </div>
-
-          {/* Right: Download */}
-          <div className="flex items-center gap-3 lg:ml-2 lg:flex-1 lg:justify-end lg:flex-nowrap min-w-0">
-            <button
-              className="hidden lg:flex download-btn shrink-0"
-              onClick={handleDownloadReport}
-            >
-              <LuFileSpreadsheet className="text-lg" />
-              Baixar PDF
-            </button>
           </div>
         </div>
 

@@ -19,29 +19,6 @@ const ManageUsers = () => {
     }
   };
 
-  // download task report
-  const handleDownloadReport = async () => {
-    try {
-      const response = await axiosInstance.get(API_PATHS.REPORTS.EXPORT_USERS, {
-        responseType: "blob",
-      });
-
-      // Create a URL for the blob
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "user_details.xlsx");
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Error downloading details:", error);
-      // eslint-disable-next-line no-undef
-      toast.error("Failed to download details. Please try again.");
-    }
-  };
-
   useEffect(() => {
     getAllUsers();
 
@@ -53,14 +30,6 @@ const ManageUsers = () => {
       <div className="mt-5 mb-10">
         <div className="flex md:flex-row md:items-center justify-between">
           <h2 className="text-xl md:text-xl font-medium">Membros</h2>
-
-          <button
-            className="flex md:flex download-btn"
-            onClick={handleDownloadReport}
-          >
-            <LuFileSpreadsheet className="text-lg" />
-            Baixar PDF
-          </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">

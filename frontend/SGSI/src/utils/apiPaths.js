@@ -34,11 +34,6 @@ export const API_PATHS = {
     UPDATE_TODO_CHECKLIST: (taskId) => `/api/tasks/${taskId}/todo`, // Update todo checklist
   },
 
-  REPORTS: {
-    EXPORT_TASKS: "/api/reports/export/tasks", // Download all tasks as an Excel/PDF report
-    EXPORT_USERS: "/api/reports/export/users", // Download user-task report
-  },
-
   IMAGE: {
     UPLOAD_IMAGE: "api/auth/upload-image",
   },
