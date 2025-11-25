@@ -30,6 +30,14 @@ import { LuZoomIn } from "react-icons/lu";
 import Modal from "../../components/Modal";
 
 const COLORS = ["#8D51FF", "#00B8DB", "#7BCE00"];
+const NIST_FUNCTION_COLORS = {
+  Govern: "#8D51FF",
+  Identify: "#00B8DB",
+  Protect: "#00BC7D",
+  Detect: "#FACC15",
+  Respond: "#FB7185",
+  Recover: "#22C55E",
+};
 
 const Dashboard = () => {
   useUserAuth();
@@ -45,6 +53,9 @@ const Dashboard = () => {
   const [completionPercentData, setCompletionPercentData] = useState([]);
   const [frameworkLineData, setFrameworkLineData] = useState([]);
   const [tasksByUserData, setTasksByUserData] = useState([]);
+  const [nistFunctionCompletionData, setNistFunctionCompletionData] = useState(
+    []
+  );
   const [fwModal, setFwModal] = useState({ open: false, fw: null, percent: 0 });
 
   const [classificationFilter, setClassificationFilter] = useState("All");
@@ -108,6 +119,15 @@ const Dashboard = () => {
     }));
     setCompletionPercentData(completion);
 
+    // Completion by NIST CSF function
+    const nistCompletionRaw = data?.completionByNistFunction || [];
+    const nistCompletion = nistCompletionRaw.map((i) => ({
+      function: i.function,
+      percent: i.percent,
+      total: i.total,
+    }));
+    setNistFunctionCompletionData(nistCompletion);
+
     // Tasks by user (Top 5)
     const tbu = (data?.tasksByUser || []).map((i) => ({
       user: i.user,
@@ -164,10 +184,7 @@ const Dashboard = () => {
       <div className="card my-5">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
           <div>
-            <h2 className="text-xl md:text-2xl">Bem-vindo, {user?.name}!</h2>
-            <p className="text-xs md:text-[13px] text-gray-400 mt-1.5">
-              {formatLongPtBr()}
-            </p>
+            <h2 className="text-xl md:text-2xl">Dashboard</h2>
           </div>
         </div>
 
@@ -272,6 +289,74 @@ const Dashboard = () => {
           );
         })}
       </div>
+
+      {/* NIST CSF by Function */}
+      {nistFunctionCompletionData?.length > 0 && (
+        <div className="card my-5">
+          <div className="flex items-center justify-between mb-3">
+            <h5 className="font-medium">NIST CSF Core</h5>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 md:gap-6">
+            {nistFunctionCompletionData.map((fn) => (
+              <InfoCard
+                key={fn.function}
+                label={`${fn.function} (${fn.total})`}
+                value={`${fn.percent}%`}
+                color="bg-primary"
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* NIST CSF by Function - mini charts */}
+      {nistFunctionCompletionData?.length > 0 && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 md:gap-4 my-4">
+          {nistFunctionCompletionData.map((fn) => {
+            const pct = Math.max(0, Math.min(100, fn.percent || 0));
+            const donutData = [
+              { name: "done", value: pct },
+              { name: "remain", value: 100 - pct },
+            ];
+            const color =
+              NIST_FUNCTION_COLORS[fn.function] || NIST_FUNCTION_COLORS.Govern;
+            return (
+              <div
+                key={fn.function}
+                className="card flex flex-col items-center justify-between px-2 py-2"
+              >
+                <div className="text-[11px] md:text-xs font-semibold text-center text-gray-700 dark:text-slate-200">
+                  {fn.function}
+                </div>
+                <div className="w-[64px] h-[64px] md:w-[72px] md:h-[72px] my-1 flex items-center justify-center">
+                  <ReResponsiveContainer width="100%" height="100%">
+                    <RePieChart>
+                      <RePie
+                        data={donutData}
+                        dataKey="value"
+                        innerRadius={"60%"}
+                        outerRadius={"85%"}
+                        startAngle={90}
+                        endAngle={-270}
+                        stroke="none"
+                      >
+                        <ReCell fill={color} />
+                        <ReCell fill="#CBD5E1" />
+                      </RePie>
+                    </RePieChart>
+                  </ReResponsiveContainer>
+                </div>
+                <div className="text-xs md:text-sm font-bold text-gray-900 dark:text-white">
+                  {pct}%
+                </div>
+                <div className="text-[10px] md:text-[11px] text-gray-500 dark:text-slate-300">
+                  {fn.total || 0} ações
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* Framework zoom modal */}
       {fwModal.open && (

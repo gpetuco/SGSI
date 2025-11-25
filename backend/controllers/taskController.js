@@ -474,6 +474,138 @@ const getDashboardData = async (req, res) => {
       return { framework: fw, percent: row ? row.percent : 0 };
     });
 
+    // Completion by NIST CSF function (Govern, Identify, Protect, Detect, Respond, Recover)
+    const nistMatch = { ...baseMatch, classification: "NIST CSF" };
+    const completionByNistFunctionAgg = await Task.aggregate([
+      { $match: nistMatch },
+      {
+        $addFields: {
+          totalTodos: { $size: { $ifNull: ["$todoChecklist", []] } },
+          doneTodos: {
+            $size: {
+              $filter: {
+                input: { $ifNull: ["$todoChecklist", []] },
+                as: "t",
+                cond: { $eq: ["$$t.completed", true] },
+              },
+            },
+          },
+          nistFunction: {
+            $switch: {
+              branches: [
+                {
+                  case: {
+                    $regexMatch: {
+                      input: "$title",
+                      regex: /^GOVERN/i,
+                    },
+                  },
+                  then: "Govern",
+                },
+                {
+                  case: {
+                    $regexMatch: {
+                      input: "$title",
+                      regex: /^IDENTIFY/i,
+                    },
+                  },
+                  then: "Identify",
+                },
+                {
+                  case: {
+                    $regexMatch: {
+                      input: "$title",
+                      regex: /^PROTECT/i,
+                    },
+                  },
+                  then: "Protect",
+                },
+                {
+                  case: {
+                    $regexMatch: {
+                      input: "$title",
+                      regex: /^DETECT/i,
+                    },
+                  },
+                  then: "Detect",
+                },
+                {
+                  case: {
+                    $regexMatch: {
+                      input: "$title",
+                      regex: /^RESPOND/i,
+                    },
+                  },
+                  then: "Respond",
+                },
+                {
+                  case: {
+                    $regexMatch: {
+                      input: "$title",
+                      regex: /^RECOVER/i,
+                    },
+                  },
+                  then: "Recover",
+                },
+              ],
+              default: null,
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          nistFunction: 1,
+          progress: {
+            $cond: [
+              { $gt: ["$totalTodos", 0] },
+              { $multiply: [{ $divide: ["$doneTodos", "$totalTodos"] }, 100] },
+              {
+                $cond: [
+                  { $eq: ["$status", "Completed"] },
+                  100,
+                  { $ifNull: ["$progress", 0] },
+                ],
+              },
+            ],
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$nistFunction",
+          avgProgress: { $avg: "$progress" },
+          total: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          func: "$_id",
+          percent: { $round: ["$avgProgress", 0] },
+          total: 1,
+        },
+      },
+    ]);
+
+    const nistFunctionsOrder = [
+      "Govern",
+      "Identify",
+      "Protect",
+      "Detect",
+      "Respond",
+      "Recover",
+    ];
+
+    const completionByNistFunction = nistFunctionsOrder.map((fn) => {
+      const row = completionByNistFunctionAgg.find((i) => i.func === fn);
+      return {
+        function: fn,
+        percent: row ? row.percent : 0,
+        total: row ? row.total : 0,
+      };
+    });
+
     // On-time rate among completed
     const completedInScope = await Task.find({
       ...baseMatch,
@@ -552,6 +684,7 @@ const getDashboardData = async (req, res) => {
         taskPriorityLevels,
         statusByFramework,
         completionByFramework,
+        completionByNistFunction,
         tasksByUser: tasksByUserAgg,
       },
       recentTasks,
