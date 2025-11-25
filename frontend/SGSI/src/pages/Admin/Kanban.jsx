@@ -34,7 +34,6 @@ const Column = ({ title, tasks, onOpen }) => {
                 createdAt={item.createdAt}
                 dueDate={item.dueDate}
                 assignedTo={item.assignedTo?.map((p) => p.profileImageUrl)}
-                attachmentCount={item.attachments?.length || 0}
                 completedTodoCount={item.completedTodoCount || 0}
                 todoChecklist={item.todoChecklist || []}
                 onClick={() => onOpen(item._id)}
@@ -167,7 +166,7 @@ const Kanban = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <Column
             title="NIST CSF"
             tasks={grouped["NIST CSF"]}

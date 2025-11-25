@@ -33,7 +33,6 @@ const Column = ({ title, tasks, onOpen }) => {
               createdAt={item.createdAt}
               dueDate={item.dueDate}
               assignedTo={item.assignedTo?.map((p) => p.profileImageUrl)}
-              attachmentCount={item.attachments?.length || 0}
               completedTodoCount={item.completedTodoCount || 0}
               todoChecklist={item.todoChecklist || []}
               onClick={() => onOpen(item._id)}

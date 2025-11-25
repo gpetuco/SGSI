@@ -1,7 +1,6 @@
 import React from "react";
 import Progress from "../Progress";
 import AvatarGroup from "../AvatarGroup";
-import { LuPaperclip } from "react-icons/lu";
 import moment from "moment";
 
 const TaskCard = ({
@@ -14,7 +13,6 @@ const TaskCard = ({
   createdAt,
   dueDate,
   assignedTo,
-  attachmentCount,
   completedTodoCount,
   todoChecklist,
   onClick,
@@ -132,15 +130,6 @@ const TaskCard = ({
 
         <div className="flex items-center justify-between mt-3">
           <AvatarGroup avatars={assignedTo || []} />
-
-          {attachmentCount > 0 && (
-            <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 px-2.5 py-1.5 rounded-lg">
-              <LuPaperclip className="text-primary" />{" "}
-              <span className="text-xs text-gray-900 dark:text-blue-200">
-                {attachmentCount}
-              </span>
-            </div>
-          )}
         </div>
       </div>
     </div>

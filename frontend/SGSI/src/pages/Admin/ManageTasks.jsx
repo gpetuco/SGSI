@@ -154,7 +154,6 @@ const ManageTasks = () => {
               assignedTo={item.assignedTo?.map(
                 (member) => member.profileImageUrl
               )}
-              attachmentCount={item.attachments?.length || 0}
               completedTodoCount={item.completedTodoCount || 0}
               todoChecklist={item.todoChecklist || []}
               onClick={() => {

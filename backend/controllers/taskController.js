@@ -134,7 +134,6 @@ const createTask = async (req, res) => {
       classification,
       dueDate,
       assignedTo,
-      attachments,
       todoChecklist,
       cliente,
     } = req.body;
@@ -167,7 +166,6 @@ const createTask = async (req, res) => {
       assignedTo,
       createdBy: req.user._id,
       todoChecklist,
-      attachments,
       cliente: clienteId,
     });
 
@@ -207,7 +205,6 @@ const updateTask = async (req, res) => {
         }
       }
     }
-    task.attachments = req.body.attachments || task.attachments;
 
     if (req.body.assignedTo) {
       if (!Array.isArray(req.body.assignedTo)) {

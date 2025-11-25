@@ -32,7 +32,6 @@ const taskSchema = new mongoose.Schema(
       ref: "Company",
       default: null,
     },
-    attachments: [{ type: String }],
     todoChecklist: [todoSchema],
     progress: { type: Number, default: 0 },
     completedAt: { type: Date },

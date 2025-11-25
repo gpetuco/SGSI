@@ -13,7 +13,6 @@ import { NIST_CSF_DATA } from "../../utils/nistCsfData";
 import SelectUsers from "../../components/Inputs/SelectUsers";
 import SelectCompany from "../../components/Inputs/SelectCompany";
 import TodoListInput from "../../components/Inputs/TodoListInput";
-import AddAttachmentsInput from "../../components/Inputs/AddAttachmentsInput";
 import DeleteAlert from "../../components/DeleteAlert";
 import Modal from "../../components/Modal";
 
@@ -43,7 +42,6 @@ const CreateTask = () => {
     assignedTo: [],
     cliente: "",
     todoChecklist: [],
-    attachments: [],
   });
 
   const [currentTask, setCurrentTask] = useState(null);
@@ -126,7 +124,6 @@ const CreateTask = () => {
       assignedTo: [],
       cliente: "",
       todoChecklist: [],
-      attachments: [],
     });
   };
 
@@ -284,7 +281,6 @@ const CreateTask = () => {
             "",
           todoChecklist:
             taskInfo?.todoChecklist?.map((item) => item?.text) || [],
-          attachments: taskInfo?.attachments || [],
         }));
       }
     } catch (error) {
@@ -453,7 +449,7 @@ const CreateTask = () => {
               onClick={handleSubmit}
               disabled={loading}
             >
-              {taskId ? "UPDATE TASK" : "CREATE TASK"}
+              {"Salvar"}
             </button>
           </div>
         }
@@ -792,19 +788,6 @@ const CreateTask = () => {
                 setSelectedUsers={(value) => {
                   handleValueChange("assignedTo", value);
                 }}
-              />
-            </div>
-
-            <div className="mt-3">
-              <label className="text-xs font-medium text-slate-600">
-                Add Attachments
-              </label>
-
-              <AddAttachmentsInput
-                attachments={taskData?.attachments}
-                setAttachments={(value) =>
-                  handleValueChange("attachments", value)
-                }
               />
             </div>
 
