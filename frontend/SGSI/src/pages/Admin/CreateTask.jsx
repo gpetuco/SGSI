@@ -475,7 +475,7 @@ const CreateTask = () => {
                   className="flex items-center gap-1.5 text-[13px] font-medium text-rose-500 bg-rose-50 rounded px-2 py-1 border border-rose-100 hover:border-rose-300 cursor-pointer"
                   onClick={() => setOpenDeleteAlert(true)}
                 >
-                  <LuTrash2 className="text-base" /> Delete
+                  <LuTrash2 className="text-base" /> Apagar
                 </button>
               )}
             </div>
@@ -483,7 +483,7 @@ const CreateTask = () => {
             <div className="grid grid-cols-12 gap-4 mt-2">
               <div className="col-span-6 md:col-span-4">
                 <label className="text-xs font-medium text-slate-600">
-                  Classification
+                  Classificação
                 </label>
 
                 <SelectDropdown
@@ -496,7 +496,7 @@ const CreateTask = () => {
 
               <div className="col-span-6 md:col-span-4">
                 <label className="text-xs font-medium text-slate-600">
-                  Priority
+                  Prioridade
                 </label>
 
                 <SelectDropdown
@@ -526,7 +526,7 @@ const CreateTask = () => {
 
             <div className="mt-4">
               <label className="text-xs font-medium text-slate-600">
-                Task Title
+                Título
               </label>
 
               {isNist ? (
@@ -552,7 +552,7 @@ const CreateTask = () => {
 
             <div className="mt-3">
               <label className="text-xs font-medium text-slate-600">
-                Description
+                Descrição
               </label>
 
               {isNist ? (
@@ -592,7 +592,7 @@ const CreateTask = () => {
             <div className="mt-3">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-medium text-slate-600">
-                  TODO Checklist
+                  Itens
                 </label>
               </div>
 
@@ -771,8 +771,6 @@ const CreateTask = () => {
                   )}
                 </div>
               )}
-
-              {/* no quick-add in view mode after revert */}
             </div>
             <div className="mt-3">
               <label className="text-xs font-medium text-slate-600">

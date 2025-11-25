@@ -2,7 +2,13 @@ import React, { useMemo, useState } from "react";
 import { LuChevronDown, LuSearch } from "react-icons/lu";
 import UserAvatar from "../UserAvatar";
 
-const SelectDropdownSearch = ({ options = [], value, onChange, placeholder, showAvatar = false }) => {
+const SelectDropdownSearch = ({
+  options = [],
+  value,
+  onChange,
+  placeholder,
+  showAvatar = false,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
 
@@ -30,12 +36,18 @@ const SelectDropdownSearch = ({ options = [], value, onChange, placeholder, show
       >
         <span className="flex items-center gap-2 truncate">
           {showAvatar && (
-            <UserAvatar src={current?.avatar} name={current?.label} size="w-5 h-5" />
+            <UserAvatar
+              src={current?.avatar}
+              name={current?.label}
+              size="w-5 h-5"
+            />
           )}
           <span className="truncate">{current?.label || placeholder}</span>
         </span>
         <span className="ml-2">
-          <LuChevronDown className={`${isOpen ? "rotate-180" : ""} transition-transform`} />
+          <LuChevronDown
+            className={`${isOpen ? "rotate-180" : ""} transition-transform`}
+          />
         </span>
       </button>
 
@@ -47,7 +59,7 @@ const SelectDropdownSearch = ({ options = [], value, onChange, placeholder, show
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search..."
+              placeholder="Pesquisar..."
               className="w-full text-sm outline-none bg-transparent text-black dark:text-slate-100 placeholder:text-gray-400 dark:placeholder:text-slate-400"
             />
           </div>
@@ -60,13 +72,21 @@ const SelectDropdownSearch = ({ options = [], value, onChange, placeholder, show
                 className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600 flex items-center gap-2"
               >
                 {showAvatar && (
-                  <UserAvatar src={option.avatar} name={option.label} size="w-6 h-6" />
+                  <UserAvatar
+                    src={option.avatar}
+                    name={option.label}
+                    size="w-6 h-6"
+                  />
                 )}
-                <span className="truncate text-black dark:text-slate-100">{option.label}</span>
+                <span className="truncate text-black dark:text-slate-100">
+                  {option.label}
+                </span>
               </div>
             ))}
             {filtered.length === 0 && (
-              <div className="px-3 py-3 text-xs text-gray-500 dark:text-slate-400">No results</div>
+              <div className="px-3 py-3 text-xs text-gray-500 dark:text-slate-400">
+                No results
+              </div>
             )}
           </div>
         </div>
@@ -76,4 +96,3 @@ const SelectDropdownSearch = ({ options = [], value, onChange, placeholder, show
 };
 
 export default SelectDropdownSearch;
-
