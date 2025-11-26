@@ -606,6 +606,118 @@ const getDashboardData = async (req, res) => {
       };
     });
 
+    // Completion by ISO 27001 control type (Organisational, People, Physical, Technological)
+    const isoMatch = { ...baseMatch, classification: "ISO 27001" };
+    const completionByIsoControlTypeAgg = await Task.aggregate([
+      { $match: isoMatch },
+      {
+        $addFields: {
+          totalTodos: { $size: { $ifNull: ["$todoChecklist", []] } },
+          doneTodos: {
+            $size: {
+              $filter: {
+                input: { $ifNull: ["$todoChecklist", []] },
+                as: "t",
+                cond: { $eq: ["$$t.completed", true] },
+              },
+            },
+          },
+          isoType: {
+            $switch: {
+              branches: [
+                {
+                  case: {
+                    $regexMatch: {
+                      input: "$title",
+                      regex: /^Organisational Controls/i,
+                    },
+                  },
+                  then: "Organisational",
+                },
+                {
+                  case: {
+                    $regexMatch: {
+                      input: "$title",
+                      regex: /^People Controls/i,
+                    },
+                  },
+                  then: "People",
+                },
+                {
+                  case: {
+                    $regexMatch: {
+                      input: "$title",
+                      regex: /^Physical Controls/i,
+                    },
+                  },
+                  then: "Physical",
+                },
+                {
+                  case: {
+                    $regexMatch: {
+                      input: "$title",
+                      regex: /^Technological Controls/i,
+                    },
+                  },
+                  then: "Technological",
+                },
+              ],
+              default: null,
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          isoType: 1,
+          progress: {
+            $cond: [
+              { $gt: ["$totalTodos", 0] },
+              { $multiply: [{ $divide: ["$doneTodos", "$totalTodos"] }, 100] },
+              {
+                $cond: [
+                  { $eq: ["$status", "Completed"] },
+                  100,
+                  { $ifNull: ["$progress", 0] },
+                ],
+              },
+            ],
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$isoType",
+          avgProgress: { $avg: "$progress" },
+          total: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          type: "$_id",
+          percent: { $round: ["$avgProgress", 0] },
+          total: 1,
+        },
+      },
+    ]);
+
+    const isoControlTypesOrder = [
+      "Organisational",
+      "People",
+      "Physical",
+      "Technological",
+    ];
+
+    const completionByIsoControlType = isoControlTypesOrder.map((t) => {
+      const row = completionByIsoControlTypeAgg.find((i) => i.type === t);
+      return {
+        type: t,
+        percent: row ? row.percent : 0,
+        total: row ? row.total : 0,
+      };
+    });
+
     // On-time rate among completed
     const completedInScope = await Task.find({
       ...baseMatch,
@@ -685,6 +797,7 @@ const getDashboardData = async (req, res) => {
         statusByFramework,
         completionByFramework,
         completionByNistFunction,
+        completionByIsoControlType,
         tasksByUser: tasksByUserAgg,
       },
       recentTasks,

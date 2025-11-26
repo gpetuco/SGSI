@@ -38,6 +38,12 @@ const NIST_FUNCTION_COLORS = {
   Respond: "#FB7185",
   Recover: "#22C55E",
 };
+const ISO_CONTROL_COLORS = {
+  Organisational: "#4F46E5",
+  People: "#0EA5E9",
+  Physical: "#22C55E",
+  Technological: "#F97316",
+};
 
 const Dashboard = () => {
   useUserAuth();
@@ -56,6 +62,7 @@ const Dashboard = () => {
   const [nistFunctionCompletionData, setNistFunctionCompletionData] = useState(
     []
   );
+  const [isoControlCompletionData, setIsoControlCompletionData] = useState([]);
   const [fwModal, setFwModal] = useState({ open: false, fw: null, percent: 0 });
 
   const [classificationFilter, setClassificationFilter] = useState("All");
@@ -137,6 +144,15 @@ const Dashboard = () => {
       Completed: i.Completed || 0,
       total: i.total || 0,
     }));
+    // Completion by ISO 27001 control type
+    const isoCompletionRaw = data?.completionByIsoControlType || [];
+    const isoCompletion = isoCompletionRaw.map((i) => ({
+      type: i.type,
+      percent: i.percent,
+      total: i.total,
+    }));
+    setIsoControlCompletionData(isoCompletion);
+
     setTasksByUserData(tbu);
   };
 
@@ -294,7 +310,7 @@ const Dashboard = () => {
       {nistFunctionCompletionData?.length > 0 && (
         <div className="card my-5">
           <div className="flex items-center justify-between mb-3">
-            <h5 className="font-medium">NIST CSF Core</h5>
+            <h5 className="font-medium">NIST CSF - Funções</h5>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 md:gap-6">
             {nistFunctionCompletionData.map((fn) => (
@@ -351,6 +367,75 @@ const Dashboard = () => {
                 </div>
                 <div className="text-[10px] md:text-[11px] text-gray-500 dark:text-slate-300">
                   {fn.total || 0} ações
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* ISO 27001 by Control Type */}
+      {isoControlCompletionData?.length > 0 && (
+        <div className="card my-5">
+          <div className="flex items-center justify-between mb-3">
+            <h5 className="font-medium">ISO 27001 - Controles</h5>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-3 md:gap-6">
+            {isoControlCompletionData.map((ctrl) => (
+              <InfoCard
+                key={ctrl.type}
+                label={`${ctrl.type} (${ctrl.total})`}
+                value={`${ctrl.percent}%`}
+                color="bg-primary"
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ISO 27001 by Control Type - mini charts */}
+      {isoControlCompletionData?.length > 0 && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-3 md:gap-4 my-4">
+          {isoControlCompletionData.map((ctrl) => {
+            const pct = Math.max(0, Math.min(100, ctrl.percent || 0));
+            const donutData = [
+              { name: "done", value: pct },
+              { name: "remain", value: 100 - pct },
+            ];
+            const color =
+              ISO_CONTROL_COLORS[ctrl.type] ||
+              ISO_CONTROL_COLORS.Organisational;
+            return (
+              <div
+                key={ctrl.type}
+                className="card flex flex-col items-center justify-between px-2 py-2"
+              >
+                <div className="text-[11px] md:text-xs font-semibold text-center text-gray-700 dark:text-slate-200">
+                  {ctrl.type}
+                </div>
+                <div className="w-[64px] h-[64px] md:w-[72px] md:h-[72px] my-1 flex items-center justify-center">
+                  <ReResponsiveContainer width="100%" height="100%">
+                    <RePieChart>
+                      <RePie
+                        data={donutData}
+                        dataKey="value"
+                        innerRadius={"60%"}
+                        outerRadius={"85%"}
+                        startAngle={90}
+                        endAngle={-270}
+                        stroke="none"
+                      >
+                        <ReCell fill={color} />
+                        <ReCell fill="#CBD5E1" />
+                      </RePie>
+                    </RePieChart>
+                  </ReResponsiveContainer>
+                </div>
+                <div className="text-xs md:text-sm font-bold text-gray-900 dark:text-white">
+                  {pct}%
+                </div>
+                <div className="text-[10px] md:text-[11px] text-gray-500 dark:text-slate-300">
+                  {ctrl.total || 0} ações
                 </div>
               </div>
             );
