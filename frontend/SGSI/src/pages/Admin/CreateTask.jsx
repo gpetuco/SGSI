@@ -66,7 +66,8 @@ const CreateTask = () => {
   const [newTodoText, setNewTodoText] = useState("");
 
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // salvar (criar/atualizar)
+  const [loadingTask, setLoadingTask] = useState(!!taskId); // carregar dados iniciais em modo edição
 
   const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
 
@@ -289,6 +290,7 @@ const CreateTask = () => {
   // get Task info by ID
   const getTaskDetailsByID = async () => {
     try {
+      setLoadingTask(true);
       const response = await axiosInstance.get(
         API_PATHS.TASKS.GET_TASK_BY_ID(taskId)
       );
@@ -316,6 +318,8 @@ const CreateTask = () => {
       }
     } catch (error) {
       console.error("Error fetching users:", error);
+    } finally {
+      setLoadingTask(false);
     }
   };
 
@@ -465,6 +469,30 @@ const CreateTask = () => {
       navigate(-1);
     }, 0);
   };
+
+  if (taskId && loadingTask && !currentTask) {
+    return (
+      <DashboardLayout activeMenu="Create Task">
+        <Modal
+          isOpen={openFormModal}
+          onClose={closeAndGoBack}
+          title={"A��o"}
+          variant="wide"
+        >
+          <div className="grid grid-cols-1 mt-1">
+            <div className="form-card">
+              <h2 className="text-sm md:text-xl font-medium mb-2">
+                Carregando dados da a��o...
+              </h2>
+              <p className="text-xs md:text-[13px] text-slate-500">
+                Aguarde enquanto buscamos as informa����es da a��o selecionada.
+              </p>
+            </div>
+          </div>
+        </Modal>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout activeMenu="Create Task">

@@ -28,8 +28,7 @@ import {
 } from "recharts";
 import { LuZoomIn } from "react-icons/lu";
 import Modal from "../../components/Modal";
-
-const COLORS = ["#8D51FF", "#00B8DB", "#7BCE00"];
+const COLORS = ["#ff0000", "#FACC15", "#22C55E"];
 const NIST_FUNCTION_COLORS = {
   Govern: "#8D51FF",
   Identify: "#00B8DB",
@@ -359,8 +358,8 @@ const Dashboard = () => {
               { name: "done", value: pct },
               { name: "remain", value: 100 - pct },
             ];
-            const color =
-              NIST_FUNCTION_COLORS[fn.function] || NIST_FUNCTION_COLORS.Govern;
+            const color = pct === 100 ? "#22C55E" : "#FACC15";
+
             return (
               <div
                 key={fn.function}
@@ -427,9 +426,8 @@ const Dashboard = () => {
               { name: "done", value: pct },
               { name: "remain", value: 100 - pct },
             ];
-            const color =
-              ISO_CONTROL_COLORS[ctrl.type] ||
-              ISO_CONTROL_COLORS.Organisational;
+            const color = pct === 100 ? "#22C55E" : "#FACC15";
+
             return (
               <div
                 key={ctrl.type}
@@ -560,7 +558,7 @@ const Dashboard = () => {
             <CustomAreaChart
               data={barChartData}
               xKey="priority"
-              areas={[{ dataKey: "count", color: "#1368ec", name: "Tasks" }]}
+              areas={[{ dataKey: "count", color: "#1368ec", name: "Ações" }]}
             />
           </div>
         </div>
