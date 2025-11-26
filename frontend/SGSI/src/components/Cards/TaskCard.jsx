@@ -31,6 +31,18 @@ const TaskCard = ({
     }
   };
 
+  const getStatusLabel = () => {
+    switch (status) {
+      case "In Progress":
+        return "Em Andamento";
+      case "Completed":
+        return "Concluído";
+      case "Pending":
+      default:
+        return "Pendente";
+    }
+  };
+
   const getPriorityTagColor = () => {
     switch (priority) {
       case "Low":
@@ -41,6 +53,18 @@ const TaskCard = ({
 
       default:
         return "text-rose-600 bg-rose-50 border border-rose-500/10 dark:text-rose-300 dark:bg-rose-900/25 dark:border-rose-400/20";
+    }
+  };
+
+  const getPriorityLabel = () => {
+    switch (priority) {
+      case "Low":
+        return "Baixa Prioridade";
+      case "Medium":
+        return "Média Prioridade";
+      case "High":
+      default:
+        return "Alta Prioridade";
     }
   };
 
@@ -66,12 +90,12 @@ const TaskCard = ({
         <div
           className={`text-[11px] font-medium ${getStatusTagColor()} px-3 py-0.5 rounded whitespace-nowrap`}
         >
-          {status}
+          {getStatusLabel()}
         </div>
         <div
           className={`text-[11px] font-medium ${getPriorityTagColor()} px-3 py-0.5 rounded whitespace-nowrap`}
         >
-          {priority} Priority
+          {getPriorityLabel()}
         </div>
         {classification && (
           <div

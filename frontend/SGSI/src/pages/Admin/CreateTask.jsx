@@ -27,6 +27,18 @@ const getStatusTagColor = (status) => {
   }
 };
 
+const getStatusLabel = (status) => {
+  switch (status) {
+    case "In Progress":
+      return "Em Andamento";
+    case "Completed":
+      return "Concluído";
+    case "Pending":
+    default:
+      return "Pendente";
+  }
+};
+
 const CreateTask = () => {
   const location = useLocation();
   const { taskId } = location.state || {};
@@ -463,7 +475,7 @@ const CreateTask = () => {
                     currentTask?.status || "Pending"
                   )} px-3 py-1 rounded`}
                 >
-                  {currentTask?.status || "Pending"}
+                  {getStatusLabel(currentTask?.status || "Pending")}
                 </div>
               )}
               {taskId && (
