@@ -10,6 +10,7 @@ import { LuTrash2 } from "react-icons/lu";
 import { HiOutlineTrash, HiMiniPlus } from "react-icons/hi2";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
 import { NIST_CSF_DATA } from "../../utils/nistCsfData";
+import { ISO_27001_DATA } from "../../utils/iso27001Data";
 import SelectUsers from "../../components/Inputs/SelectUsers";
 import SelectCompany from "../../components/Inputs/SelectCompany";
 import TodoListInput from "../../components/Inputs/TodoListInput";
@@ -69,22 +70,40 @@ const CreateTask = () => {
 
   const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
 
-  // Helpers for NIST CSF cascade
-  const isNist = taskData.classification === "NIST CSF";
-  const nistFunctionOptions = NIST_CSF_DATA.functions.map((f) => ({
-    label: f.name,
-    value: f.name,
-  }));
-  const selectedFunction = isNist
-    ? NIST_CSF_DATA.functions.find((f) => f.name === taskData.title)
-    : null;
-  const nistCategoryOptions = selectedFunction
+  // Helpers for NIST CSF / ISO 27001 cascata
+  const isCascadeFramework =
+    taskData.classification === "NIST CSF" ||
+    taskData.classification === "ISO 27001";
+
+  const frameworkData =
+    taskData.classification === "NIST CSF"
+      ? NIST_CSF_DATA
+      : taskData.classification === "ISO 27001"
+      ? ISO_27001_DATA
+      : null;
+
+  const functionOptions = frameworkData
+    ? frameworkData.functions.map((f) => ({
+        label: f.name,
+        value: f.name,
+      }))
+    : [];
+
+  const selectedFunction =
+    frameworkData && taskData.title
+      ? frameworkData.functions.find((f) => f.name === taskData.title)
+      : null;
+
+  const categoryOptions = selectedFunction
     ? selectedFunction.categories.map((c) => ({ label: c.name, value: c.name }))
     : [];
-  const selectedCategory = selectedFunction
-    ? selectedFunction.categories.find((c) => c.name === taskData.description)
-    : null;
-  const nistSubcategoryOptions = selectedCategory
+
+  const selectedCategory =
+    selectedFunction && taskData.description
+      ? selectedFunction.categories.find((c) => c.name === taskData.description)
+      : null;
+
+  const subcategoryOptions = selectedCategory
     ? selectedCategory.subcategories.map((s) => ({
         label: s.name,
         value: s.name,
@@ -537,10 +556,10 @@ const CreateTask = () => {
                 Título
               </label>
 
-              {isNist ? (
+              {isCascadeFramework ? (
                 <div className="relative">
                   <SelectDropdown
-                    options={nistFunctionOptions}
+                    options={functionOptions}
                     value={taskData.title}
                     onChange={(value) => handleNistTitleChange(value)}
                     placeholder="Select Function"
@@ -563,7 +582,7 @@ const CreateTask = () => {
                 Descrição
               </label>
 
-              {isNist ? (
+              {isCascadeFramework ? (
                 <div className="relative opacity-100">
                   {/* Disabled overlay when no function selected */}
                   {!taskData.title && (
@@ -573,7 +592,7 @@ const CreateTask = () => {
                     className={!taskData.title ? "opacity-50" : "opacity-100"}
                   >
                     <SelectDropdown
-                      options={nistCategoryOptions}
+                      options={categoryOptions}
                       value={taskData.description}
                       onChange={(value) => handleNistDescriptionChange(value)}
                       placeholder={
@@ -614,14 +633,14 @@ const CreateTask = () => {
                       <input
                         className="form-input flex-1 mt-0"
                         value={text}
-                        readOnly={isNist}
+                        readOnly={isCascadeFramework}
                         onChange={
-                          isNist
+                          isCascadeFramework
                             ? undefined
                             : (e) => handleEditItemChange(index, e.target.value)
                         }
                         onBlur={
-                          isNist
+                          isCascadeFramework
                             ? undefined
                             : (e) => {
                                 const next = (
@@ -653,7 +672,7 @@ const CreateTask = () => {
                   ))}
 
                   {/* Add row */}
-                  {isNist ? (
+                  {isCascadeFramework ? (
                     <div className="grid grid-cols-[1fr_auto] items-center gap-x-3 mt-2 pr-3">
                       <div className="relative">
                         {(!taskData.title || !taskData.description) && (
@@ -667,7 +686,7 @@ const CreateTask = () => {
                           }
                         >
                           <SelectDropdown
-                            options={nistSubcategoryOptions}
+                            options={subcategoryOptions}
                             value={newTodoText}
                             onChange={(value) => setNewTodoText(value)}
                             placeholder={
@@ -708,7 +727,7 @@ const CreateTask = () => {
                 </div>
               ) : (
                 <div className="mt-1">
-                  {isNist ? (
+                  {isCascadeFramework ? (
                     <>
                       {(taskData?.todoChecklist || []).map((text, index) => (
                         <div
@@ -747,7 +766,7 @@ const CreateTask = () => {
                             }
                           >
                             <SelectDropdown
-                              options={nistSubcategoryOptions}
+                              options={subcategoryOptions}
                               value={newTodoText}
                               onChange={(value) => setNewTodoText(value)}
                               placeholder={
