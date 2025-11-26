@@ -178,6 +178,7 @@ const SignUp = () => {
                 label="ID da Empresa Cliente"
                 placeholder="Digite o ID da empresa fornecido pelo admin"
                 type="text"
+                labelClassName="text-[13px] text-white"
               />
             )}
           </div>
