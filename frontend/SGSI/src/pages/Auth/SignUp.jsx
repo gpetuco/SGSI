@@ -141,6 +141,7 @@ const SignUp = () => {
               label="Nome"
               placeholder="Digite seu nome"
               type="text"
+              labelClassName="text-[13px] text-white"
             />
 
             <Input
@@ -149,6 +150,7 @@ const SignUp = () => {
               label="Email"
               placeholder="Digite seu email"
               type="text"
+              labelClassName="text-[13px] text-white"
             />
 
             <Input
@@ -157,6 +159,7 @@ const SignUp = () => {
               label="Senha"
               placeholder="Digite uma senha com pelo menos 8 caracteres"
               type="password"
+              labelClassName="text-[13px] text-white"
             />
 
             <Input
@@ -166,6 +169,7 @@ const SignUp = () => {
               label="Token de Admin (opcional)"
               placeholder="Digite o token se você for administrador"
               type="text"
+              labelClassName="text-[13px] text-white"
             />
             {userType === "company" && (
               <Input

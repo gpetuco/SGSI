@@ -73,6 +73,7 @@ const Login = () => {
             value={email}
             onChange={({ target }) => setEmail(target.value)}
             label="Email"
+            labelClassName="text-[13px] text-white"
             placeholder="Digite seu email"
             type="text"
           />
@@ -81,6 +82,7 @@ const Login = () => {
             value={password}
             onChange={({ target }) => setPassword(target.value)}
             label="Senha"
+            labelClassName="text-[13px] text-white"
             placeholder="Digite sua senha"
             type="password"
           />
