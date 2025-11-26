@@ -13,10 +13,28 @@ const Iso27001Tasks = () => {
   const [filterStatus, setFilterStatus] = useState("All");
   const [selectedPriority, setSelectedPriority] = useState("All");
   const [selectedUser, setSelectedUser] = useState("All");
+  const [selectedControlType, setSelectedControlType] = useState("All");
   const [userOptions, setUserOptions] = useState([
     { label: "Todos", value: "All" },
   ]);
   const navigate = useNavigate();
+
+  const isoControlTypeOptions = [
+    { label: "Todos", value: "All" },
+    { label: "Organisational", value: "Organisational" },
+    { label: "People", value: "People" },
+    { label: "Physical", value: "Physical" },
+    { label: "Technological", value: "Technological" },
+  ];
+
+  const getIsoControlTypeFromTitle = (title = "") => {
+    const upper = String(title).toUpperCase();
+    if (upper.startsWith("ORGANISATIONAL CONTROLS")) return "Organisational";
+    if (upper.startsWith("PEOPLE CONTROLS")) return "People";
+    if (upper.startsWith("PHYSICAL CONTROLS")) return "Physical";
+    if (upper.startsWith("TECHNOLOGICAL CONTROLS")) return "Technological";
+    return null;
+  };
 
   const getAllTasks = async () => {
     try {
@@ -72,7 +90,7 @@ const Iso27001Tasks = () => {
           <h2 className="text-xl md:text-xl font-medium">ISO 27001</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-3 w-full lg:w-[660px]">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mt-3 w-full lg:w-[880px]">
           <div className="w-full md:w-[210px]">
             <label className="text-xs font-medium text-slate-600">
               Responsável
@@ -110,13 +128,29 @@ const Iso27001Tasks = () => {
               placeholder="All Priorities"
             />
           </div>
+          <div className="w-full md:w-[210px]">
+            <label className="text-xs font-medium text-slate-600">
+              Tipo de Controle
+            </label>
+            <SelectDropdown
+              options={isoControlTypeOptions}
+              value={selectedControlType}
+              onChange={setSelectedControlType}
+              placeholder="Todos os tipos"
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 mt-4">
           {(selectedPriority === "All"
             ? allTasks
             : allTasks.filter((t) => t.priority === selectedPriority)
-          )?.map((item) => (
+          )
+            ?.filter((t) => {
+              if (selectedControlType === "All") return true;
+              return getIsoControlTypeFromTitle(t.title) === selectedControlType;
+            })
+            .map((item) => (
             <TaskCard
               key={item._id}
               title={item.title}

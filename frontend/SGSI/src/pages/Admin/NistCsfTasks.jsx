@@ -13,10 +13,32 @@ const NistCsfTasks = () => {
   const [filterStatus, setFilterStatus] = useState("All");
   const [selectedPriority, setSelectedPriority] = useState("All");
   const [selectedUser, setSelectedUser] = useState("All");
+   const [selectedFunction, setSelectedFunction] = useState("All");
   const [userOptions, setUserOptions] = useState([
     { label: "Todos", value: "All" },
   ]);
   const navigate = useNavigate();
+
+  const nistFunctionOptions = [
+    { label: "Todos", value: "All" },
+    { label: "Govern", value: "Govern" },
+    { label: "Identify", value: "Identify" },
+    { label: "Protect", value: "Protect" },
+    { label: "Detect", value: "Detect" },
+    { label: "Respond", value: "Respond" },
+    { label: "Recover", value: "Recover" },
+  ];
+
+  const getNistFunctionFromTitle = (title = "") => {
+    const upper = String(title).toUpperCase();
+    if (upper.startsWith("GOVERN")) return "Govern";
+    if (upper.startsWith("IDENTIFY")) return "Identify";
+    if (upper.startsWith("PROTECT")) return "Protect";
+    if (upper.startsWith("DETECT")) return "Detect";
+    if (upper.startsWith("RESPOND")) return "Respond";
+    if (upper.startsWith("RECOVER")) return "Recover";
+    return null;
+  };
 
   const getAllTasks = async () => {
     try {
@@ -72,8 +94,8 @@ const NistCsfTasks = () => {
           <h2 className="text-xl md:text-xl font-medium">NIST CSF</h2>
         </div>
 
-        {/* Filters: User, Status, Priority (no Framework here) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-3 w-full lg:w-[660px]">
+        {/* Filters: User, Status, Priority, NIST Function */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mt-3 w-full lg:w-[880px]">
           <div className="w-full md:w-[210px]">
             <label className="text-xs font-medium text-slate-600">
               Responsável
@@ -111,13 +133,29 @@ const NistCsfTasks = () => {
               placeholder="All Priorities"
             />
           </div>
+          <div className="w-full md:w-[210px]">
+            <label className="text-xs font-medium text-slate-600">
+              Função NIST
+            </label>
+            <SelectDropdown
+              options={nistFunctionOptions}
+              value={selectedFunction}
+              onChange={setSelectedFunction}
+              placeholder="Todas as funções"
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 mt-4">
           {(selectedPriority === "All"
             ? allTasks
             : allTasks.filter((t) => t.priority === selectedPriority)
-          )?.map((item) => (
+          )
+            ?.filter((t) => {
+              if (selectedFunction === "All") return true;
+              return getNistFunctionFromTitle(t.title) === selectedFunction;
+            })
+            .map((item) => (
             <TaskCard
               key={item._id}
               title={item.title}
