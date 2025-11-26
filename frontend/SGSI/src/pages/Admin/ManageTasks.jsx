@@ -165,6 +165,7 @@ const ManageTasks = () => {
               )}
               completedTodoCount={item.completedTodoCount || 0}
               todoChecklist={item.todoChecklist || []}
+              clienteName={item.cliente?.name}
               onClick={() => handleClick(item)}
             />
           ))}

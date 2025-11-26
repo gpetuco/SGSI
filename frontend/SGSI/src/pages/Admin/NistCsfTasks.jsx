@@ -169,6 +169,7 @@ const NistCsfTasks = () => {
               assignedTo={item.assignedTo?.map((a) => a.profileImageUrl)}
               completedTodoCount={item.completedTodoCount || 0}
               todoChecklist={item.todoChecklist || []}
+              clienteName={item.cliente?.name}
               onClick={() => handleClick(item)}
             />
           ))}

@@ -35,6 +35,7 @@ const Column = ({ title, tasks, onOpen }) => {
                 assignedTo={item.assignedTo?.map((p) => p.profileImageUrl)}
                 completedTodoCount={item.completedTodoCount || 0}
                 todoChecklist={item.todoChecklist || []}
+                clienteName={item.cliente?.name}
                 onClick={() => onOpen(item._id)}
                 className="h-full"
               />

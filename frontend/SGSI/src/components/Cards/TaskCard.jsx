@@ -17,6 +17,7 @@ const TaskCard = ({
   todoChecklist,
   onClick,
   className,
+  clienteName,
 }) => {
   const getStatusTagColor = () => {
     switch (status) {
@@ -135,11 +136,21 @@ const TaskCard = ({
 
       <div className="px-4">
         <div className="flex items-center justify-between my-1">
-          <div>
-            <label className="text-xs text-gray-500">Previsto</label>
-            <p className="text-[13px] font-medium text-gray-900">
-              {moment(dueDate).format("DD/MM/YYYY")}
-            </p>
+          <div className="flex items-start gap-8">
+            {clienteName && (
+              <div>
+                <label className="text-xs text-gray-500">Cliente</label>
+                <p className="text-[13px] font-medium text-gray-900 truncate max-w-[220px]">
+                  {clienteName}
+                </p>
+              </div>
+            )}
+            <div>
+              <label className="text-xs text-gray-500">Previsto</label>
+              <p className="text-[13px] font-medium text-gray-900">
+                {moment(dueDate).format("DD/MM/YYYY")}
+              </p>
+            </div>
           </div>
 
           <div className="flex items-center justify-between mt-3">
