@@ -608,15 +608,16 @@ const Dashboard = () => {
             />
           </div>
         </div>
-
-        <div className="md:col-span-2">
-          <div className="card">
-            <div className="flex items-center justify-between">
-              <h5 className="font-medium">Top 5 (Membros)</h5>
+        {user?.role === "admin" && (
+          <div className="md:col-span-2">
+            <div className="card">
+              <div className="flex items-center justify-between">
+                <h5 className="font-medium">Top 5 (Membros)</h5>
+              </div>
+              <StackedStatusByUser data={tasksByUserData} />
             </div>
-            <StackedStatusByUser data={tasksByUserData} />
           </div>
-        </div>
+        )}
       </div>
     </DashboardLayout>
   );

@@ -126,18 +126,20 @@ const NistCsfTasks = () => {
 
         {/* Filters: User, Status, Priority, NIST Function */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-2 mt-3 w-full lg:w-[1100px]">
-          <div className="w-full md:w-[210px]">
-            <label className="text-xs font-medium text-slate-600">
-              Responsável
-            </label>
-            <SelectDropdownSearch
-              options={userOptions}
-              value={selectedUser}
-              onChange={setSelectedUser}
-              placeholder="All Users"
-              showAvatar
-            />
-          </div>
+          {user?.role === "admin" && (
+            <div className="w-full md:w-[210px]">
+              <label className="text-xs font-medium text-slate-600">
+                Responsável
+              </label>
+              <SelectDropdownSearch
+                options={userOptions}
+                value={selectedUser}
+                onChange={setSelectedUser}
+                placeholder="All Users"
+                showAvatar
+              />
+            </div>
+          )}
           <div className="w-full md:w-[210px]">
             <label className="text-xs font-medium text-slate-600">Status</label>
             <SelectDropdown
@@ -174,17 +176,19 @@ const NistCsfTasks = () => {
               placeholder="Todas as funções"
             />
           </div>
-          <div className="w-full md:w-[210px]">
-            <label className="text-xs font-medium text-slate-600">
-              Cliente
-            </label>
-            <SelectDropdown
-              options={companyOptions}
-              value={selectedCompany}
-              onChange={setSelectedCompany}
-              placeholder="Todos os clientes"
-            />
-          </div>
+          {user?.role === "admin" && (
+            <div className="w-full md:w-[210px]">
+              <label className="text-xs font-medium text-slate-600">
+                Cliente
+              </label>
+              <SelectDropdown
+                options={companyOptions}
+                value={selectedCompany}
+                onChange={setSelectedCompany}
+                placeholder="Todos os clientes"
+              />
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 gap-4 mt-4">

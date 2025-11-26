@@ -108,18 +108,20 @@ const ManageTasks = () => {
         <div className="mt-3 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-3">
           {/* Filtros */}
           <div className="grid grid-cols-1 md:grid-cols-5 gap-2 w-full lg:w-[1100px]">
-            <div className="w-full md:w-[190px]">
-              <label className="text-xs font-medium text-slate-600">
-                Responsável
-              </label>
-              <SelectDropdownSearch
-                options={userOptions}
-                value={selectedUser}
-                onChange={setSelectedUser}
-                placeholder="Todos"
-                showAvatar
-              />
-            </div>
+            {user?.role === "admin" && (
+              <div className="w-full md:w-[190px]">
+                <label className="text-xs font-medium text-slate-600">
+                  Responsável
+                </label>
+                <SelectDropdownSearch
+                  options={userOptions}
+                  value={selectedUser}
+                  onChange={setSelectedUser}
+                  placeholder="Todos"
+                  showAvatar
+                />
+              </div>
+            )}
             <div className="w-full md:w-[190px]">
               <label className="text-xs font-medium text-slate-600">
                 Classificação
@@ -161,17 +163,19 @@ const ManageTasks = () => {
                 placeholder="Todas"
               />
             </div>
-            <div className="w-full md:w-[190px]">
-              <label className="text-xs font-medium text-slate-600">
-                Cliente
-              </label>
-              <SelectDropdown
-                options={companyOptions}
-                value={selectedCompany}
-                onChange={setSelectedCompany}
-                placeholder="Todos"
-              />
-            </div>
+            {user?.role === "admin" && (
+              <div className="w-full md:w-[190px]">
+                <label className="text-xs font-medium text-slate-600">
+                  Cliente
+                </label>
+                <SelectDropdown
+                  options={companyOptions}
+                  value={selectedCompany}
+                  onChange={setSelectedCompany}
+                  placeholder="Todos"
+                />
+              </div>
+            )}
           </div>
 
           {/* Botão Criar alinhado à direita, mesmo tamanho dos selects */}

@@ -120,18 +120,20 @@ const Iso27001Tasks = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-5 gap-2 mt-3 w-full lg:w-[1100px]">
-          <div className="w-full md:w-[210px]">
-            <label className="text-xs font-medium text-slate-600">
-              Responsável
-            </label>
-            <SelectDropdownSearch
-              options={userOptions}
-              value={selectedUser}
-              onChange={setSelectedUser}
-              placeholder="All Users"
-              showAvatar
-            />
-          </div>
+          {user?.role === "admin" && (
+            <div className="w-full md:w-[210px]">
+              <label className="text-xs font-medium text-slate-600">
+                Responsável
+              </label>
+              <SelectDropdownSearch
+                options={userOptions}
+                value={selectedUser}
+                onChange={setSelectedUser}
+                placeholder="All Users"
+                showAvatar
+              />
+            </div>
+          )}
           <div className="w-full md:w-[210px]">
             <label className="text-xs font-medium text-slate-600">Status</label>
             <SelectDropdown
@@ -168,17 +170,19 @@ const Iso27001Tasks = () => {
               placeholder="Todos os tipos"
             />
           </div>
-          <div className="w-full md:w-[210px]">
-            <label className="text-xs font-medium text-slate-600">
-              Cliente
-            </label>
-            <SelectDropdown
-              options={companyOptions}
-              value={selectedCompany}
-              onChange={setSelectedCompany}
-              placeholder="Todos os clientes"
-            />
-          </div>
+          {user?.role === "admin" && (
+            <div className="w-full md:w-[210px]">
+              <label className="text-xs font-medium text-slate-600">
+                Cliente
+              </label>
+              <SelectDropdown
+                options={companyOptions}
+                value={selectedCompany}
+                onChange={setSelectedCompany}
+                placeholder="Todos os clientes"
+              />
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 gap-4 mt-4">
@@ -188,26 +192,28 @@ const Iso27001Tasks = () => {
           )
             ?.filter((t) => {
               if (selectedControlType === "All") return true;
-              return getIsoControlTypeFromTitle(t.title) === selectedControlType;
+              return (
+                getIsoControlTypeFromTitle(t.title) === selectedControlType
+              );
             })
             .map((item) => (
-            <TaskCard
-              key={item._id}
-              title={item.title}
-              description={item.description}
-              priority={item.priority}
-              classification={item.classification}
-              status={item.status}
-              progress={item.progress}
-              createdAt={item.createdAt}
-              dueDate={item.dueDate}
-              assignedTo={item.assignedTo?.map((a) => a.profileImageUrl)}
-              completedTodoCount={item.completedTodoCount || 0}
-              todoChecklist={item.todoChecklist || []}
-              clienteName={item.cliente?.name}
-              onClick={() => handleClick(item)}
-            />
-          ))}
+              <TaskCard
+                key={item._id}
+                title={item.title}
+                description={item.description}
+                priority={item.priority}
+                classification={item.classification}
+                status={item.status}
+                progress={item.progress}
+                createdAt={item.createdAt}
+                dueDate={item.dueDate}
+                assignedTo={item.assignedTo?.map((a) => a.profileImageUrl)}
+                completedTodoCount={item.completedTodoCount || 0}
+                todoChecklist={item.todoChecklist || []}
+                clienteName={item.cliente?.name}
+                onClick={() => handleClick(item)}
+              />
+            ))}
         </div>
       </div>
     </DashboardLayout>
