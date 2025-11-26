@@ -584,10 +584,6 @@ const CreateTask = () => {
 
               {isCascadeFramework ? (
                 <div className="relative opacity-100">
-                  {/* Disabled overlay when no function selected */}
-                  {!taskData.title && (
-                    <div className="absolute inset-0 z-10 cursor-not-allowed rounded-md"></div>
-                  )}
                   <div
                     className={!taskData.title ? "opacity-50" : "opacity-100"}
                   >
@@ -675,9 +671,6 @@ const CreateTask = () => {
                   {isCascadeFramework ? (
                     <div className="grid grid-cols-[1fr_auto] items-center gap-x-3 mt-2 pr-3">
                       <div className="relative">
-                        {(!taskData.title || !taskData.description) && (
-                          <div className="absolute inset-0 z-10 cursor-not-allowed rounded-md"></div>
-                        )}
                         <div
                           className={
                             !taskData.title || !taskData.description
@@ -755,9 +748,6 @@ const CreateTask = () => {
                       ))}
                       <div className="grid grid-cols-[1fr_auto] items-center gap-x-3 mt-2 pr-3">
                         <div className="relative">
-                          {(!taskData.title || !taskData.description) && (
-                            <div className="absolute inset-0 z-10 cursor-not-allowed rounded-md"></div>
-                          )}
                           <div
                             className={
                               !taskData.title || !taskData.description
