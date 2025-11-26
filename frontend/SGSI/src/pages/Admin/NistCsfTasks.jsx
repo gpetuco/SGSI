@@ -7,6 +7,7 @@ import TaskCard from "../../components/Cards/TaskCard";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
 import SelectDropdownSearch from "../../components/Inputs/SelectDropdownSearch";
 import { PRIORITY_DATA } from "../../utils/data";
+import { UserContext } from "../../context/userContext";
 
 const NistCsfTasks = () => {
   const [allTasks, setAllTasks] = useState([]);
@@ -22,6 +23,7 @@ const NistCsfTasks = () => {
     { label: "Todos", value: "All" },
   ]);
   const navigate = useNavigate();
+  const { user } = React.useContext(UserContext);
 
   const nistFunctionOptions = [
     { label: "Todos", value: "All" },
@@ -96,13 +98,19 @@ const NistCsfTasks = () => {
   };
 
   const handleClick = (taskData) => {
-    navigate(`/admin/create-task`, { state: { taskId: taskData._id } });
+    if (user?.role === "admin") {
+      navigate(`/admin/create-task`, { state: { taskId: taskData._id } });
+    } else {
+      navigate(`/user/task-details/${taskData._id}`);
+    }
   };
 
   useEffect(() => {
-    fetchUsers();
-    fetchCompanies();
-  }, []);
+    if (user?.role === "admin") {
+      fetchUsers();
+      fetchCompanies();
+    }
+  }, [user]);
 
   useEffect(() => {
     getAllTasks(filterStatus);

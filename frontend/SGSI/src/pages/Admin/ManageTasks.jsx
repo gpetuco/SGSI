@@ -7,6 +7,7 @@ import TaskCard from "../../components/Cards/TaskCard";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
 import SelectDropdownSearch from "../../components/Inputs/SelectDropdownSearch";
 import { CLASSIFICATION_DATA, PRIORITY_DATA } from "../../utils/data";
+import { UserContext } from "../../context/userContext";
 
 const ManageTasks = () => {
   const [allTasks, setAllTasks] = useState([]);
@@ -24,6 +25,7 @@ const ManageTasks = () => {
   ]);
 
   const navigate = useNavigate();
+  const { user } = React.useContext(UserContext);
 
   const getAllTasks = async () => {
     try {
@@ -46,7 +48,11 @@ const ManageTasks = () => {
   };
 
   const handleClick = (taskData) => {
-    navigate(`/admin/create-task`, { state: { taskId: taskData._id } });
+    if (user?.role === "admin") {
+      navigate(`/admin/create-task`, { state: { taskId: taskData._id } });
+    } else {
+      navigate(`/user/task-details/${taskData._id}`);
+    }
   };
 
   // fetch users for dropdown
@@ -82,9 +88,11 @@ const ManageTasks = () => {
   };
 
   useEffect(() => {
-    fetchUsers();
-    fetchCompanies();
-  }, []);
+    if (user?.role === "admin") {
+      fetchUsers();
+      fetchCompanies();
+    }
+  }, [user]);
 
   useEffect(() => {
     getAllTasks(filterStatus);
@@ -167,14 +175,16 @@ const ManageTasks = () => {
           </div>
 
           {/* Botão Criar alinhado à direita, mesmo tamanho dos selects */}
-          <div className="w-full md:w-[190px]">
-            <button
-              className="w-full text-sm font-medium text-white bg-primary px-2.5 py-3 rounded-md mt-2 hover:bg-primary/90 transition-colors"
-              onClick={() => navigate("/admin/create-task")}
-            >
-              + Criar
-            </button>
-          </div>
+          {user?.role === "admin" && (
+            <div className="w-full md:w-[190px]">
+              <button
+                className="w-full text-sm font-medium text-white bg-primary px-2.5 py-3 rounded-md mt-2 hover:bg-primary/90 transition-colors"
+                onClick={() => navigate("/admin/create-task")}
+              >
+                + Criar
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 gap-4 mt-4">

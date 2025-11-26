@@ -180,7 +180,11 @@ const Dashboard = () => {
   };
 
   const onSeeMore = () => {
-    navigate("/admin/tasks");
+    if (user?.role === "member") {
+      navigate("/user/tasks");
+    } else {
+      navigate("/admin/tasks");
+    }
   };
 
   useEffect(() => {

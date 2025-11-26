@@ -7,6 +7,7 @@ import TaskCard from "../../components/Cards/TaskCard";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
 import SelectDropdownSearch from "../../components/Inputs/SelectDropdownSearch";
 import { PRIORITY_DATA } from "../../utils/data";
+import { UserContext } from "../../context/userContext";
 
 const Iso27001Tasks = () => {
   const [allTasks, setAllTasks] = useState([]);
@@ -22,6 +23,7 @@ const Iso27001Tasks = () => {
     { label: "Todos", value: "All" },
   ]);
   const navigate = useNavigate();
+  const { user } = React.useContext(UserContext);
 
   const isoControlTypeOptions = [
     { label: "Todos", value: "All" },
@@ -59,7 +61,11 @@ const Iso27001Tasks = () => {
   };
 
   const handleClick = (taskData) => {
-    navigate(`/admin/create-task`, { state: { taskId: taskData._id } });
+    if (user?.role === "admin") {
+      navigate(`/admin/create-task`, { state: { taskId: taskData._id } });
+    } else {
+      navigate(`/user/task-details/${taskData._id}`);
+    }
   };
 
   // fetch users for dropdown
@@ -95,9 +101,11 @@ const Iso27001Tasks = () => {
   };
 
   useEffect(() => {
-    fetchUsers();
-    fetchCompanies();
-  }, []);
+    if (user?.role === "admin") {
+      fetchUsers();
+      fetchCompanies();
+    }
+  }, [user]);
 
   useEffect(() => {
     getAllTasks(filterStatus);

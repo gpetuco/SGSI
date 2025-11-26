@@ -81,13 +81,26 @@ const ViewTaskDetails = () => {
 
   return (
     <DashboardLayout activeMenu="My Tasks">
-      <Modal isOpen={openModal} onClose={closeAndGoBack} title={task?.title || "Task Details"} variant="wide">
+      <Modal
+        isOpen={openModal}
+        onClose={closeAndGoBack}
+        title={task?.title || "Task Details"}
+        variant="wide"
+      >
         {task && (
           <div className="grid grid-cols-1 mt-1">
             <div className="form-card">
               <div className="flex items-center justify-between">
-                <h2 className="text-sm md:text-xl font-medium">{task?.title}</h2>
-                <div className={`text-[11px] md:text-[13px] font-medium ${getStatusTagColor(task?.status)} px-4 py-0.5 rounded`}>{task?.status}</div>
+                <h2 className="text-sm md:text-xl font-medium">
+                  {task?.title}
+                </h2>
+                <div
+                  className={`text-[11px] md:text-[13px] font-medium ${getStatusTagColor(
+                    task?.status
+                  )} px-4 py-0.5 rounded`}
+                >
+                  {task?.status}
+                </div>
               </div>
 
               <div className="mt-4">
@@ -99,21 +112,42 @@ const ViewTaskDetails = () => {
                   <InfoBox label="Priority" value={task?.priority} />
                 </div>
                 <div className="col-span-6 md:col-span-4">
-                  <InfoBox label="Previsto" value={task?.dueDate ? moment(task?.dueDate).format("Do MMM YYYY") : "N/A"} />
+                  <InfoBox
+                    label="Previsto"
+                    value={
+                      task?.dueDate
+                        ? moment(task?.dueDate).format("Do MMM YYYY")
+                        : "N/A"
+                    }
+                  />
                 </div>
                 <div className="col-span-6 md:col-span-4">
-                  <label className="text-xs font-medium text-slate-500">Assigned To</label>
-                  <AvatarGroup avatars={task?.assignedTo?.map((item) => item?.profileImageUrl) || []} maxVisible={5} />
+                  <label className="text-xs font-medium text-slate-500">
+                    Assigned To
+                  </label>
+                  <AvatarGroup
+                    avatars={
+                      task?.assignedTo?.map((item) => item?.profileImageUrl) ||
+                      []
+                    }
+                    maxVisible={5}
+                  />
                 </div>
               </div>
 
               <div className="mt-2">
-                <label className="text-xs font-medium text-slate-500">Todo Checklist</label>
+                <label className="text-xs font-medium text-slate-500">
+                  Itens
+                </label>
                 {task?.todoChecklist?.map((item, index) => (
-                  <TodoCheckList key={`todo_${index}`} text={item.text} isChecked={item?.completed} onChange={() => updateTodoChecklist(index)} />
+                  <TodoCheckList
+                    key={`todo_${index}`}
+                    text={item.text}
+                    isChecked={item?.completed}
+                    onChange={() => updateTodoChecklist(index)}
+                  />
                 ))}
               </div>
-
             </div>
           </div>
         )}
@@ -150,4 +184,3 @@ const TodoCheckList = ({ text, isChecked, onChange }) => {
     </div>
   );
 };
-

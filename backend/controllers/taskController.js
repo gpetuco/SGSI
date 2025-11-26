@@ -1,40 +1,63 @@
 const Task = require("../models/Task");
 
-// @desc    Get all tasks (Admin: all, User: only assigned tasks)
+// @desc    Get all tasks
 // @route   GET /api/tasks/
 // @access  Private
 const getTasks = async (req, res) => {
   try {
     const { status, assignedTo, classification, cliente } = req.query;
-    let filter = {};
-
-    if (status) {
-      filter.status = status;
-    }
-    if (classification) {
-      filter.classification = classification;
-    }
-    if (cliente) {
-      filter.cliente = cliente;
-    }
-
-    let tasks;
-
-    // Admin can request only their assigned tasks using ?assignedTo=me
+    const isAdmin = req.user.role === "admin";
     const restrictToMe = assignedTo === "me";
 
-    if (req.user.role === "admin" && !restrictToMe) {
-      if (assignedTo && assignedTo !== "me") {
-        filter.assignedTo = assignedTo;
-      }
-      tasks = await Task.find(filter)
-        .populate("assignedTo", "name email profileImageUrl")
-        .populate("cliente", "name");
-    } else {
-      tasks = await Task.find({ ...filter, assignedTo: req.user._id })
-        .populate("assignedTo", "name email profileImageUrl")
-        .populate("cliente", "name");
+    // Base filter shared between list and summary
+    let baseFilter = {};
+
+    if (status) {
+      baseFilter.status = status;
     }
+    if (classification) {
+      baseFilter.classification = classification;
+    }
+
+    if (isAdmin) {
+      if (cliente) {
+        baseFilter.cliente = cliente;
+      }
+      if (assignedTo && !restrictToMe) {
+        baseFilter.assignedTo = assignedTo;
+      }
+    } else {
+      // Non-admin users are always scoped to their own empresa (cliente)
+      if (!req.user.empresa) {
+        return res.json({
+          tasks: [],
+          statusSummary: {
+            all: 0,
+            pendingTasks: 0,
+            inProgressTasks: 0,
+            completedTasks: 0,
+          },
+        });
+      }
+
+      baseFilter.cliente = req.user.empresa;
+
+      if (restrictToMe) {
+        baseFilter.assignedTo = req.user._id;
+      } else if (assignedTo && assignedTo !== "me") {
+        baseFilter.assignedTo = assignedTo;
+      }
+    }
+
+    // For admins using ?assignedTo=me explicitly
+    const listFilter = {
+      ...baseFilter,
+      ...(isAdmin && restrictToMe ? { assignedTo: req.user._id } : {}),
+    };
+
+    let tasks = await Task.find(listFilter)
+      .populate("assignedTo", "name email profileImageUrl")
+      .populate("cliente", "name");
 
     // Add completed todoChecklist count and computed progress to each task
     tasks = await Promise.all(
@@ -57,46 +80,27 @@ const getTasks = async (req, res) => {
       })
     );
 
-    // Status summary counts
-    const baseCountFilter =
-      req.user.role === "admin" && !restrictToMe
-        ? {
-            ...(classification && { classification }),
-            ...(cliente && { cliente }),
-          }
-        : {
-            assignedTo: req.user._id,
-            ...(classification && { classification }),
-            ...(cliente && { cliente }),
-          };
+    // Status summary counts (same scoping as list)
+    const summaryBaseFilter = {
+      ...baseFilter,
+      ...(isAdmin && restrictToMe ? { assignedTo: req.user._id } : {}),
+    };
 
-    const allTasks = await Task.countDocuments(baseCountFilter);
+    const allTasks = await Task.countDocuments(summaryBaseFilter);
 
     const pendingTasks = await Task.countDocuments({
-      ...filter,
+      ...summaryBaseFilter,
       status: "Pending",
-      ...((req.user.role !== "admin" || restrictToMe) && {
-        assignedTo: req.user._id,
-      }),
-      ...(classification && { classification }),
     });
 
     const inProgressTasks = await Task.countDocuments({
-      ...filter,
+      ...summaryBaseFilter,
       status: "In Progress",
-      ...((req.user.role !== "admin" || restrictToMe) && {
-        assignedTo: req.user._id,
-      }),
-      ...(classification && { classification }),
     });
 
     const completedTasks = await Task.countDocuments({
-      ...filter,
+      ...summaryBaseFilter,
       status: "Completed",
-      ...((req.user.role !== "admin" || restrictToMe) && {
-        assignedTo: req.user._id,
-      }),
-      ...(classification && { classification }),
     });
 
     res.json({
@@ -123,6 +127,16 @@ const getTaskById = async (req, res) => {
       .populate("cliente", "name");
 
     if (!task) return res.status(404).json({ message: "Task not found" });
+
+    // Members can only access tasks from their own empresa (cliente)
+    if (req.user.role === "member") {
+      const userEmpresaId = req.user.empresa ? req.user.empresa.toString() : null;
+      const taskClienteId = task.cliente ? task.cliente._id?.toString() || task.cliente.toString() : null;
+
+      if (!userEmpresaId || !taskClienteId || userEmpresaId !== taskClienteId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+    }
 
     res.json(task);
   } catch (error) {
@@ -254,6 +268,16 @@ const updateTaskStatus = async (req, res) => {
     const task = await Task.findById(req.params.id);
     if (!task) return res.status(404).json({ message: "Task not found" });
 
+    // Members can only modify status of tasks from their own empresa (cliente)
+    if (req.user.role === "member") {
+      const userEmpresaId = req.user.empresa ? req.user.empresa.toString() : null;
+      const taskClienteId = task.cliente ? task.cliente.toString() : null;
+
+      if (!userEmpresaId || !taskClienteId || userEmpresaId !== taskClienteId) {
+        return res.status(403).json({ message: "Not authorized" });
+      }
+    }
+
     const isAssigned = task.assignedTo.some(
       (userId) => userId.toString() === req.user._id.toString()
     );
@@ -291,6 +315,18 @@ const updateTaskChecklist = async (req, res) => {
     const task = await Task.findById(req.params.id);
 
     if (!task) return res.status(404).json({ message: "Task not found" });
+
+    // Members can only modify checklist of tasks from their own empresa (cliente)
+    if (req.user.role === "member") {
+      const userEmpresaId = req.user.empresa ? req.user.empresa.toString() : null;
+      const taskClienteId = task.cliente ? task.cliente.toString() : null;
+
+      if (!userEmpresaId || !taskClienteId || userEmpresaId !== taskClienteId) {
+        return res
+          .status(403)
+          .json({ message: "Not authorized to update checklist" });
+      }
+    }
 
     if (!task.assignedTo.includes(req.user._id) && req.user.role !== "admin") {
       return res
@@ -339,7 +375,8 @@ const updateTaskChecklist = async (req, res) => {
 // @access  Private
 const getDashboardData = async (req, res) => {
   try {
-    const { classification, startDate, endDate } = req.query;
+    const { classification, startDate, endDate, cliente } = req.query;
+    const isAdmin = req.user.role === "admin";
 
     const baseMatch = {};
     if (classification) baseMatch.classification = classification;
@@ -347,6 +384,46 @@ const getDashboardData = async (req, res) => {
       baseMatch.createdAt = {};
       if (startDate) baseMatch.createdAt.$gte = new Date(startDate);
       if (endDate) baseMatch.createdAt.$lte = new Date(endDate);
+    }
+
+    // Scope by empresa (cliente) for non-admin users.
+    // Admins can optionally filter by ?cliente.
+    if (isAdmin) {
+      if (cliente) {
+        baseMatch.cliente = cliente;
+      }
+    } else {
+      if (!req.user.empresa) {
+        return res.status(200).json({
+          statistics: {
+            totalTasks: 0,
+            pendingTasks: 0,
+            completedTasks: 0,
+            overdueTasks: 0,
+            onTimeRate: 0,
+          },
+          charts: {
+            taskDistribution: {
+              All: 0,
+              Pending: 0,
+              InProgress: 0,
+              Completed: 0,
+            },
+            taskPriorityLevels: {
+              Low: 0,
+              Medium: 0,
+              High: 0,
+            },
+            statusByFramework: {},
+            completionByFramework: [],
+            completionByNistFunction: [],
+            completionByIsoControlType: [],
+            tasksByUser: [],
+          },
+          recentTasks: [],
+        });
+      }
+      baseMatch.cliente = req.user.empresa;
     }
 
     // Statistics (with filters)
@@ -821,19 +898,24 @@ const getDashboardData = async (req, res) => {
 const getUserDashboardData = async (req, res) => {
   try {
     const userId = req.user._id; // Only fetch data for the logged-in user
+    const empresaId = req.user.empresa || null;
+
+    const baseMatch = empresaId
+      ? { assignedTo: userId, cliente: empresaId }
+      : { assignedTo: userId };
 
     // Fetch statistics for user-specific tasks
-    const totalTasks = await Task.countDocuments({ assignedTo: userId });
+    const totalTasks = await Task.countDocuments(baseMatch);
     const pendingTasks = await Task.countDocuments({
-      assignedTo: userId,
+      ...baseMatch,
       status: "Pending",
     });
     const completedTasks = await Task.countDocuments({
-      assignedTo: userId,
+      ...baseMatch,
       status: "Completed",
     });
     const overdueTasks = await Task.countDocuments({
-      assignedTo: userId,
+      ...baseMatch,
       status: { $ne: "Completed" },
       dueDate: { $lt: new Date() },
     });
@@ -841,7 +923,7 @@ const getUserDashboardData = async (req, res) => {
     // Task distribution by status
     const taskStatuses = ["Pending", "In Progress", "Completed"];
     const taskDistributionRaw = await Task.aggregate([
-      { $match: { assignedTo: userId } },
+      { $match: baseMatch },
       { $group: { _id: "$status", count: { $sum: 1 } } },
     ]);
 
@@ -856,7 +938,7 @@ const getUserDashboardData = async (req, res) => {
     // Task distribution by priority
     const taskPriorities = ["Low", "Medium", "High"];
     const taskPriorityLevelsRaw = await Task.aggregate([
-      { $match: { assignedTo: userId } },
+      { $match: baseMatch },
       { $group: { _id: "$priority", count: { $sum: 1 } } },
     ]);
 
@@ -867,7 +949,7 @@ const getUserDashboardData = async (req, res) => {
     }, {});
 
     // Fetch recent 10 tasks for the logged-in user
-    const recentTasks = await Task.find({ assignedTo: userId })
+    const recentTasks = await Task.find(baseMatch)
       .sort({ createdAt: -1 })
       .limit(10)
       .select(

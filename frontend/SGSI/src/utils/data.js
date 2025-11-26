@@ -71,6 +71,12 @@ export const SIDE_MENU_USER_DATA = [
     path: "/user/dashboard",
   },
   {
+    id: "02",
+    label: "Ações",
+    icon: LuListTodo,
+    path: "/user/tasks",
+  },
+  {
     id: "02f",
     label: "NIST CSF",
     icon: LuNetwork,

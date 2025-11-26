@@ -19,11 +19,6 @@ import CreateTask from "./pages/Admin/CreateTask";
 import ManageUsers from "./pages/Admin/ManageUsers";
 import Clients from "./pages/Admin/Clients";
 
-import UserDashboard from "./pages/User/UserDashboard";
-import MyTasks from "./pages/User/MyTasks";
-import ViewTaskDetails from "./pages/User/ViewTaskDetails";
-import UserKanban from "./pages/User/Kanban";
-
 import PrivateRoute from "./routes/PrivateRoute";
 import UserProvider, { UserContext } from "./context/userContext";
 import { Toaster } from "react-hot-toast";
@@ -57,14 +52,23 @@ const App = () => {
               />
             </Route>
 
-            {/* User Routes */}
-            <Route element={<PrivateRoute allowedRoles={["admin"]} />}>
-              <Route path="/user/dashboard" element={<UserDashboard />} />
-              <Route path="/user/tasks" element={<MyTasks />} />
-              <Route path="/user/kanban" element={<UserKanban />} />
+            {/* User Routes (members: same pages as admin, read-only) */}
+            <Route element={<PrivateRoute allowedRoles={["member"]} />}>
+              <Route path="/user/dashboard" element={<Dashboard />} />
+              <Route path="/user/tasks" element={<ManageTasks />} />
+              <Route path="/user/kanban" element={<AdminKanban />} />
+              <Route
+                path="/user/tasks/iso-27001"
+                element={<Iso27001Tasks />}
+              />
+              <Route
+                path="/user/tasks/nist-csf"
+                element={<NistCsfTasks />}
+              />
+              <Route path="/user/my-tasks" element={<AdminMyTasks />} />
               <Route
                 path="/user/task-details/:id"
-                element={<ViewTaskDetails />}
+                element={<AdminViewTaskDetails />}
               />
             </Route>
 

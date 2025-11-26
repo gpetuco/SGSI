@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
 import SelectDropdownSearch from "../../components/Inputs/SelectDropdownSearch";
 import { PRIORITY_DATA } from "../../utils/data";
+import { UserContext } from "../../context/userContext";
 
 const Column = ({ title, tasks, onOpen }) => {
   return (
@@ -60,6 +61,7 @@ const Kanban = () => {
     { label: "Todos", value: "All" },
   ]);
   const navigate = useNavigate();
+  const { user } = React.useContext(UserContext);
 
   const getAllTasks = async () => {
     try {
@@ -113,9 +115,11 @@ const Kanban = () => {
   };
 
   useEffect(() => {
-    fetchUsers();
-    fetchCompanies();
-  }, []);
+    if (user?.role === "admin") {
+      fetchUsers();
+      fetchCompanies();
+    }
+  }, [user]);
 
   useEffect(() => {
     getAllTasks();
@@ -136,7 +140,11 @@ const Kanban = () => {
   }, [tasks, selectedPriority]);
 
   const handleOpen = (taskId) => {
-    navigate(`/admin/create-task`, { state: { taskId } });
+    if (user?.role === "admin") {
+      navigate(`/admin/create-task`, { state: { taskId } });
+    } else {
+      navigate(`/user/task-details/${taskId}`);
+    }
   };
 
   return (
