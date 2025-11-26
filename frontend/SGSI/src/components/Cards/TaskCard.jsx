@@ -2,6 +2,7 @@ import React from "react";
 import Progress from "../Progress";
 import AvatarGroup from "../AvatarGroup";
 import moment from "moment";
+import { UserContext } from "../../context/userContext";
 
 const TaskCard = ({
   title,
@@ -19,6 +20,7 @@ const TaskCard = ({
   className,
   clienteName,
 }) => {
+  const { user } = React.useContext(UserContext);
   const getStatusTagColor = () => {
     switch (status) {
       case "In Progress":
@@ -154,7 +156,7 @@ const TaskCard = ({
           </div>
 
           <div className="flex items-center justify-between mt-3">
-            <AvatarGroup avatars={assignedTo || []} />
+            {user?.role === "admin" && <AvatarGroup avatars={assignedTo || []} />}
           </div>
         </div>
       </div>

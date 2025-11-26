@@ -27,6 +27,30 @@ const ViewTaskDetails = () => {
     }
   };
 
+  const getStatusLabel = (status) => {
+    switch (status) {
+      case "In Progress":
+        return "Em Andamento";
+      case "Completed":
+        return "Concluído";
+      case "Pending":
+      default:
+        return "Pendente";
+    }
+  };
+
+  const getPriorityLabel = (priority) => {
+    switch (priority) {
+      case "Low":
+        return "Baixa";
+      case "Medium":
+        return "Média";
+      case "High":
+      default:
+        return "Alta";
+    }
+  };
+
   // get Task info by ID
   const getTaskDetailsByID = async () => {
     try {
@@ -91,7 +115,7 @@ const ViewTaskDetails = () => {
       <Modal
         isOpen={openModal}
         onClose={closeAndGoBack}
-        title={task?.title || "Task Details"}
+        title={"Ação"}
         variant="wide"
       >
         {task && (
@@ -101,29 +125,32 @@ const ViewTaskDetails = () => {
                 <h2 className="text-sm md:text-xl font-medium">
                   {task?.title}
                 </h2>
-                <div
+              <div
                   className={`text-[11px] md:text-[13px] font-medium ${getStatusTagColor(
                     task?.status
-                  )} px-4 py-0.5 rounded`}
+                  )} px-4 py-0.5 rounded whitespace-nowrap`}
                 >
-                  {task?.status}
-                </div>
+                  {getStatusLabel(task?.status)}
+              </div>
               </div>
 
               <div className="mt-4">
-                <InfoBox label="Description" value={task?.description} />
+                <InfoBox label="Descrição" value={task?.description} />
               </div>
 
               <div className="grid grid-cols-12 gap-4 mt-4">
                 <div className="col-span-6 md:col-span-4">
-                  <InfoBox label="Prioridade" value={task?.priority} />
+                  <InfoBox
+                    label="Prioridade"
+                    value={getPriorityLabel(task?.priority)}
+                  />
                 </div>
                 <div className="col-span-6 md:col-span-4">
                   <InfoBox
                     label="Previsto"
                     value={
                       task?.dueDate
-                        ? moment(task?.dueDate).format("Do MMM YYYY")
+                        ? moment(task?.dueDate).format("DD/MM/YYYY")
                         : "N/A"
                     }
                   />
