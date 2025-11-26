@@ -266,7 +266,7 @@ const Dashboard = () => {
       {/* Completion by framework mini-cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
         {[
-          { label: "NIST CSF", color: COLORS[1] },
+          { label: "NIST CSF", color: "#00B8DB" },
           { label: "ISO 27001", color: COLORS[2] },
         ].map((fw) => {
           const pct =

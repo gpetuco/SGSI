@@ -32,9 +32,24 @@ const StackedStatusByFramework = ({ data, title = "Status by Framework" }) => {
         <Tooltip />
         <Legend />
         {/* Side-by-side bars for each status */}
-        <Bar dataKey="Pending" fill="#ff0000" radius={[6, 6, 0, 0]} />
-        <Bar dataKey="InProgress" fill="#FACC15" radius={[6, 6, 0, 0]} />
-        <Bar dataKey="Completed" fill="#7BCE00" radius={[6, 6, 0, 0]} />
+        <Bar
+          dataKey="Completed"
+          name="Concluído"
+          fill="#7BCE00"
+          radius={[6, 6, 0, 0]}
+        />
+        <Bar
+          dataKey="InProgress"
+          name="Em Andamento"
+          fill="#FACC15"
+          radius={[6, 6, 0, 0]}
+        />
+        <Bar
+          dataKey="Pending"
+          name="Pendente"
+          fill="#FF4B4B"
+          radius={[6, 6, 0, 0]}
+        />
       </BarChart>
     </ResponsiveContainer>
   );
