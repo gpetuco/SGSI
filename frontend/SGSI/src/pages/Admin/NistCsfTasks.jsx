@@ -13,8 +13,12 @@ const NistCsfTasks = () => {
   const [filterStatus, setFilterStatus] = useState("All");
   const [selectedPriority, setSelectedPriority] = useState("All");
   const [selectedUser, setSelectedUser] = useState("All");
-   const [selectedFunction, setSelectedFunction] = useState("All");
+  const [selectedFunction, setSelectedFunction] = useState("All");
+  const [selectedCompany, setSelectedCompany] = useState("All");
   const [userOptions, setUserOptions] = useState([
+    { label: "Todos", value: "All" },
+  ]);
+  const [companyOptions, setCompanyOptions] = useState([
     { label: "Todos", value: "All" },
   ]);
   const navigate = useNavigate();
@@ -47,6 +51,7 @@ const NistCsfTasks = () => {
         classification: "NIST CSF",
       };
       if (selectedUser !== "All") params.assignedTo = selectedUser;
+      if (selectedCompany !== "All") params.cliente = selectedCompany;
       const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, {
         params,
       });
@@ -74,18 +79,35 @@ const NistCsfTasks = () => {
     }
   };
 
+  // fetch companies for dropdown
+  const fetchCompanies = async () => {
+    try {
+      const res = await axiosInstance.get(API_PATHS.COMPANIES.LIST);
+      const opts = [{ label: "Todos", value: "All" }].concat(
+        (res.data || []).map((c) => ({
+          label: c.name,
+          value: c._id,
+        }))
+      );
+      setCompanyOptions(opts);
+    } catch (e) {
+      console.error("Error fetching companies:", e);
+    }
+  };
+
   const handleClick = (taskData) => {
     navigate(`/admin/create-task`, { state: { taskId: taskData._id } });
   };
 
   useEffect(() => {
     fetchUsers();
+    fetchCompanies();
   }, []);
 
   useEffect(() => {
     getAllTasks(filterStatus);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterStatus, selectedUser]);
+  }, [filterStatus, selectedUser, selectedCompany]);
 
   return (
     <DashboardLayout activeMenu="NIST CSF">
@@ -95,7 +117,7 @@ const NistCsfTasks = () => {
         </div>
 
         {/* Filters: User, Status, Priority, NIST Function */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mt-3 w-full lg:w-[880px]">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-2 mt-3 w-full lg:w-[1100px]">
           <div className="w-full md:w-[210px]">
             <label className="text-xs font-medium text-slate-600">
               Responsável
@@ -144,6 +166,17 @@ const NistCsfTasks = () => {
               placeholder="Todas as funções"
             />
           </div>
+          <div className="w-full md:w-[210px]">
+            <label className="text-xs font-medium text-slate-600">
+              Cliente
+            </label>
+            <SelectDropdown
+              options={companyOptions}
+              value={selectedCompany}
+              onChange={setSelectedCompany}
+              placeholder="Todos os clientes"
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 mt-4">
@@ -156,23 +189,23 @@ const NistCsfTasks = () => {
               return getNistFunctionFromTitle(t.title) === selectedFunction;
             })
             .map((item) => (
-            <TaskCard
-              key={item._id}
-              title={item.title}
-              description={item.description}
-              priority={item.priority}
-              classification={item.classification}
-              status={item.status}
-              progress={item.progress}
-              createdAt={item.createdAt}
-              dueDate={item.dueDate}
-              assignedTo={item.assignedTo?.map((a) => a.profileImageUrl)}
-              completedTodoCount={item.completedTodoCount || 0}
-              todoChecklist={item.todoChecklist || []}
-              clienteName={item.cliente?.name}
-              onClick={() => handleClick(item)}
-            />
-          ))}
+              <TaskCard
+                key={item._id}
+                title={item.title}
+                description={item.description}
+                priority={item.priority}
+                classification={item.classification}
+                status={item.status}
+                progress={item.progress}
+                createdAt={item.createdAt}
+                dueDate={item.dueDate}
+                assignedTo={item.assignedTo?.map((a) => a.profileImageUrl)}
+                completedTodoCount={item.completedTodoCount || 0}
+                todoChecklist={item.todoChecklist || []}
+                clienteName={item.cliente?.name}
+                onClick={() => handleClick(item)}
+              />
+            ))}
         </div>
       </div>
     </DashboardLayout>

@@ -18,7 +18,7 @@ const Column = ({ title, tasks, onOpen }) => {
       <div className="flex-1 flex flex-col gap-3 max-h-[calc(100vh-260px)] overflow-y-auto pr-1">
         {tasks.length === 0 ? (
           <div className="text-xs text-gray-400 py-6 text-center border border-dashed border-gray-200 rounded">
-            No tasks
+            Nenhuma ação encontrada.
           </div>
         ) : (
           tasks.map((item) => (
@@ -55,6 +55,10 @@ const Kanban = () => {
   const [userOptions, setUserOptions] = useState([
     { label: "Todos", value: "All" },
   ]);
+  const [selectedCompany, setSelectedCompany] = useState("All");
+  const [companyOptions, setCompanyOptions] = useState([
+    { label: "Todos", value: "All" },
+  ]);
   const navigate = useNavigate();
 
   const getAllTasks = async () => {
@@ -63,6 +67,7 @@ const Kanban = () => {
         status: filterStatus === "All" ? "" : filterStatus,
       };
       if (selectedUser !== "All") params.assignedTo = selectedUser;
+      if (selectedCompany !== "All") params.cliente = selectedCompany;
 
       const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, {
         params,
@@ -92,14 +97,30 @@ const Kanban = () => {
     }
   };
 
+  const fetchCompanies = async () => {
+    try {
+      const res = await axiosInstance.get(API_PATHS.COMPANIES.LIST);
+      const opts = [{ label: "Todos", value: "All" }].concat(
+        (res.data || []).map((c) => ({
+          label: c.name,
+          value: c._id,
+        }))
+      );
+      setCompanyOptions(opts);
+    } catch (e) {
+      console.error("Error fetching companies:", e);
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
+    fetchCompanies();
   }, []);
 
   useEffect(() => {
     getAllTasks();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterStatus, selectedUser]);
+  }, [filterStatus, selectedUser, selectedCompany]);
 
   const grouped = useMemo(() => {
     const source =
@@ -123,7 +144,7 @@ const Kanban = () => {
       <div className="my-5">
         <div className="flex flex-col lg:flex-row lg:items-center gap-4">
           {/* Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 w-full lg:w-[660px]">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-2 w-full lg:w-[880px]">
             <div className="w-full md:w-[210px]">
               <label className="text-xs font-medium text-slate-600">
                 Responsável
@@ -161,6 +182,17 @@ const Kanban = () => {
                 value={selectedPriority}
                 onChange={setSelectedPriority}
                 placeholder="All Priorities"
+              />
+            </div>
+            <div className="w-full md:w-[210px]">
+              <label className="text-xs font-medium text-slate-600">
+                Cliente
+              </label>
+              <SelectDropdown
+                options={companyOptions}
+                value={selectedCompany}
+                onChange={setSelectedCompany}
+                placeholder="Todos os clientes"
               />
             </div>
           </div>

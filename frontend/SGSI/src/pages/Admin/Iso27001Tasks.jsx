@@ -14,7 +14,11 @@ const Iso27001Tasks = () => {
   const [selectedPriority, setSelectedPriority] = useState("All");
   const [selectedUser, setSelectedUser] = useState("All");
   const [selectedControlType, setSelectedControlType] = useState("All");
+  const [selectedCompany, setSelectedCompany] = useState("All");
   const [userOptions, setUserOptions] = useState([
+    { label: "Todos", value: "All" },
+  ]);
+  const [companyOptions, setCompanyOptions] = useState([
     { label: "Todos", value: "All" },
   ]);
   const navigate = useNavigate();
@@ -43,6 +47,7 @@ const Iso27001Tasks = () => {
         classification: "ISO 27001",
       };
       if (selectedUser !== "All") params.assignedTo = selectedUser;
+      if (selectedCompany !== "All") params.cliente = selectedCompany;
       const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, {
         params,
       });
@@ -74,14 +79,30 @@ const Iso27001Tasks = () => {
     }
   };
 
+  const fetchCompanies = async () => {
+    try {
+      const res = await axiosInstance.get(API_PATHS.COMPANIES.LIST);
+      const opts = [{ label: "Todos", value: "All" }].concat(
+        (res.data || []).map((c) => ({
+          label: c.name,
+          value: c._id,
+        }))
+      );
+      setCompanyOptions(opts);
+    } catch (e) {
+      console.error("Error fetching companies:", e);
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
+    fetchCompanies();
   }, []);
 
   useEffect(() => {
     getAllTasks(filterStatus);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterStatus, selectedUser]);
+  }, [filterStatus, selectedUser, selectedCompany]);
 
   return (
     <DashboardLayout activeMenu="ISO 27001">
@@ -90,7 +111,7 @@ const Iso27001Tasks = () => {
           <h2 className="text-xl md:text-xl font-medium">ISO 27001</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mt-3 w-full lg:w-[880px]">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-2 mt-3 w-full lg:w-[1100px]">
           <div className="w-full md:w-[210px]">
             <label className="text-xs font-medium text-slate-600">
               Responsável
@@ -137,6 +158,17 @@ const Iso27001Tasks = () => {
               value={selectedControlType}
               onChange={setSelectedControlType}
               placeholder="Todos os tipos"
+            />
+          </div>
+          <div className="w-full md:w-[210px]">
+            <label className="text-xs font-medium text-slate-600">
+              Cliente
+            </label>
+            <SelectDropdown
+              options={companyOptions}
+              value={selectedCompany}
+              onChange={setSelectedCompany}
+              placeholder="Todos os clientes"
             />
           </div>
         </div>

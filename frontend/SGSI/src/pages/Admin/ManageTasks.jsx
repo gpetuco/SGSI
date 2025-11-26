@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
@@ -15,7 +15,11 @@ const ManageTasks = () => {
   const [selectedUser, setSelectedUser] = useState("All");
   const [selectedFramework, setSelectedFramework] = useState("All");
   const [selectedPriority, setSelectedPriority] = useState("All");
+  const [selectedCompany, setSelectedCompany] = useState("All");
   const [userOptions, setUserOptions] = useState([
+    { label: "Todos", value: "All" },
+  ]);
+  const [companyOptions, setCompanyOptions] = useState([
     { label: "Todos", value: "All" },
   ]);
 
@@ -29,6 +33,7 @@ const ManageTasks = () => {
       if (selectedFramework !== "All")
         params.classification = selectedFramework;
       if (selectedUser !== "All") params.assignedTo = selectedUser;
+      if (selectedCompany !== "All") params.cliente = selectedCompany;
 
       const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, {
         params,
@@ -61,15 +66,31 @@ const ManageTasks = () => {
     }
   };
 
+  const fetchCompanies = async () => {
+    try {
+      const res = await axiosInstance.get(API_PATHS.COMPANIES.LIST);
+      const opts = [{ label: "Todos", value: "All" }].concat(
+        (res.data || []).map((c) => ({
+          label: c.name,
+          value: c._id,
+        }))
+      );
+      setCompanyOptions(opts);
+    } catch (e) {
+      console.error("Error fetching companies:", e);
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
+    fetchCompanies();
   }, []);
 
   useEffect(() => {
     getAllTasks(filterStatus);
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterStatus, selectedFramework, selectedUser]);
+  }, [filterStatus, selectedFramework, selectedUser, selectedCompany]);
 
   return (
     <DashboardLayout activeMenu="Ações">
@@ -78,7 +99,7 @@ const ManageTasks = () => {
 
         <div className="mt-3 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-3">
           {/* Filtros */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-2 w-full lg:w-[880px]">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-2 w-full lg:w-[1100px]">
             <div className="w-full md:w-[190px]">
               <label className="text-xs font-medium text-slate-600">
                 Responsável
@@ -93,7 +114,7 @@ const ManageTasks = () => {
             </div>
             <div className="w-full md:w-[190px]">
               <label className="text-xs font-medium text-slate-600">
-                Framework
+                Classificação
               </label>
               <SelectDropdown
                 options={[
@@ -130,6 +151,17 @@ const ManageTasks = () => {
                 value={selectedPriority}
                 onChange={setSelectedPriority}
                 placeholder="Todas"
+              />
+            </div>
+            <div className="w-full md:w-[190px]">
+              <label className="text-xs font-medium text-slate-600">
+                Cliente
+              </label>
+              <SelectDropdown
+                options={companyOptions}
+                value={selectedCompany}
+                onChange={setSelectedCompany}
+                placeholder="Todos"
               />
             </div>
           </div>

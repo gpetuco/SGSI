@@ -5,7 +5,7 @@ const Task = require("../models/Task");
 // @access  Private
 const getTasks = async (req, res) => {
   try {
-    const { status, assignedTo, classification } = req.query;
+    const { status, assignedTo, classification, cliente } = req.query;
     let filter = {};
 
     if (status) {
@@ -13,6 +13,9 @@ const getTasks = async (req, res) => {
     }
     if (classification) {
       filter.classification = classification;
+    }
+    if (cliente) {
+      filter.cliente = cliente;
     }
 
     let tasks;
@@ -55,14 +58,19 @@ const getTasks = async (req, res) => {
     );
 
     // Status summary counts
-    const allTasks = await Task.countDocuments(
+    const baseCountFilter =
       req.user.role === "admin" && !restrictToMe
-        ? { ...(classification && { classification }) }
+        ? {
+            ...(classification && { classification }),
+            ...(cliente && { cliente }),
+          }
         : {
             assignedTo: req.user._id,
             ...(classification && { classification }),
-          }
-    );
+            ...(cliente && { cliente }),
+          };
+
+    const allTasks = await Task.countDocuments(baseCountFilter);
 
     const pendingTasks = await Task.countDocuments({
       ...filter,
