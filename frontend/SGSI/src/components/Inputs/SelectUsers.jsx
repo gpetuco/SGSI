@@ -13,7 +13,9 @@ const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
 
   const openModal = () => {
     // Preload current selection so users appear checked in the modal
-    setTempSelectedUsers(Array.isArray(selectedUsers) ? [...selectedUsers] : []);
+    setTempSelectedUsers(
+      Array.isArray(selectedUsers) ? [...selectedUsers] : []
+    );
     setIsModalOpen(true);
   };
 
@@ -61,7 +63,7 @@ const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
     <div className="space-y-4 mt-2">
       {selectedUserAvatars.length === 0 && (
         <button className="card-btn" onClick={openModal}>
-          <LuUsers className="text-sm" /> Add Members
+          <LuUsers className="text-sm" /> Atribuir Responsáveis
         </button>
       )}
 
@@ -74,7 +76,7 @@ const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="Select Users"
+        title="Atribuir responsáveis"
       >
         <div className="space-y-4 h-[60vh] overflow-y-auto">
           {allUsers.map((user) => (
@@ -82,7 +84,11 @@ const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
               key={user._id}
               className="flex items-center gap-4 p-3 border-b border-gray-200"
             >
-              <UserAvatar src={user.profileImageUrl} name={user.name} size="w-10 h-10" />
+              <UserAvatar
+                src={user.profileImageUrl}
+                name={user.name}
+                size="w-10 h-10"
+              />
               <div className="flex-1">
                 <p className="font-medium text-gray-800 dark:text-white">
                   {user.name}
@@ -102,10 +108,10 @@ const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
 
         <div className="flex justify-end gap-4 pt-4">
           <button className="card-btn" onClick={() => setIsModalOpen(false)}>
-            CANCEL
+            Cancelar
           </button>
           <button className="card-btn-fill" onClick={handleAssign}>
-            DONE
+            Atribuir
           </button>
         </div>
       </Modal>

@@ -252,11 +252,11 @@ const CreateTask = () => {
 
     // Input validation
     if (!taskData.title.trim()) {
-      setError("Title is required.");
+      setError("Título é obrigatório.");
       return;
     }
     if (!taskData.description.trim()) {
-      setError("Description is required.");
+      setError("Descrição é obrigatória.");
       return;
     }
     if (!taskData.cliente) {
@@ -264,17 +264,17 @@ const CreateTask = () => {
       return;
     }
     if (!taskData.dueDate) {
-      setError("Previsto is required.");
+      setError("Data Prevista é obrigatório.");
       return;
     }
 
     if (taskData.assignedTo?.length === 0) {
-      setError("Task not assigned to any member");
+      setError("Ação não atribuída a nenhum responsável.");
       return;
     }
 
     if (taskData.todoChecklist?.length === 0) {
-      setError("Add atleast one todo task");
+      setError("Adicione pelo menos um item.");
       return;
     }
 
@@ -697,7 +697,7 @@ const CreateTask = () => {
                         onClick={handleAddItem}
                         disabled={!newTodoText}
                       >
-                        <HiMiniPlus className="text-lg" /> Add
+                        <HiMiniPlus className="text-lg" /> Adicionar
                       </button>
                     </div>
                   ) : (
@@ -713,7 +713,7 @@ const CreateTask = () => {
                         className="card-btn text-nowrap dark:!text-white"
                         onClick={handleAddItem}
                       >
-                        <HiMiniPlus className="text-lg" /> Add
+                        <HiMiniPlus className="text-lg" /> Adicionar
                       </button>
                     </div>
                   )}
@@ -774,7 +774,7 @@ const CreateTask = () => {
                           onClick={handleAddItem}
                           disabled={!newTodoText}
                         >
-                          <HiMiniPlus className="text-lg" /> Add
+                          <HiMiniPlus className="text-lg" /> Adicionar
                         </button>
                       </div>
                     </>
