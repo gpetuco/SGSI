@@ -339,12 +339,12 @@ const Dashboard = () => {
             return (
               <div
                 key={fn.function}
-                className="card flex flex-col items-center justify-between px-2 py-2"
+                className="card flex flex-col items-center justify-between px-3 py-3"
               >
-                <div className="text-[11px] md:text-xs font-semibold text-center text-gray-700 dark:text-slate-200">
+                <div className="text-xs md:text-sm font-semibold text-center text-gray-700 dark:text-slate-200">
                   {fn.function}
                 </div>
-                <div className="w-[64px] h-[64px] md:w-[72px] md:h-[72px] my-1 flex items-center justify-center">
+                <div className="w-[72px] h-[72px] md:w-[88px] md:h-[88px] my-2 flex items-center justify-center">
                   <ReResponsiveContainer width="100%" height="100%">
                     <RePieChart>
                       <RePie
@@ -362,10 +362,10 @@ const Dashboard = () => {
                     </RePieChart>
                   </ReResponsiveContainer>
                 </div>
-                <div className="text-xs md:text-sm font-bold text-gray-900 dark:text-white">
+                <div className="text-sm md:text-base font-bold text-gray-900 dark:text-white">
                   {pct}%
                 </div>
-                <div className="text-[10px] md:text-[11px] text-gray-500 dark:text-slate-300">
+                <div className="text-[11px] md:text-xs text-gray-500 dark:text-slate-300">
                   {fn.total || 0} ações
                 </div>
               </div>
@@ -408,12 +408,12 @@ const Dashboard = () => {
             return (
               <div
                 key={ctrl.type}
-                className="card flex flex-col items-center justify-between px-2 py-2"
+                className="card flex flex-col items-center justify-between px-3 py-3"
               >
-                <div className="text-[11px] md:text-xs font-semibold text-center text-gray-700 dark:text-slate-200">
+                <div className="text-xs md:text-sm font-semibold text-center text-gray-700 dark:text-slate-200">
                   {ctrl.type}
                 </div>
-                <div className="w-[64px] h-[64px] md:w-[72px] md:h-[72px] my-1 flex items-center justify-center">
+                <div className="w-[72px] h-[72px] md:w-[88px] md:h-[88px] my-2 flex items-center justify-center">
                   <ReResponsiveContainer width="100%" height="100%">
                     <RePieChart>
                       <RePie
@@ -431,10 +431,10 @@ const Dashboard = () => {
                     </RePieChart>
                   </ReResponsiveContainer>
                 </div>
-                <div className="text-xs md:text-sm font-bold text-gray-900 dark:text-white">
+                <div className="text-sm md:text-base font-bold text-gray-900 dark:text-white">
                   {pct}%
                 </div>
-                <div className="text-[10px] md:text-[11px] text-gray-500 dark:text-slate-300">
+                <div className="text-[11px] md:text-xs text-gray-500 dark:text-slate-300">
                   {ctrl.total || 0} ações
                 </div>
               </div>
@@ -529,16 +529,6 @@ const Dashboard = () => {
         <div>
           <div className="card">
             <div className="flex items-center justify-between">
-              <h5 className="font-medium">Status</h5>
-            </div>
-
-            <CustomPieChart data={pieChartData} colors={COLORS} />
-          </div>
-        </div>
-
-        <div>
-          <div className="card">
-            <div className="flex items-center justify-between">
               <h5 className="font-medium">Prioridade</h5>
             </div>
 
@@ -547,6 +537,16 @@ const Dashboard = () => {
               xKey="priority"
               areas={[{ dataKey: "count", color: "#1368ec", name: "Tasks" }]}
             />
+          </div>
+        </div>
+
+        <div>
+          <div className="card">
+            <div className="flex items-center justify-between">
+              <h5 className="font-medium">Status</h5>
+            </div>
+
+            <CustomPieChart data={pieChartData} colors={COLORS} />
           </div>
         </div>
 
