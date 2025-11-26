@@ -28,7 +28,7 @@ const SelectCompany = ({ value, onChange, placeholder = "Selecione o cliente" })
   };
 
   const filtered = companies.filter((c) =>
-    c.name?.toLowerCase().includes(query.toLowerCase()) || c._id?.toLowerCase().includes(query.toLowerCase())
+    c.name?.toLowerCase().includes(query.toLowerCase())
   );
 
   const handleSelect = (id) => {
@@ -55,7 +55,7 @@ const SelectCompany = ({ value, onChange, placeholder = "Selecione o cliente" })
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Pesquisar cliente por nome ou ID"
+              placeholder="Pesquisar cliente por nome"
               className="w-full text-sm bg-transparent outline-none text-black dark:text-white"
             />
           </div>
@@ -67,7 +67,6 @@ const SelectCompany = ({ value, onChange, placeholder = "Selecione o cliente" })
                 className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600 text-black dark:text-slate-100"
               >
                 <div className="font-medium">{c.name}</div>
-                <div className="text-xs text-gray-500">{c._id}</div>
               </div>
             ))}
             {filtered.length === 0 && (
@@ -81,4 +80,3 @@ const SelectCompany = ({ value, onChange, placeholder = "Selecione o cliente" })
 };
 
 export default SelectCompany;
-

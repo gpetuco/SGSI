@@ -471,7 +471,7 @@ const CreateTask = () => {
       <Modal
         isOpen={openFormModal}
         onClose={closeAndGoBack}
-        title={taskId ? "Update Task" : "Create Task"}
+        title={"Ação"}
         variant="wide"
         footer={
           <div className="flex justify-end">
