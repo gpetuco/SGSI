@@ -9,6 +9,7 @@ import {
   LuBadgeCheck,
   LuNetwork,
   LuColumns3,
+  LuBuilding2,
 } from "react-icons/lu";
 
 export const SIDE_MENU_DATA = [
@@ -51,7 +52,7 @@ export const SIDE_MENU_DATA = [
   {
     id: "04b",
     label: "Clientes",
-    icon: LuUsers,
+    icon: LuBuilding2,
     path: "/admin/clients",
   },
   {
@@ -81,7 +82,7 @@ export const SIDE_MENU_USER_DATA = [
     icon: LuBadgeCheck,
     path: "/user/tasks/iso-27001",
   },
-   {
+  {
     id: "02c",
     label: "Kanban",
     icon: LuColumns3,
