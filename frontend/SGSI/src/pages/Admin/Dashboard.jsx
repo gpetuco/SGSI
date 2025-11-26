@@ -66,6 +66,7 @@ const Dashboard = () => {
   const [fwModal, setFwModal] = useState({ open: false, fw: null, percent: 0 });
 
   const [classificationFilter, setClassificationFilter] = useState("All");
+  const [loading, setLoading] = useState(true);
 
   // Prepare Chart Data
   const prepareChartData = (data) => {
@@ -158,6 +159,7 @@ const Dashboard = () => {
 
   const getDashboardData = async () => {
     try {
+      setLoading(true);
       const params = {};
       if (classificationFilter !== "All")
         params.classification = classificationFilter;
@@ -172,6 +174,8 @@ const Dashboard = () => {
       }
     } catch (error) {
       console.error("Error fetching users:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -194,6 +198,23 @@ const Dashboard = () => {
     }).format(new Date());
     return s.charAt(0).toUpperCase() + s.slice(1);
   };
+
+  if (loading && !dashboardData) {
+    return (
+      <DashboardLayout activeMenu="Dashboard">
+        <div className="card my-5">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+            <div>
+              <h2 className="text-xl md:text-2xl">Dashboard</h2>
+              <p className="text-xs text-slate-500 mt-2">
+                Carregando dados do dashboard...
+              </p>
+            </div>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout activeMenu="Dashboard">
