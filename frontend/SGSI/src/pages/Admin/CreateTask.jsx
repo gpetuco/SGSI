@@ -174,7 +174,7 @@ const CreateTask = () => {
         todoChecklist: todolist,
       });
 
-      toast.success("Task Created Successfully");
+      toast.success("Ação criada com sucesso!");
 
       clearData();
     } catch (error) {
@@ -209,7 +209,7 @@ const CreateTask = () => {
         }
       );
 
-      toast.success("Task Updated Successfully");
+      toast.success("Ação salva com sucesso!");
     } catch (error) {
       console.error("Error creating task:", error);
       setLoading(false);
@@ -562,7 +562,7 @@ const CreateTask = () => {
                     options={functionOptions}
                     value={taskData.title}
                     onChange={(value) => handleNistTitleChange(value)}
-                    placeholder="Select Function"
+                    placeholder="Selecione um item"
                   />
                 </div>
               ) : (
@@ -593,8 +593,8 @@ const CreateTask = () => {
                       onChange={(value) => handleNistDescriptionChange(value)}
                       placeholder={
                         taskData.title
-                          ? "Select Category"
-                          : "Select a Function first"
+                          ? "Selecione um item"
+                          : "Selecione Título antes"
                       }
                     />
                   </div>
@@ -684,10 +684,10 @@ const CreateTask = () => {
                             onChange={(value) => setNewTodoText(value)}
                             placeholder={
                               taskData.description
-                                ? "Select Subcategory"
+                                ? "Selecione um item"
                                 : taskData.title
-                                ? "Select a Category first"
-                                : "Select a Function first"
+                                ? "Selecione Descrição antes"
+                                : "Selecione Título antes"
                             }
                           />
                         </div>
@@ -761,10 +761,10 @@ const CreateTask = () => {
                               onChange={(value) => setNewTodoText(value)}
                               placeholder={
                                 taskData.description
-                                  ? "Select Subcategory"
+                                  ? "Selecione um item"
                                   : taskData.title
-                                  ? "Select a Category first"
-                                  : "Select a Function first"
+                                  ? "Selecione Descrição antes"
+                                  : "Selecione Título antes"
                               }
                             />
                           </div>
@@ -822,10 +822,10 @@ const CreateTask = () => {
       <Modal
         isOpen={openDeleteAlert}
         onClose={() => setOpenDeleteAlert(false)}
-        title="Delete Task"
+        title="Apagar ação"
       >
         <DeleteAlert
-          content="Are you sure you want to delete this task?"
+          content="Você deseja apagar essa ação?"
           onDelete={() => deleteTask()}
         />
       </Modal>
