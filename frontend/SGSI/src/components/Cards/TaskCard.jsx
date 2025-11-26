@@ -86,36 +86,42 @@ const TaskCard = ({
       }`}
       onClick={onClick}
     >
-      <div className="flex flex-wrap items-center gap-2 px-4 min-w-0">
-        <div
-          className={`text-[11px] font-medium ${getStatusTagColor()} px-3 py-0.5 rounded whitespace-nowrap`}
-        >
-          {getStatusLabel()}
-        </div>
-        <div
-          className={`text-[11px] font-medium ${getPriorityTagColor()} px-3 py-0.5 rounded whitespace-nowrap`}
-        >
-          {getPriorityLabel()}
-        </div>
-        {classification && (
-          <div
-            className={`text-[11px] font-medium ${getClassificationTagColor()} px-3 py-0.5 rounded whitespace-nowrap`}
-          >
-            {classification}
+      <div className="px-4 flex-grow">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <p className="text-sm md:text-base font-medium text-gray-800 line-clamp-2">
+              {title}
+            </p>
+
+            <p className="text-xs md:text-[13px] text-gray-500 mt-1.5 line-clamp-2 leading-[18px]">
+              {description}
+            </p>
           </div>
-        )}
-      </div>
 
-      <div className={`px-4   flex-grow`}>
-        <p className="text-sm font-medium text-gray-800 mt-4 line-clamp-2">
-          {title}
-        </p>
+          <div className="flex flex-col items-end gap-1">
+            <div className="flex flex-wrap justify-end gap-1.5">
+              <div
+                className={`text-[12px] md:text-[13px] font-semibold ${getStatusTagColor()} px-3.5 py-1.5 rounded-md whitespace-nowrap`}
+              >
+                {getStatusLabel()}
+              </div>
+              <div
+                className={`text-[12px] md:text-[13px] font-semibold ${getPriorityTagColor()} px-3.5 py-1.5 rounded-md whitespace-nowrap`}
+              >
+                {getPriorityLabel()}
+              </div>
+              {classification && (
+                <div
+                  className={`text-[12px] md:text-[13px] font-semibold ${getClassificationTagColor()} px-3.5 py-1.5 rounded-md whitespace-nowrap`}
+                >
+                  {classification}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
 
-        <p className="text-xs text-gray-500 mt-1.5 line-clamp-2 leading-[18px]">
-          {description}
-        </p>
-
-        <p className="text-[13px] font-medium mt-2 mb-2 leading-[18px]">
+        <p className="text-[13px] md:text-[14px] font-medium mt-3 mb-2 leading-[18px]">
           <span className="text-white">Progresso:</span>{" "}
           <span className="font-semibold text-gray-700 dark:text-white">
             {`${progress}% (`}
