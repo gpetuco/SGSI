@@ -1,9 +1,9 @@
 import React from "react";
 
-const FotosUsuarios = ({ avatars, maxVisible = 3 }) => {
+const FotosUsuarios = ({ fotosPerfilUsuario, mostra = 3 }) => {
   return (
     <div className="flex items-center">
-      {avatars.slice(0, maxVisible).map((avatar, index) => (
+      {fotosPerfilUsuario.slice(0, mostra).map((avatar, index) => (
         <img
           key={index}
           src={avatar}
@@ -11,9 +11,9 @@ const FotosUsuarios = ({ avatars, maxVisible = 3 }) => {
           className="w-9 h-9 rounded-full border-2 border-white -ml-3 first:ml-0"
         />
       ))}
-      {avatars.length > maxVisible && (
+      {fotosPerfilUsuario.length > mostra && (
         <div className="w-9 h-9 flex items-center justify-center bg-blue-50 text-sm font-medium rounded-full border-2 border-white -ml-3">
-          +{avatars.length - maxVisible}
+          +{fotosPerfilUsuario.length - mostra}
         </div>
       )}
     </div>

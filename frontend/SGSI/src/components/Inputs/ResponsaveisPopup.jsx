@@ -68,7 +68,10 @@ const ResponsaveisPopup = ({ selectedUsers, setSelectedUsers }) => {
 
       {selectedImagemUsuarios.length > 0 && (
         <div className="cursor-pointer" onClick={openPopup}>
-          <FotosUsuarios avatars={selectedImagemUsuarios} maxVisible={3} />
+          <FotosUsuarios
+            fotosPerfilUsuario={selectedImagemUsuarios}
+            mostra={3}
+          />
         </div>
       )}
 

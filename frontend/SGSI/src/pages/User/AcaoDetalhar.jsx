@@ -123,11 +123,11 @@ const AcaoDetalhar = () => {
                     Assigned To
                   </label>
                   <FotosUsuarios
-                    avatars={
+                    fotosPerfilUsuario={
                       acao?.responsavel?.map((item) => item?.profileImageUrl) ||
                       []
                     }
-                    maxVisible={5}
+                    mostra={5}
                   />
                 </div>
               </div>

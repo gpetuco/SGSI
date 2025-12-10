@@ -4,7 +4,6 @@ import axiosReq from "../../utils/axiosReq";
 import { API_PATHS } from "../../utils/apiUrl";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import Popup from "../../components/Popup";
-import FotosUsuarios from "../../components/FotosUsuarios";
 import moment from "moment";
 import { UserContext } from "../../context/userContext";
 
