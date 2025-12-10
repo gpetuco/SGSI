@@ -2,7 +2,7 @@ const express = require("express");
 const { protect, adminOnly } = require("../middlewares/authMiddleware");
 const {
   getDashboardData,
-  getUserDashboardData,
+  getDashboardClienteData,
   getAcaoById,
   getAcoes,
   criarAcao,
@@ -16,7 +16,7 @@ const router = express.Router();
 
 // Acao Management Routes
 router.get("/dashboard-data", protect, getDashboardData);
-router.get("/user-dashboard-data", protect, getUserDashboardData);
+router.get("/user-dashboard-data", protect, getDashboardClienteData);
 router.get("/", protect, getAcoes); // Get all acoes (Admin: all, User: assigned)
 router.get("/:id", protect, getAcaoById); // Get acao by ID
 router.post("/", protect, adminOnly, criarAcao); // Create a acao (Admin only)

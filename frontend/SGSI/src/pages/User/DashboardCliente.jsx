@@ -6,16 +6,14 @@ import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
 import { API_PATHS } from "../../utils/apiUrl";
-// Use Intl for pt-BR date formatting
 import { formatMilhar } from "../../utils/helper";
 import Info from "../../components/Cards/Info";
-import { LuArrowRight } from "react-icons/lu";
 import PizzaWc from "../../components/Graficos/PizzaWc";
 import BarWc from "../../components/Graficos/BarWc";
 
 const COLORS = ["#8D51FF", "#00B8DB", "#7BCE00"];
 
-const UserDashboard = () => {
+const DashboardCliente = () => {
   hookUsuarioPermission();
 
   const { user } = useContext(UserContext);
@@ -153,4 +151,4 @@ const UserDashboard = () => {
   );
 };
 
-export default UserDashboard;
+export default DashboardCliente;

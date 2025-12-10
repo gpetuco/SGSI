@@ -17,7 +17,7 @@ import ItensInput from "../../components/Inputs/ItensInput";
 import Excluir from "../../components/Excluir";
 import Modal from "../../components/Modal";
 
-const getStatusTagColor = (status) => {
+const getCorStatus = (status) => {
   switch (status) {
     case "Em Andamento":
       return "text-cyan-500 bg-cyan-50 border border-cyan-500/10";
@@ -510,7 +510,7 @@ const CriarAcao = () => {
             <div className="flex items-center justify-between">
               {acaoId && (
                 <div
-                  className={`text-[11px] md:text-[13px] font-medium ${getStatusTagColor(
+                  className={`text-[11px] md:text-[13px] font-medium ${getCorStatus(
                     currentAcao?.status || "Pendente"
                   )} px-3 py-1 rounded`}
                 >

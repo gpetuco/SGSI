@@ -14,7 +14,7 @@ const AcaoDetalhar = () => {
   const [openModal, setOpenModal] = useState(true);
   const { user } = React.useContext(UserContext);
 
-  const getStatusTagColor = (status) => {
+  const getCorStatus = (status) => {
     switch (status) {
       case "Em Andamento":
         return "text-cyan-500 bg-cyan-50 border border-cyan-500/10";
@@ -121,7 +121,7 @@ const AcaoDetalhar = () => {
                   {acao?.title}
                 </h2>
                 <div
-                  className={`text-[11px] md:text-[13px] font-medium ${getStatusTagColor(
+                  className={`text-[11px] md:text-[13px] font-medium ${getCorStatus(
                     acao?.status
                   )} px-4 py-0.5 rounded whitespace-nowrap`}
                 >

@@ -876,7 +876,7 @@ const getDashboardData = async (req, res) => {
 // @desc    Dashboard Data (User-specific)
 // @route   GET /api/acoes/user-dashboard-data
 // @access  Private
-const getUserDashboardData = async (req, res) => {
+const getDashboardClienteData = async (req, res) => {
   try {
     const userId = req.user._id;
     const empresaId = req.user.empresa || null;
@@ -962,5 +962,5 @@ module.exports = {
   updateAcaoStatus,
   updateAcaoChecklist,
   getDashboardData,
-  getUserDashboardData,
+  getDashboardClienteData,
 };

@@ -42,7 +42,7 @@ const Usuario = ({ userInfo }) => {
 export default Usuario;
 
 const StatCard = ({ label, count, status }) => {
-  const getStatusTagColor = () => {
+  const getCorStatus = () => {
     switch (status) {
       case "Em Andamento":
         return "text-cyan-500 bg-gray-50";
@@ -57,7 +57,7 @@ const StatCard = ({ label, count, status }) => {
 
   return (
     <div
-      className={`flex-1 text-[10px] font-medium ${getStatusTagColor()} px-4 py-0.5 rounded `}
+      className={`flex-1 text-[10px] font-medium ${getCorStatus()} px-4 py-0.5 rounded `}
     >
       <span className="text-[12px] font-semibold">{count}</span> <br /> {label}
     </div>

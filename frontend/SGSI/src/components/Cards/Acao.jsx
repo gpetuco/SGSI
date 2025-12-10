@@ -21,7 +21,7 @@ const Acao = ({
   clienteName,
 }) => {
   const { user } = React.useContext(UserContext);
-  const getStatusTagColor = () => {
+  const getCorStatus = () => {
     switch (status) {
       case "Em Andamento":
         return "border-cyan-500/10 bg-cyan-50 text-cyan-500 border dark:text-cyan-300 dark:bg-cyan-900/30 dark:border-cyan-400/20";
@@ -104,7 +104,7 @@ const Acao = ({
           <div className="flex flex-col items-end gap-1">
             <div className="flex flex-wrap justify-end gap-1.5">
               <div
-                className={`text-[12px] md:text-[13px] font-semibold ${getStatusTagColor()} px-3.5 py-1.5 rounded-md whitespace-nowrap`}
+                className={`text-[12px] md:text-[13px] font-semibold ${getCorStatus()} px-3.5 py-1.5 rounded-md whitespace-nowrap`}
               >
                 {getStatusLabel()}
               </div>
