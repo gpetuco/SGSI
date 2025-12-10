@@ -52,7 +52,7 @@ const CreateTask = () => {
     classification: "NIST CSF",
     priority: "Low",
     dueDate: null,
-    assignedTo: [],
+    responsavel: [],
     cliente: "",
     itens: [],
   });
@@ -153,7 +153,7 @@ const CreateTask = () => {
       classification: "NIST CSF",
       priority: "Low",
       dueDate: null,
-      assignedTo: [],
+      responsavel: [],
       cliente: "",
       itens: [],
     });
@@ -266,7 +266,7 @@ const CreateTask = () => {
       return;
     }
 
-    if (taskData.assignedTo?.length === 0) {
+    if (taskData.responsavel?.length === 0) {
       setError("Ação não atribuída a nenhum responsável.");
       return;
     }
@@ -304,7 +304,7 @@ const CreateTask = () => {
           dueDate: taskInfo.dueDate
             ? moment(taskInfo.dueDate).format("YYYY-MM-DD")
             : null,
-          assignedTo: taskInfo?.assignedTo?.map((item) => item?._id) || [],
+          responsavel: taskInfo?.responsavel?.map((item) => item?._id) || [],
           cliente:
             (taskInfo?.cliente && taskInfo?.cliente?._id) ||
             taskInfo?.cliente ||
@@ -819,9 +819,9 @@ const CreateTask = () => {
               </label>
 
               <SelectUsers
-                selectedUsers={taskData.assignedTo}
+                selectedUsers={taskData.responsavel}
                 setSelectedUsers={(value) => {
-                  handleValueChange("assignedTo", value);
+                  handleValueChange("responsavel", value);
                 }}
               />
             </div>

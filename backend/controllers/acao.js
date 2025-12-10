@@ -5,9 +5,9 @@ const Task = require("../models/Task");
 // @access  Private
 const getTasks = async (req, res) => {
   try {
-    const { status, assignedTo, classification, cliente } = req.query;
+    const { status, responsavel, classification, cliente } = req.query;
     const isAdmin = req.user.role === "admin";
-    const restrictToMe = assignedTo === "me";
+    const restrictToMe = responsavel === "me";
 
     let baseFilter = {};
 
@@ -22,8 +22,8 @@ const getTasks = async (req, res) => {
       if (cliente) {
         baseFilter.cliente = cliente;
       }
-      if (assignedTo && !restrictToMe) {
-        baseFilter.assignedTo = assignedTo;
+      if (responsavel && !restrictToMe) {
+        baseFilter.responsavel = responsavel;
       }
     } else {
       if (!req.user.empresa) {
@@ -41,19 +41,19 @@ const getTasks = async (req, res) => {
       baseFilter.cliente = req.user.empresa;
 
       if (restrictToMe) {
-        baseFilter.assignedTo = req.user._id;
-      } else if (assignedTo && assignedTo !== "me") {
-        baseFilter.assignedTo = assignedTo;
+        baseFilter.responsavel = req.user._id;
+      } else if (responsavel && responsavel !== "me") {
+        baseFilter.responsavel = responsavel;
       }
     }
 
     const listFilter = {
       ...baseFilter,
-      ...(isAdmin && restrictToMe ? { assignedTo: req.user._id } : {}),
+      ...(isAdmin && restrictToMe ? { responsavel: req.user._id } : {}),
     };
 
     let tasks = await Task.find(listFilter)
-      .populate("assignedTo", "name email profileImageUrl")
+      .populate("responsavel", "name email profileImageUrl")
       .populate("cliente", "name");
 
     tasks = await Promise.all(
@@ -76,7 +76,7 @@ const getTasks = async (req, res) => {
 
     const summaryBaseFilter = {
       ...baseFilter,
-      ...(isAdmin && restrictToMe ? { assignedTo: req.user._id } : {}),
+      ...(isAdmin && restrictToMe ? { responsavel: req.user._id } : {}),
     };
 
     const allTasks = await Task.countDocuments(summaryBaseFilter);
@@ -116,7 +116,7 @@ const getTasks = async (req, res) => {
 const getTaskById = async (req, res) => {
   try {
     const task = await Task.findById(req.params.id)
-      .populate("assignedTo", "name email profileImageUrl")
+      .populate("responsavel", "name email profileImageUrl")
       .populate("cliente", "name");
 
     if (!task) return res.status(404).json({ message: "Task not found" });
@@ -130,13 +130,13 @@ const getTaskById = async (req, res) => {
         : null;
 
       if (!userEmpresaId || !taskClienteId || userEmpresaId !== taskClienteId) {
-        return res.status(403).json({ message: "Access denied" });
+        return res.status(403).json({ message: "Acesso negado!" });
       }
     }
 
     res.json(task);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Erro:", error: error.message });
   }
 };
 
@@ -151,15 +151,15 @@ const createTask = async (req, res) => {
       priority,
       classification,
       dueDate,
-      assignedTo,
+      responsavel,
       itens,
       cliente,
     } = req.body;
 
-    if (!Array.isArray(assignedTo)) {
+    if (!Array.isArray(responsavel)) {
       return res
         .status(400)
-        .json({ message: "assignedTo must be an array of user IDs" });
+        .json({ message: "responsavel must be an array of user IDs" });
     }
 
     let clienteId = null;
@@ -180,7 +180,7 @@ const createTask = async (req, res) => {
       priority,
       classification,
       dueDate,
-      assignedTo,
+      responsavel,
       createdBy: req.user._id,
       itens,
       cliente: clienteId,
@@ -223,13 +223,13 @@ const updateTask = async (req, res) => {
       }
     }
 
-    if (req.body.assignedTo) {
-      if (!Array.isArray(req.body.assignedTo)) {
+    if (req.body.responsavel) {
+      if (!Array.isArray(req.body.responsavel)) {
         return res
           .status(400)
-          .json({ message: "assignedTo must be an array of user IDs" });
+          .json({ message: "responsavel must be an array of user IDs" });
       }
-      task.assignedTo = req.body.assignedTo;
+      task.responsavel = req.body.responsavel;
     }
 
     const updatedTask = await task.save();
@@ -274,7 +274,7 @@ const updateTaskStatus = async (req, res) => {
       }
     }
 
-    const isAssigned = task.assignedTo.some(
+    const isAssigned = task.responsavel.some(
       (userId) => userId.toString() === req.user._id.toString()
     );
 
@@ -324,7 +324,7 @@ const updateTaskChecklist = async (req, res) => {
       }
     }
 
-    if (!task.assignedTo.includes(req.user._id) && req.user.role !== "admin") {
+    if (!task.responsavel.includes(req.user._id) && req.user.role !== "admin") {
       return res
         .status(403)
         .json({ message: "Not authorized to update checklist" });
@@ -351,7 +351,7 @@ const updateTaskChecklist = async (req, res) => {
 
     await task.save();
     const updatedTask = await Task.findById(req.params.id).populate(
-      "assignedTo",
+      "responsavel",
       "name email profileImageUrl"
     );
 
@@ -458,9 +458,9 @@ const getDashboardData = async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(10)
       .select(
-        "title status priority classification dueDate createdAt assignedTo"
+        "title status priority classification dueDate createdAt responsavel"
       )
-      .populate("assignedTo", "name profileImageUrl");
+      .populate("responsavel", "name profileImageUrl");
 
     const frameworks = ["NIST CSF", "ISO 27001"];
     const statusByFrameworkRaw = await Task.aggregate([
@@ -798,10 +798,10 @@ const getDashboardData = async (req, res) => {
 
     const tasksByUserAgg = await Task.aggregate([
       { $match: baseMatch },
-      { $unwind: "$assignedTo" },
+      { $unwind: "$responsavel" },
       {
         $group: {
-          _id: "$assignedTo",
+          _id: "$responsavel",
           Pending: { $sum: { $cond: [{ $eq: ["$status", "Pending"] }, 1, 0] } },
           InProgress: {
             $sum: { $cond: [{ $eq: ["$status", "In Progress"] }, 1, 0] },
@@ -880,8 +880,8 @@ const getUserDashboardData = async (req, res) => {
     const empresaId = req.user.empresa || null;
 
     const baseMatch = empresaId
-      ? { assignedTo: userId, cliente: empresaId }
-      : { assignedTo: userId };
+      ? { responsavel: userId, cliente: empresaId }
+      : { responsavel: userId };
 
     const totalTasks = await Task.countDocuments(baseMatch);
     const pendingTasks = await Task.countDocuments({
@@ -928,9 +928,9 @@ const getUserDashboardData = async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(10)
       .select(
-        "title status priority classification dueDate createdAt assignedTo"
+        "title status priority classification dueDate createdAt responsavel"
       )
-      .populate("assignedTo", "name profileImageUrl");
+      .populate("responsavel", "name profileImageUrl");
 
     res.status(200).json({
       statistics: {

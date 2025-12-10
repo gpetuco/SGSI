@@ -32,7 +32,7 @@ const Column = ({ title, tasks, onOpen }) => {
                 progress={item.progress}
                 createdAt={item.createdAt}
                 dueDate={item.dueDate}
-                assignedTo={item.assignedTo?.map((p) => p.profileImageUrl)}
+                responsavel={item.responsavel?.map((p) => p.profileImageUrl)}
                 completedTodoCount={item.completedTodoCount || 0}
                 itens={item.itens || []}
                 clienteName={item.cliente?.name}

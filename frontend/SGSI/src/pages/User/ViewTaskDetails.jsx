@@ -124,7 +124,7 @@ const ViewTaskDetails = () => {
                   </label>
                   <FotosUsuarios
                     avatars={
-                      task?.assignedTo?.map((item) => item?.profileImageUrl) ||
+                      task?.responsavel?.map((item) => item?.profileImageUrl) ||
                       []
                     }
                     maxVisible={5}

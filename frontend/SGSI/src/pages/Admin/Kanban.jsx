@@ -33,7 +33,7 @@ const Column = ({ title, tasks, onOpen }) => {
                 progress={item.progress}
                 createdAt={item.createdAt}
                 dueDate={item.dueDate}
-                assignedTo={item.assignedTo?.map((p) => p.profileImageUrl)}
+                responsavel={item.responsavel?.map((p) => p.profileImageUrl)}
                 completedTodoCount={item.completedTodoCount || 0}
                 itens={item.itens || []}
                 clienteName={item.cliente?.name}
@@ -68,7 +68,7 @@ const Kanban = () => {
       const params = {
         status: filterStatus === "All" ? "" : filterStatus,
       };
-      if (selectedUser !== "All") params.assignedTo = selectedUser;
+      if (selectedUser !== "All") params.responsavel = selectedUser;
       if (selectedCompany !== "All") params.cliente = selectedCompany;
 
       const response = await axiosReq.get(API_PATHS.TASKS.GET_ALL_TASKS, {

@@ -34,7 +34,7 @@ const ManageTasks = () => {
       };
       if (selectedFramework !== "All")
         params.classification = selectedFramework;
-      if (selectedUser !== "All") params.assignedTo = selectedUser;
+      if (selectedUser !== "All") params.responsavel = selectedUser;
       if (selectedCompany !== "All") params.cliente = selectedCompany;
 
       const response = await axiosReq.get(API_PATHS.TASKS.GET_ALL_TASKS, {
@@ -206,7 +206,7 @@ const ManageTasks = () => {
               progress={item.progress}
               createdAt={item.createdAt}
               dueDate={item.dueDate}
-              assignedTo={item.assignedTo?.map(
+              responsavel={item.responsavel?.map(
                 (member) => member.profileImageUrl
               )}
               completedTodoCount={item.completedTodoCount || 0}

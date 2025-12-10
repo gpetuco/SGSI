@@ -13,7 +13,7 @@ const Acao = ({
   progress,
   createdAt,
   dueDate,
-  assignedTo,
+  responsavel,
   completedTodoCount,
   itens,
   onClick,
@@ -157,7 +157,7 @@ const Acao = ({
 
           <div className="flex items-center justify-between mt-3">
             {user?.role === "admin" && (
-              <FotosUsuarios avatars={assignedTo || []} />
+              <FotosUsuarios avatars={responsavel || []} />
             )}
           </div>
         </div>

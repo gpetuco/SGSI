@@ -48,7 +48,7 @@ const Iso27001Tasks = () => {
         status: filterStatus === "All" ? "" : filterStatus,
         classification: "ISO 27001",
       };
-      if (selectedUser !== "All") params.assignedTo = selectedUser;
+      if (selectedUser !== "All") params.responsavel = selectedUser;
       if (selectedCompany !== "All") params.cliente = selectedCompany;
       const response = await axiosReq.get(API_PATHS.TASKS.GET_ALL_TASKS, {
         params,
@@ -207,7 +207,7 @@ const Iso27001Tasks = () => {
                 progress={item.progress}
                 createdAt={item.createdAt}
                 dueDate={item.dueDate}
-                assignedTo={item.assignedTo?.map((a) => a.profileImageUrl)}
+                responsavel={item.responsavel?.map((a) => a.profileImageUrl)}
                 completedTodoCount={item.completedTodoCount || 0}
                 itens={item.itens || []}
                 clienteName={item.cliente?.name}

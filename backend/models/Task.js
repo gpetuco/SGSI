@@ -25,7 +25,7 @@ const taskSchema = new mongoose.Schema(
       default: "Pending",
     },
     dueDate: { type: Date, required: true },
-    assignedTo: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    responsavel: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     cliente: {
       type: mongoose.Schema.Types.ObjectId,
