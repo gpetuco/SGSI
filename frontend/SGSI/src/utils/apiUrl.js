@@ -20,17 +20,17 @@ export const API_PATHS = {
     DELETE_USER: (userId) => `/api/users/${userId}`,
   },
 
-  TASKS: {
-    GET_DASHBOARD_DATA: "/api/tasks/dashboard-data",
-    GET_USER_DASHBOARD_DATA: "/api/tasks/user-dashboard-data",
-    GET_ALL_TASKS: "/api/tasks",
-    GET_TASK_BY_ID: (taskId) => `/api/tasks/${taskId}`,
-    CREATE_TASK: "/api/tasks",
-    UPDATE_TASK: (taskId) => `/api/tasks/${taskId}`,
-    DELETE_TASK: (taskId) => `/api/tasks/${taskId}`,
+  ACOES: {
+    GET_DASHBOARD_DATA: "/api/acoes/dashboard-data",
+    GET_USER_DASHBOARD_DATA: "/api/acoes/user-dashboard-data",
+    GET_ALL_ACOES: "/api/acoes",
+    GET_TASK_BY_ID: (acaoId) => `/api/acoes/${acaoId}`,
+    CREATE_TASK: "/api/acoes",
+    UPDATE_TASK: (acaoId) => `/api/acoes/${acaoId}`,
+    DELETE_TASK: (acaoId) => `/api/acoes/${acaoId}`,
 
-    UPDATE_TASK_STATUS: (taskId) => `/api/tasks/${taskId}/status`,
-    UPDATE_TODO_CHECKLIST: (taskId) => `/api/tasks/${taskId}/todo`,
+    UPDATE_TASK_STATUS: (acaoId) => `/api/acoes/${acaoId}/status`,
+    UPDATE_TODO_CHECKLIST: (acaoId) => `/api/acoes/${acaoId}/todo`,
   },
 
   IMAGE: {

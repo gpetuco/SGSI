@@ -5,7 +5,7 @@ const todoSchema = new mongoose.Schema({
   concluido: { type: Boolean, default: false },
 });
 
-const taskSchema = new mongoose.Schema(
+const acaoSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     descricao: { type: String },
@@ -16,8 +16,8 @@ const taskSchema = new mongoose.Schema(
     },
     prioridade: {
       type: String,
-      enum: ["Low", "Medium", "High"],
-      default: "Medium",
+      enum: ["Baixa", "Media", "Alta"],
+      default: "Media",
     },
     status: {
       type: String,
@@ -39,7 +39,7 @@ const taskSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-taskSchema.pre("save", function (next) {
+acaoSchema.pre("save", function (next) {
   try {
     const hasChecklist = Array.isArray(this.itens) && this.itens.length > 0;
     if (hasChecklist) {
@@ -72,4 +72,4 @@ taskSchema.pre("save", function (next) {
   next();
 });
 
-module.exports = mongoose.model("Task", taskSchema);
+module.exports = mongoose.model("Acao", acaoSchema);

@@ -9,20 +9,20 @@ import ListaSearch from "../../components/Inputs/ListaSearch";
 import { PRIORIDADE_DATA } from "../../utils/menus";
 import { UserContext } from "../../context/userContext";
 
-const Column = ({ title, tasks, onOpen }) => {
+const Column = ({ title, acoes, onOpen }) => {
   return (
     <div className="bg-white border border-gray-200/60 rounded-lg p-3 flex flex-col">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-semibold text-gray-700">{title}</h3>
-        <span className="text-xs text-gray-500">{tasks.length}</span>
+        <span className="text-xs text-gray-500">{acoes.length}</span>
       </div>
       <div className="flex-1 flex flex-col gap-3 max-h-[calc(100vh-260px)] overflow-y-auto pr-1">
-        {tasks.length === 0 ? (
+        {acoes.length === 0 ? (
           <div className="text-xs text-gray-400 py-6 text-center border border-dashed border-gray-200 rounded">
             Nenhuma ação encontrada.
           </div>
         ) : (
-          tasks.map((item) => (
+          acoes.map((item) => (
             <div key={item._id} className="h-[280px]">
               <Acao
                 title={item.title}
@@ -49,7 +49,7 @@ const Column = ({ title, tasks, onOpen }) => {
 };
 
 const Kanban = () => {
-  const [tasks, setTasks] = useState([]);
+  const [acoes, setAcoes] = useState([]);
   const [filterStatus, setFilterStatus] = useState("All");
   const [selectedUser, setSelectedUser] = useState("All");
   const [selectedPrioridade, setSelectedPrioridade] = useState("All");
@@ -63,7 +63,7 @@ const Kanban = () => {
   const navigate = useNavigate();
   const { user } = React.useContext(UserContext);
 
-  const getAllTasks = async () => {
+  const getAllAcoes = async () => {
     try {
       const params = {
         status: filterStatus === "All" ? "" : filterStatus,
@@ -71,16 +71,16 @@ const Kanban = () => {
       if (selectedUser !== "All") params.responsavel = selectedUser;
       if (selectedCompany !== "All") params.cliente = selectedCompany;
 
-      const response = await axiosReq.get(API_PATHS.TASKS.GET_ALL_TASKS, {
+      const response = await axiosReq.get(API_PATHS.ACOES.GET_ALL_ACOES, {
         params,
       });
-      setTasks(response.data?.tasks || []);
+      setAcoes(response.data?.acoes || []);
     } catch (error) {
-      console.error("Error fetching tasks:", error);
+      console.error("Error fetching acoes:", error);
     }
   };
 
-  // initial tasks fetch happens via dependency effect below
+  // initial acoes fetch happens via dependency effect below
 
   // fetch users for dropdown
   const fetchUsers = async () => {
@@ -122,28 +122,28 @@ const Kanban = () => {
   }, [user]);
 
   useEffect(() => {
-    getAllTasks();
+    getAllAcoes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterStatus, selectedUser, selectedCompany]);
 
   const grouped = useMemo(() => {
     const source =
       selectedPrioridade === "All"
-        ? tasks
-        : tasks.filter((t) => t.prioridade === selectedPrioridade);
+        ? acoes
+        : acoes.filter((t) => t.prioridade === selectedPrioridade);
     const by = { "NIST CSF": [], "ISO 27001": [] };
     for (const t of source) {
       const key = t.classification;
       if (by[key]) by[key].push(t);
     }
     return by;
-  }, [tasks, selectedPrioridade]);
+  }, [acoes, selectedPrioridade]);
 
-  const handleOpen = (taskId) => {
+  const handleOpen = (acaoId) => {
     if (user?.role === "admin") {
-      navigate(`/admin/acao-modal`, { state: { taskId } });
+      navigate(`/admin/acao-modal`, { state: { acaoId } });
     } else {
-      navigate(`/user/task-details/${taskId}`);
+      navigate(`/user/acao-details/${acaoId}`);
     }
   };
 
@@ -213,12 +213,12 @@ const Kanban = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <Column
             title="NIST CSF"
-            tasks={grouped["NIST CSF"]}
+            acoes={grouped["NIST CSF"]}
             onOpen={handleOpen}
           />
           <Column
             title="ISO 27001"
-            tasks={grouped["ISO 27001"]}
+            acoes={grouped["ISO 27001"]}
             onOpen={handleOpen}
           />
         </div>

@@ -31,7 +31,7 @@ const Navbar = ({ activeMenu }) => {
         </button>
 
         <h2 className="text-lg font-medium text-black dark:text-white">
-          Task Manager
+          Acao Manager
         </h2>
       </div>
 

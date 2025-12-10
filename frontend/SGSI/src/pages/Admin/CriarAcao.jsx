@@ -42,22 +42,22 @@ const getStatusLabel = (status) => {
 
 const CriarAcao = () => {
   const location = useLocation();
-  const { taskId } = location.state || {};
+  const { acaoId } = location.state || {};
   const navigate = useNavigate();
   const [openFormModal, setOpenFormModal] = useState(true);
 
-  const [taskData, setTaskData] = useState({
+  const [acaoData, setAcaoData] = useState({
     title: "",
     descricao: "",
     classification: "NIST CSF",
-    prioridade: "Low",
+    prioridade: "Baixa",
     dueDate: null,
     responsavel: [],
     cliente: "",
     itens: [],
   });
 
-  const [currentTask, setCurrentTask] = useState(null);
+  const [currentAcao, setCurrentAcao] = useState(null);
   const [checklistEditMode, setChecklistEditMode] = useState(false);
   const editChecklistRef = useRef(null);
   const editInputsRef = useRef([]);
@@ -67,19 +67,19 @@ const CriarAcao = () => {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false); // salvar (criar/atualizar)
-  const [loadingTask, setLoadingTask] = useState(!!taskId); // carregar dados iniciais em modo edição
+  const [loadingAcao, setLoadingAcao] = useState(!!acaoId); // carregar dados iniciais em modo edição
 
   const [openExcluir, setOpenExcluir] = useState(false);
 
   // Helpers for NIST CSF / ISO 27001 cascata
   const isCascadeFramework =
-    taskData.classification === "NIST CSF" ||
-    taskData.classification === "ISO 27001";
+    acaoData.classification === "NIST CSF" ||
+    acaoData.classification === "ISO 27001";
 
   const frameworkData =
-    taskData.classification === "NIST CSF"
+    acaoData.classification === "NIST CSF"
       ? NIST_CSF_DATA
-      : taskData.classification === "ISO 27001"
+      : acaoData.classification === "ISO 27001"
       ? ISO_27001_DATA
       : null;
 
@@ -91,8 +91,8 @@ const CriarAcao = () => {
     : [];
 
   const selectedFunction =
-    frameworkData && taskData.title
-      ? frameworkData.functions.find((f) => f.name === taskData.title)
+    frameworkData && acaoData.title
+      ? frameworkData.functions.find((f) => f.name === acaoData.title)
       : null;
 
   const categoryOptions = selectedFunction
@@ -100,8 +100,8 @@ const CriarAcao = () => {
     : [];
 
   const selectedCategory =
-    selectedFunction && taskData.descricao
-      ? selectedFunction.categories.find((c) => c.name === taskData.descricao)
+    selectedFunction && acaoData.descricao
+      ? selectedFunction.categories.find((c) => c.name === acaoData.descricao)
       : null;
 
   const subcategoryOptions = selectedCategory
@@ -112,12 +112,12 @@ const CriarAcao = () => {
     : [];
 
   const handleValueChange = (key, value) => {
-    setTaskData((prevData) => ({ ...prevData, [key]: value }));
+    setAcaoData((prevData) => ({ ...prevData, [key]: value }));
   };
 
   const handleClassificationChange = (value) => {
     // reset cascade when classification changes
-    setTaskData((prev) => ({
+    setAcaoData((prev) => ({
       ...prev,
       classification: value,
       title: "",
@@ -128,7 +128,7 @@ const CriarAcao = () => {
 
   const handleNistTitleChange = (value) => {
     // when function changes, clear dependent fields
-    setTaskData((prev) => ({
+    setAcaoData((prev) => ({
       ...prev,
       title: value,
       descricao: "",
@@ -138,7 +138,7 @@ const CriarAcao = () => {
 
   const handleNistDescricaoChange = (value) => {
     // when category changes, clear checklist selections
-    setTaskData((prev) => ({
+    setAcaoData((prev) => ({
       ...prev,
       descricao: value,
       itens: [],
@@ -147,11 +147,11 @@ const CriarAcao = () => {
 
   const clearData = () => {
     //reset form
-    setTaskData({
+    setAcaoData({
       title: "",
       descricao: "",
       classification: "NIST CSF",
-      prioridade: "Low",
+      prioridade: "Baixa",
       dueDate: null,
       responsavel: [],
       cliente: "",
@@ -159,19 +159,19 @@ const CriarAcao = () => {
     });
   };
 
-  // Create Task
-  const createTask = async () => {
+  // Create Acao
+  const createAcao = async () => {
     setLoading(true);
 
     try {
-      const todolist = taskData.itens?.map((item) => ({
+      const todolist = acaoData.itens?.map((item) => ({
         text: item,
         concluido: false,
       }));
 
-      const response = await axiosReq.post(API_PATHS.TASKS.CREATE_TASK, {
-        ...taskData,
-        dueDate: new Date(taskData.dueDate).toISOString(),
+      const response = await axiosReq.post(API_PATHS.ACOES.CREATE_TASK, {
+        ...acaoData,
+        dueDate: new Date(acaoData.dueDate).toISOString(),
         itens: todolist,
       });
 
@@ -179,37 +179,37 @@ const CriarAcao = () => {
 
       clearData();
     } catch (error) {
-      console.error("Error creating task:", error);
+      console.error("Error creating acao:", error);
       setLoading(false);
     } finally {
       setLoading(false);
     }
   };
 
-  // Update Task
-  const updateTask = async () => {
+  // Update Acao
+  const updateAcao = async () => {
     setLoading(true);
 
     try {
-      const todolist = taskData.itens?.map((item) => {
-        const prevItens = currentTask?.itens || [];
-        const matchedTask = prevItens.find((task) => task.text == item);
+      const todolist = acaoData.itens?.map((item) => {
+        const prevItens = currentAcao?.itens || [];
+        const matchedAcao = prevItens.find((acao) => acao.text == item);
 
         return {
           text: item,
-          concluido: matchedTask ? matchedTask.concluido : false,
+          concluido: matchedAcao ? matchedAcao.concluido : false,
         };
       });
 
-      const response = await axiosReq.put(API_PATHS.TASKS.UPDATE_TASK(taskId), {
-        ...taskData,
-        dueDate: new Date(taskData.dueDate).toISOString(),
+      const response = await axiosReq.put(API_PATHS.ACOES.UPDATE_TASK(acaoId), {
+        ...acaoData,
+        dueDate: new Date(acaoData.dueDate).toISOString(),
         itens: todolist,
       });
 
       toast.success("Ação salva com sucesso!");
     } catch (error) {
-      console.error("Error creating task:", error);
+      console.error("Error creating acao:", error);
       setLoading(false);
     } finally {
       setLoading(false);
@@ -218,22 +218,22 @@ const CriarAcao = () => {
 
   // Toggle a checklist item concluido state (update status accordingly)
   const toggleChecklistItem = async (index) => {
-    if (!taskId) return;
+    if (!acaoId) return;
     try {
-      const next = Array.isArray(currentTask?.itens)
-        ? [...currentTask.itens]
+      const next = Array.isArray(currentAcao?.itens)
+        ? [...currentAcao.itens]
         : [];
       if (!next[index]) return;
       next[index] = { ...next[index], concluido: !next[index].concluido };
 
       const response = await axiosReq.put(
-        API_PATHS.TASKS.UPDATE_TODO_CHECKLIST(taskId),
+        API_PATHS.ACOES.UPDATE_TODO_CHECKLIST(acaoId),
         { itens: next }
       );
       if (response.status === 200) {
-        const updated = response.data?.task;
-        setCurrentTask(updated);
-        setTaskData((prev) => ({
+        const updated = response.data?.acao;
+        setCurrentAcao(updated);
+        setAcaoData((prev) => ({
           ...prev,
           itens: Array.isArray(updated?.itens)
             ? updated.itens.map((i) => i.text)
@@ -249,73 +249,73 @@ const CriarAcao = () => {
     setError(null);
 
     // Input validation
-    if (!taskData.title.trim()) {
+    if (!acaoData.title.trim()) {
       setError("Título é obrigatório.");
       return;
     }
-    if (!taskData.descricao.trim()) {
+    if (!acaoData.descricao.trim()) {
       setError("Descrição é obrigatória.");
       return;
     }
-    if (!taskData.cliente) {
+    if (!acaoData.cliente) {
       setError("Selecione um cliente.");
       return;
     }
-    if (!taskData.dueDate) {
+    if (!acaoData.dueDate) {
       setError("Data Prevista é obrigatório.");
       return;
     }
 
-    if (taskData.responsavel?.length === 0) {
+    if (acaoData.responsavel?.length === 0) {
       setError("Ação não atribuída a nenhum responsável.");
       return;
     }
 
-    if (taskData.itens?.length === 0) {
+    if (acaoData.itens?.length === 0) {
       setError("Adicione pelo menos um item.");
       return;
     }
 
-    if (taskId) {
-      updateTask();
+    if (acaoId) {
+      updateAcao();
       return;
     }
 
-    createTask();
+    createAcao();
   };
 
-  // get Task info by ID
-  const getTaskDetailsByID = async () => {
+  // get Acao info by ID
+  const getAcaoDetailsByID = async () => {
     try {
-      setLoadingTask(true);
+      setLoadingAcao(true);
       const response = await axiosReq.get(
-        API_PATHS.TASKS.GET_TASK_BY_ID(taskId)
+        API_PATHS.ACOES.GET_TASK_BY_ID(acaoId)
       );
 
       if (response.data) {
-        const taskInfo = response.data;
-        setCurrentTask(taskInfo);
+        const acaoInfo = response.data;
+        setCurrentAcao(acaoInfo);
 
-        setTaskData((prevState) => ({
-          title: taskInfo.title,
-          descricao: taskInfo.descricao,
-          classification: taskInfo.classification || "NIST CSF",
-          prioridade: taskInfo.prioridade,
-          dueDate: taskInfo.dueDate
-            ? moment(taskInfo.dueDate).format("YYYY-MM-DD")
+        setAcaoData((prevState) => ({
+          title: acaoInfo.title,
+          descricao: acaoInfo.descricao,
+          classification: acaoInfo.classification || "NIST CSF",
+          prioridade: acaoInfo.prioridade,
+          dueDate: acaoInfo.dueDate
+            ? moment(acaoInfo.dueDate).format("YYYY-MM-DD")
             : null,
-          responsavel: taskInfo?.responsavel?.map((item) => item?._id) || [],
+          responsavel: acaoInfo?.responsavel?.map((item) => item?._id) || [],
           cliente:
-            (taskInfo?.cliente && taskInfo?.cliente?._id) ||
-            taskInfo?.cliente ||
+            (acaoInfo?.cliente && acaoInfo?.cliente?._id) ||
+            acaoInfo?.cliente ||
             "",
-          itens: taskInfo?.itens?.map((item) => item?.text) || [],
+          itens: acaoInfo?.itens?.map((item) => item?.text) || [],
         }));
       }
     } catch (error) {
       console.error("Error fetching users:", error);
     } finally {
-      setLoadingTask(false);
+      setLoadingAcao(false);
     }
   };
 
@@ -359,23 +359,23 @@ const CriarAcao = () => {
   }, [checklistEditMode, editFocusIndex]);
 
   const commitChecklistChanges = async (nextTexts) => {
-    if (!taskId) return;
+    if (!acaoId) return;
     try {
-      const old = Array.isArray(currentTask?.itens) ? currentTask.itens : [];
+      const old = Array.isArray(currentAcao?.itens) ? currentAcao.itens : [];
       const byText = new Map(old.map((o) => [o.text, !!o.concluido]));
       const source = Array.isArray(nextTexts)
         ? nextTexts
-        : taskData?.itens || [];
+        : acaoData?.itens || [];
       const updated = source.map((txt, idx) => ({
         text: txt,
         concluido: byText.has(txt) ? byText.get(txt) : !!old[idx]?.concluido,
       }));
       const res = await axiosReq.put(
-        API_PATHS.TASKS.UPDATE_TODO_CHECKLIST(taskId),
+        API_PATHS.ACOES.UPDATE_TODO_CHECKLIST(acaoId),
         { itens: updated }
       );
       if (res.status === 200) {
-        setCurrentTask(res.data?.task);
+        setCurrentAcao(res.data?.acao);
       }
     } catch (e) {
       // ignore
@@ -387,7 +387,7 @@ const CriarAcao = () => {
   };
 
   const handleEditItemChange = (index, value) => {
-    setTaskData((prev) => {
+    setAcaoData((prev) => {
       const next = [...(prev.itens || [])];
       next[index] = value;
       return { ...prev, itens: next };
@@ -395,10 +395,10 @@ const CriarAcao = () => {
   };
 
   const enterEditAtIndex = (index) => {
-    setTaskData((prev) => ({
+    setAcaoData((prev) => ({
       ...prev,
-      itens: Array.isArray(currentTask?.itens)
-        ? currentTask.itens.map((i) => i.text)
+      itens: Array.isArray(currentAcao?.itens)
+        ? currentAcao.itens.map((i) => i.text)
         : prev.itens,
     }));
     setSuppressOutsideOnce(true);
@@ -407,7 +407,7 @@ const CriarAcao = () => {
   };
 
   const handleDeleteItem = (index) => {
-    setTaskData((prev) => {
+    setAcaoData((prev) => {
       const next = (prev.itens || []).filter((_, i) => i !== index);
       // Persist immediately in update mode to keep indices aligned
       commitChecklistChanges(next);
@@ -418,7 +418,7 @@ const CriarAcao = () => {
   const handleAddItem = () => {
     const v = (newTodoText || "").trim();
     if (!v) return;
-    setTaskData((prev) => {
+    setAcaoData((prev) => {
       const exists = (prev.itens || []).some((t) => t === v);
       const next = exists ? prev.itens : [...(prev.itens || []), v];
       // Persist immediately in update mode
@@ -430,14 +430,14 @@ const CriarAcao = () => {
 
   // no-op helpers from previous revert
 
-  // Delete Task
-  const deleteTask = async () => {
+  // Delete Acao
+  const deleteAcao = async () => {
     try {
-      await axiosReq.delete(API_PATHS.TASKS.DELETE_TASK(taskId));
+      await axiosReq.delete(API_PATHS.ACOES.DELETE_TASK(acaoId));
 
       setOpenExcluir(false);
       toast.success("Ação excluída com sucesso!");
-      navigate("/admin/tasks");
+      navigate("/admin/acoes");
     } catch (error) {
       console.error(
         "Error deleting:",
@@ -447,13 +447,13 @@ const CriarAcao = () => {
   };
 
   useEffect(() => {
-    if (taskId) {
-      getTaskDetailsByID(taskId);
+    if (acaoId) {
+      getAcaoDetailsByID(acaoId);
     }
 
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [taskId]);
+  }, [acaoId]);
 
   const closeAndGoBack = () => {
     setOpenFormModal(false);
@@ -462,9 +462,9 @@ const CriarAcao = () => {
     }, 0);
   };
 
-  if (taskId && loadingTask && !currentTask) {
+  if (acaoId && loadingAcao && !currentAcao) {
     return (
-      <DashboardLayout activeMenu="Create Task">
+      <DashboardLayout activeMenu="Create Acao">
         <Modal
           isOpen={openFormModal}
           onClose={closeAndGoBack}
@@ -487,7 +487,7 @@ const CriarAcao = () => {
   }
 
   return (
-    <DashboardLayout activeMenu="Create Task">
+    <DashboardLayout activeMenu="Create Acao">
       <Modal
         isOpen={openFormModal}
         onClose={closeAndGoBack}
@@ -508,16 +508,16 @@ const CriarAcao = () => {
         <div className="grid grid-cols-1 mt-1">
           <div className="form-card">
             <div className="flex items-center justify-between">
-              {taskId && (
+              {acaoId && (
                 <div
                   className={`text-[11px] md:text-[13px] font-medium ${getStatusTagColor(
-                    currentTask?.status || "Pendente"
+                    currentAcao?.status || "Pendente"
                   )} px-3 py-1 rounded`}
                 >
-                  {getStatusLabel(currentTask?.status || "Pendente")}
+                  {getStatusLabel(currentAcao?.status || "Pendente")}
                 </div>
               )}
-              {taskId && (
+              {acaoId && (
                 <button
                   className="flex items-center gap-1.5 text-[13px] font-medium text-rose-500 bg-rose-50 rounded px-2 py-1 border border-rose-100 hover:border-rose-300 cursor-pointer"
                   onClick={() => setOpenExcluir(true)}
@@ -535,7 +535,7 @@ const CriarAcao = () => {
 
                 <Lista
                   options={CLASSIFICATION_DATA}
-                  value={taskData.classification}
+                  value={acaoData.classification}
                   onChange={(value) => handleClassificationChange(value)}
                   placeholder="Select Classification"
                 />
@@ -548,7 +548,7 @@ const CriarAcao = () => {
 
                 <Lista
                   options={PRIORIDADE_DATA}
-                  value={taskData.prioridade}
+                  value={acaoData.prioridade}
                   onChange={(value) => handleValueChange("prioridade", value)}
                   placeholder="Selecione a prioridade"
                 />
@@ -562,7 +562,7 @@ const CriarAcao = () => {
                 <input
                   placeholder="Create App UI"
                   className="form-input"
-                  value={taskData.dueDate}
+                  value={acaoData.dueDate}
                   onChange={({ target }) =>
                     handleValueChange("dueDate", target.value)
                   }
@@ -580,7 +580,7 @@ const CriarAcao = () => {
                 <div className="relative">
                   <Lista
                     options={functionOptions}
-                    value={taskData.title}
+                    value={acaoData.title}
                     onChange={(value) => handleNistTitleChange(value)}
                     placeholder="Selecione um item"
                   />
@@ -589,7 +589,7 @@ const CriarAcao = () => {
                 <input
                   placeholder="Create App UI"
                   className="form-input"
-                  value={taskData.title}
+                  value={acaoData.title}
                   onChange={({ target }) =>
                     handleValueChange("title", target.value)
                   }
@@ -605,14 +605,14 @@ const CriarAcao = () => {
               {isCascadeFramework ? (
                 <div className="relative opacity-100">
                   <div
-                    className={!taskData.title ? "opacity-50" : "opacity-100"}
+                    className={!acaoData.title ? "opacity-50" : "opacity-100"}
                   >
                     <Lista
                       options={categoryOptions}
-                      value={taskData.descricao}
+                      value={acaoData.descricao}
                       onChange={(value) => handleNistDescricaoChange(value)}
                       placeholder={
-                        taskData.title
+                        acaoData.title
                           ? "Selecione um item"
                           : "Selecione Título antes"
                       }
@@ -621,10 +621,10 @@ const CriarAcao = () => {
                 </div>
               ) : (
                 <textarea
-                  placeholder="Describe task"
+                  placeholder="Describe acao"
                   className="form-input"
                   rows={4}
-                  value={taskData.descricao}
+                  value={acaoData.descricao}
                   onChange={({ target }) =>
                     handleValueChange("descricao", target.value)
                   }
@@ -639,9 +639,9 @@ const CriarAcao = () => {
                 </label>
               </div>
 
-              {taskId ? (
+              {acaoId ? (
                 <div className="mt-1" ref={editChecklistRef}>
-                  {(taskData?.itens || []).map((text, index) => (
+                  {(acaoData?.itens || []).map((text, index) => (
                     <div
                       key={`todo_row_${index}`}
                       className="grid grid-cols-[1fr_auto_auto] items-center gap-x-3 mt-2 pr-3"
@@ -659,7 +659,7 @@ const CriarAcao = () => {
                           isCascadeFramework
                             ? undefined
                             : (e) => {
-                                const next = (taskData?.itens || []).map(
+                                const next = (acaoData?.itens || []).map(
                                   (t, i) => (i === index ? e.target.value : t)
                                 );
                                 commitChecklistChanges(next);
@@ -669,7 +669,7 @@ const CriarAcao = () => {
                       />
                       <input
                         type="checkbox"
-                        checked={!!currentTask?.itens?.[index]?.concluido}
+                        checked={!!currentAcao?.itens?.[index]?.concluido}
                         onChange={() => toggleChecklistItem(index)}
                         className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none cursor-pointer"
                       />
@@ -689,7 +689,7 @@ const CriarAcao = () => {
                       <div className="relative">
                         <div
                           className={
-                            !taskData.title || !taskData.descricao
+                            !acaoData.title || !acaoData.descricao
                               ? "opacity-50"
                               : "opacity-100"
                           }
@@ -699,9 +699,9 @@ const CriarAcao = () => {
                             value={newTodoText}
                             onChange={(value) => setNewTodoText(value)}
                             placeholder={
-                              taskData.descricao
+                              acaoData.descricao
                                 ? "Selecione um item"
-                                : taskData.title
+                                : acaoData.title
                                 ? "Selecione Descrição antes"
                                 : "Selecione Título antes"
                             }
@@ -720,7 +720,7 @@ const CriarAcao = () => {
                     <div className="grid grid-cols-[1fr_auto] items-center gap-x-3 mt-2 pr-3">
                       <input
                         type="text"
-                        placeholder="Enter Task"
+                        placeholder="Enter Acao"
                         value={newTodoText}
                         onChange={(e) => setNewTodoText(e.target.value)}
                         className="form-input flex-1 mt-0"
@@ -738,7 +738,7 @@ const CriarAcao = () => {
                 <div className="mt-1">
                   {isCascadeFramework ? (
                     <>
-                      {(taskData?.itens || []).map((text, index) => (
+                      {(acaoData?.itens || []).map((text, index) => (
                         <div
                           key={`todo_row_create_${index}`}
                           className="grid grid-cols-[1fr_auto_auto] items-center gap-x-3 mt-2 pr-3"
@@ -766,7 +766,7 @@ const CriarAcao = () => {
                         <div className="relative">
                           <div
                             className={
-                              !taskData.title || !taskData.descricao
+                              !acaoData.title || !acaoData.descricao
                                 ? "opacity-50"
                                 : "opacity-100"
                             }
@@ -776,9 +776,9 @@ const CriarAcao = () => {
                               value={newTodoText}
                               onChange={(value) => setNewTodoText(value)}
                               placeholder={
-                                taskData.descricao
+                                acaoData.descricao
                                   ? "Selecione um item"
-                                  : taskData.title
+                                  : acaoData.title
                                   ? "Selecione Descrição antes"
                                   : "Selecione Título antes"
                               }
@@ -796,7 +796,7 @@ const CriarAcao = () => {
                     </>
                   ) : (
                     <ItensInput
-                      todoList={taskData?.itens}
+                      todoList={acaoData?.itens}
                       setTodoList={(value) => handleValueChange("itens", value)}
                     />
                   )}
@@ -808,7 +808,7 @@ const CriarAcao = () => {
                 Cliente
               </label>
               <ListaClientes
-                value={taskData.cliente}
+                value={acaoData.cliente}
                 onChange={(value) => handleValueChange("cliente", value)}
               />
             </div>
@@ -819,7 +819,7 @@ const CriarAcao = () => {
               </label>
 
               <ResponsaveisModal
-                selectedUsers={taskData.responsavel}
+                selectedUsers={acaoData.responsavel}
                 setSelectedUsers={(value) => {
                   handleValueChange("responsavel", value);
                 }}
@@ -840,7 +840,7 @@ const CriarAcao = () => {
       >
         <Excluir
           content="Você deseja apagar essa ação?"
-          onDelete={() => deleteTask()}
+          onDelete={() => deleteAcao()}
         />
       </Modal>
     </DashboardLayout>

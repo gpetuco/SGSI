@@ -51,7 +51,7 @@ const Dashboard = () => {
   const [stackedStatusData, setStackedStatusData] = useState([]);
   const [completionPercentData, setCompletionPercentData] = useState([]);
   const [frameworkLineData, setFrameworkLineData] = useState([]);
-  const [tasksByUserData, setTasksByUserData] = useState([]);
+  const [acoesByUserData, setAcoesByUserData] = useState([]);
   const [nistFunctionCompletionData, setNistFunctionCompletionData] = useState(
     []
   );
@@ -63,7 +63,7 @@ const Dashboard = () => {
 
   const prepareChartData = (data) => {
     const dadosAcoes = data?.dadosAcoes || null;
-    const taskPrioridadeLevels = data?.taskPrioridadeLevels || null;
+    const acaoPrioridadeLevels = data?.acaoPrioridadeLevels || null;
 
     const dadosAcoesDetalhes = [
       { status: "Pendente", count: dadosAcoes?.Pendente || 0 },
@@ -74,9 +74,9 @@ const Dashboard = () => {
     setPieChartData(dadosAcoesDetalhes);
 
     const PrioridadeLevelData = [
-      { prioridade: "Baixa", count: taskPrioridadeLevels?.Low || 0 },
-      { prioridade: "Média", count: taskPrioridadeLevels?.Medium || 0 },
-      { prioridade: "Alta", count: taskPrioridadeLevels?.High || 0 },
+      { prioridade: "Baixa", count: acaoPrioridadeLevels?.Baixa || 0 },
+      { prioridade: "Média", count: acaoPrioridadeLevels?.Media || 0 },
+      { prioridade: "Alta", count: acaoPrioridadeLevels?.Alta || 0 },
     ];
 
     setBarChartData(PrioridadeLevelData);
@@ -124,7 +124,7 @@ const Dashboard = () => {
     }));
     setNistFunctionCompletionData(nistCompletion);
 
-    const tbu = (data?.tasksByUser || []).map((i) => ({
+    const tbu = (data?.acoesByUser || []).map((i) => ({
       user: i.user,
       userId: i.userId,
       Pendente: i.Pendente || 0,
@@ -140,7 +140,7 @@ const Dashboard = () => {
     }));
     setIsoControlCompletionData(isoCompletion);
 
-    setTasksByUserData(tbu);
+    setAcoesByUserData(tbu);
   };
 
   const getDashboardData = async () => {
@@ -150,7 +150,7 @@ const Dashboard = () => {
       if (classificationFilter !== "All")
         params.classification = classificationFilter;
 
-      const response = await axiosReq.get(API_PATHS.TASKS.GET_DASHBOARD_DATA, {
+      const response = await axiosReq.get(API_PATHS.ACOES.GET_DASHBOARD_DATA, {
         params,
       });
       if (response.data) {
@@ -166,9 +166,9 @@ const Dashboard = () => {
 
   const onSeeMore = () => {
     if (user?.role === "member") {
-      navigate("/user/tasks");
+      navigate("/user/acoes");
     } else {
-      navigate("/admin/tasks");
+      navigate("/admin/acoes");
     }
   };
 
@@ -591,7 +591,7 @@ const Dashboard = () => {
               <div className="flex items-center justify-between">
                 <h5 className="font-medium">Top 5 (Membros)</h5>
               </div>
-              <StackedStatusByUser data={tasksByUserData} />
+              <StackedStatusByUser data={acoesByUserData} />
             </div>
           </div>
         )}

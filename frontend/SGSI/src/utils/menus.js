@@ -23,19 +23,19 @@ export const SIDE_MENU_DATA = [
     id: "02",
     label: "Ações",
     icon: LuListTodo,
-    path: "/admin/tasks",
+    path: "/admin/acoes",
   },
   {
     id: "02f",
     label: "NIST CSF",
     icon: LuNetwork,
-    path: "/admin/tasks/nist-csf",
+    path: "/admin/acoes/nist-csf",
   },
   {
     id: "02e",
     label: "ISO 27001",
     icon: LuBadgeCheck,
-    path: "/admin/tasks/iso-27001",
+    path: "/admin/acoes/iso-27001",
   },
   {
     id: "02c",
@@ -74,19 +74,19 @@ export const SIDE_MENU_USER_DATA = [
     id: "02",
     label: "Ações",
     icon: LuListTodo,
-    path: "/user/tasks",
+    path: "/user/acoes",
   },
   {
     id: "02f",
     label: "NIST CSF",
     icon: LuNetwork,
-    path: "/user/tasks/nist-csf",
+    path: "/user/acoes/nist-csf",
   },
   {
     id: "02e",
     label: "ISO 27001",
     icon: LuBadgeCheck,
-    path: "/user/tasks/iso-27001",
+    path: "/user/acoes/iso-27001",
   },
   {
     id: "02c",
@@ -103,9 +103,9 @@ export const SIDE_MENU_USER_DATA = [
 ];
 
 export const PRIORIDADE_DATA = [
-  { label: "Baixa", value: "Low" },
-  { label: "Média", value: "Medium" },
-  { label: "Alta", value: "High" },
+  { label: "Baixa", value: "Baixa" },
+  { label: "Média", value: "Media" },
+  { label: "Alta", value: "Alta" },
 ];
 
 export const STATUS_DATA = [

@@ -235,13 +235,13 @@ export const NIST_CSF_DATA = {
           ],
         },
         {
-          name: "Awareness and Training (PR.AT): The organization’s personnel are provided with cybersecurity awareness and training so that they can perform their cybersecurity-related tasks",
+          name: "Awareness and Training (PR.AT): The organization’s personnel are provided with cybersecurity awareness and training so that they can perform their cybersecurity-related acoes",
           subcategories: [
             {
-              name: "PR.AT-01: Personnel are provided with awareness and training so that they possess the knowledge and skills to perform general tasks with cybersecurity risks in mind",
+              name: "PR.AT-01: Personnel are provided with awareness and training so that they possess the knowledge and skills to perform general acoes with cybersecurity risks in mind",
             },
             {
-              name: "PR.AT-02: Individuals in specialized roles are provided with awareness and training so that they possess the knowledge and skills to perform relevant tasks with cybersecurity risks in mind",
+              name: "PR.AT-02: Individuals in specialized roles are provided with awareness and training so that they possess the knowledge and skills to perform relevant acoes with cybersecurity risks in mind",
             },
           ],
         },

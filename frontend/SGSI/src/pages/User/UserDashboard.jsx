@@ -29,7 +29,7 @@ const UserDashboard = () => {
   // Prepare Chart Data
   const prepareChartData = (data) => {
     const dadosAcoes = data?.dadosAcoes || null;
-    const taskPrioridadeLevels = data?.taskPrioridadeLevels || null;
+    const acaoPrioridadeLevels = data?.acaoPrioridadeLevels || null;
 
     const dadosAcoesDetalhes = [
       { status: "Pendente", count: dadosAcoes?.Pendente || 0 },
@@ -40,9 +40,9 @@ const UserDashboard = () => {
     setPieChartData(dadosAcoesDetalhes);
 
     const PrioridadeLevelData = [
-      { prioridade: "Low", count: taskPrioridadeLevels?.Low || 0 },
-      { prioridade: "Medium", count: taskPrioridadeLevels?.Medium || 0 },
-      { prioridade: "High", count: taskPrioridadeLevels?.High || 0 },
+      { prioridade: "Baixa", count: acaoPrioridadeLevels?.Baixa || 0 },
+      { prioridade: "Media", count: acaoPrioridadeLevels?.Media || 0 },
+      { prioridade: "Alta", count: acaoPrioridadeLevels?.Alta || 0 },
     ];
 
     setBarChartData(PrioridadeLevelData);
@@ -51,7 +51,7 @@ const UserDashboard = () => {
   const getDashboardData = async () => {
     try {
       const response = await axiosReq.get(
-        API_PATHS.TASKS.GET_USER_DASHBOARD_DATA
+        API_PATHS.ACOES.GET_USER_DASHBOARD_DATA
       );
       if (response.data) {
         setDashboardData(response.data);
@@ -63,7 +63,7 @@ const UserDashboard = () => {
   };
 
   const onSeeMore = () => {
-    navigate("/admin/tasks");
+    navigate("/admin/acoes");
   };
 
   useEffect(() => {
@@ -97,13 +97,13 @@ const UserDashboard = () => {
 
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-5">
           <Info
-            label="Total Tasks"
+            label="Total Acoes"
             value={formatMilhar(dashboardData?.charts?.dadosAcoes?.All || 0)}
             color="bg-primary"
           />
 
           <Info
-            label="Pendente Tasks"
+            label="Pendente Acoes"
             value={formatMilhar(
               dashboardData?.charts?.dadosAcoes?.Pendente || 0
             )}
@@ -111,7 +111,7 @@ const UserDashboard = () => {
           />
 
           <Info
-            label="Em Andamento Tasks"
+            label="Em Andamento Acoes"
             value={formatMilhar(
               dashboardData?.charts?.dadosAcoes?.EmAndamento || 0
             )}
@@ -132,7 +132,7 @@ const UserDashboard = () => {
         <div>
           <div className="card">
             <div className="flex items-center justify-between">
-              <h5 className="font-medium">Task Distribution</h5>
+              <h5 className="font-medium">Acao Distribution</h5>
             </div>
 
             <PizzaWc data={pieChartData} colors={COLORS} />
@@ -142,7 +142,7 @@ const UserDashboard = () => {
         <div>
           <div className="card">
             <div className="flex items-center justify-between">
-              <h5 className="font-medium">Task Prioridade Levels</h5>
+              <h5 className="font-medium">Acao Prioridade Levels</h5>
             </div>
 
             <BarWc data={barChartData} />

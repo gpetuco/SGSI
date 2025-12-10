@@ -14,7 +14,7 @@ import Modal from "../Modal";
 
 const StackedStatusByUser = ({
   data = [],
-  title = "Tasks by User (Top 5)",
+  title = "Acoes by User (Top 5)",
 }) => {
   const [open, setOpen] = useState(false);
 

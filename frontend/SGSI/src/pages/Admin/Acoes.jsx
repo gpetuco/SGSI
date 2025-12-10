@@ -10,7 +10,7 @@ import { CLASSIFICATION_DATA, PRIORIDADE_DATA } from "../../utils/menus";
 import { UserContext } from "../../context/userContext";
 
 const Acoes = () => {
-  const [allTasks, setAllTasks] = useState([]);
+  const [allAcoes, setAllAcoes] = useState([]);
 
   const [filterStatus, setFilterStatus] = useState("All");
   const [selectedUser, setSelectedUser] = useState("All");
@@ -27,7 +27,7 @@ const Acoes = () => {
   const navigate = useNavigate();
   const { user } = React.useContext(UserContext);
 
-  const getAllTasks = async () => {
+  const getAllAcoes = async () => {
     try {
       const params = {
         status: filterStatus === "All" ? "" : filterStatus,
@@ -37,21 +37,21 @@ const Acoes = () => {
       if (selectedUser !== "All") params.responsavel = selectedUser;
       if (selectedCompany !== "All") params.cliente = selectedCompany;
 
-      const response = await axiosReq.get(API_PATHS.TASKS.GET_ALL_TASKS, {
+      const response = await axiosReq.get(API_PATHS.ACOES.GET_ALL_ACOES, {
         params,
       });
 
-      setAllTasks(response.data?.tasks?.length > 0 ? response.data.tasks : []);
+      setAllAcoes(response.data?.acoes?.length > 0 ? response.data.acoes : []);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
 
-  const handleClick = (taskData) => {
+  const handleClick = (acaoData) => {
     if (user?.role === "admin") {
-      navigate(`/admin/acao-modal`, { state: { taskId: taskData._id } });
+      navigate(`/admin/acao-modal`, { state: { acaoId: acaoData._id } });
     } else {
-      navigate(`/user/task-details/${taskData._id}`);
+      navigate(`/user/acao-details/${acaoData._id}`);
     }
   };
 
@@ -95,7 +95,7 @@ const Acoes = () => {
   }, [user]);
 
   useEffect(() => {
-    getAllTasks(filterStatus);
+    getAllAcoes(filterStatus);
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterStatus, selectedFramework, selectedUser, selectedCompany]);
@@ -193,8 +193,8 @@ const Acoes = () => {
 
         <div className="grid grid-cols-1 gap-4 mt-4">
           {(selectedPrioridade === "All"
-            ? allTasks
-            : allTasks.filter((t) => t.prioridade === selectedPrioridade)
+            ? allAcoes
+            : allAcoes.filter((t) => t.prioridade === selectedPrioridade)
           )?.map((item) => (
             <Acao
               key={item._id}

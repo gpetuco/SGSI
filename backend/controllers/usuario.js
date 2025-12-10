@@ -1,4 +1,4 @@
-const Task = require("../models/Task");
+const Acao = require("../models/Acao");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 
@@ -9,17 +9,17 @@ const getUsers = async (req, res) => {
   try {
     const users = await User.find({ role: "admin" }).select("-password");
 
-    const usersWithTaskCounts = await Promise.all(
+    const usersWithAcaoCounts = await Promise.all(
       users.map(async (user) => {
-        const acoesPendentes = await Task.countDocuments({
+        const acoesPendentes = await Acao.countDocuments({
           responsavel: user._id,
           status: "Pendente",
         });
-        const acoesEmAndamento = await Task.countDocuments({
+        const acoesEmAndamento = await Acao.countDocuments({
           responsavel: user._id,
           status: "Em Andamento",
         });
-        const acoesConcluidas = await Task.countDocuments({
+        const acoesConcluidas = await Acao.countDocuments({
           responsavel: user._id,
           status: "Concluído",
         });
@@ -33,7 +33,7 @@ const getUsers = async (req, res) => {
       })
     );
 
-    res.json(usersWithTaskCounts);
+    res.json(usersWithAcaoCounts);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }

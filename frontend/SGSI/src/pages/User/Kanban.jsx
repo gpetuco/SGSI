@@ -7,20 +7,20 @@ import { useNavigate } from "react-router-dom";
 import Lista from "../../components/Inputs/Lista";
 import { PRIORIDADE_DATA } from "../../utils/menus";
 
-const Column = ({ title, tasks, onOpen }) => {
+const Column = ({ title, acoes, onOpen }) => {
   return (
     <div className="bg-white border border-gray-200/60 rounded-lg p-3">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-semibold text-gray-700">{title}</h3>
-        <span className="text-xs text-gray-500">{tasks.length}</span>
+        <span className="text-xs text-gray-500">{acoes.length}</span>
       </div>
       <div className="flex flex-col gap-3">
-        {tasks.length === 0 ? (
+        {acoes.length === 0 ? (
           <div className="text-xs text-gray-400 py-6 text-center border border-dashed border-gray-200 rounded">
-            No tasks
+            No acoes
           </div>
         ) : (
-          tasks.map((item) => (
+          acoes.map((item) => (
             <div className="h-[280px]">
               <Acao
                 key={item._id}
@@ -48,38 +48,38 @@ const Column = ({ title, tasks, onOpen }) => {
 };
 
 const Kanban = () => {
-  const [tasks, setTasks] = useState([]);
+  const [acoes, setAcoes] = useState([]);
   const [selectedPrioridade, setSelectedPrioridade] = useState("All");
   const navigate = useNavigate();
 
-  const getMyTasks = async () => {
+  const getMyAcoes = async () => {
     try {
-      const response = await axiosReq.get(API_PATHS.TASKS.GET_ALL_TASKS);
-      setTasks(response.data?.tasks || []);
+      const response = await axiosReq.get(API_PATHS.ACOES.GET_ALL_ACOES);
+      setAcoes(response.data?.acoes || []);
     } catch (error) {
-      console.error("Error fetching tasks:", error);
+      console.error("Error fetching acoes:", error);
     }
   };
 
   useEffect(() => {
-    getMyTasks();
+    getMyAcoes();
     return () => {};
   }, []);
 
   const grouped = useMemo(() => {
     const source =
       selectedPrioridade === "All"
-        ? tasks
-        : tasks.filter((t) => t.prioridade === selectedPrioridade);
+        ? acoes
+        : acoes.filter((t) => t.prioridade === selectedPrioridade);
     const by = { Pendente: [], "Em Andamento": [], Concluído: [] };
     for (const t of source) {
       if (by[t.status]) by[t.status].push(t);
     }
     return by;
-  }, [tasks, selectedPrioridade]);
+  }, [acoes, selectedPrioridade]);
 
-  const handleOpen = (taskId) => {
-    navigate(`/user/task-details/${taskId}`);
+  const handleOpen = (acaoId) => {
+    navigate(`/user/acao-details/${acaoId}`);
   };
 
   return (
@@ -108,17 +108,17 @@ const Kanban = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
           <Column
             title="Pendente"
-            tasks={grouped["Pendente"]}
+            acoes={grouped["Pendente"]}
             onOpen={handleOpen}
           />
           <Column
             title="Em Andamento"
-            tasks={grouped["Em Andamento"]}
+            acoes={grouped["Em Andamento"]}
             onOpen={handleOpen}
           />
           <Column
             title="Concluído"
-            tasks={grouped["Concluído"]}
+            acoes={grouped["Concluído"]}
             onOpen={handleOpen}
           />
         </div>

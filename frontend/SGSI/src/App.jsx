@@ -12,8 +12,8 @@ import SignUp from "./pages/Auth/SignUp";
 import Acoes from "./pages/Admin/Acoes";
 import AdminAcaoDetalhar from "./pages/Admin/AcaoDetalhar";
 import AdminKanban from "./pages/Admin/Kanban";
-import Iso27001Tasks from "./pages/Admin/Iso27001Tasks";
-import NistCsfTasks from "./pages/Admin/NistCsfTasks";
+import Iso27001Acoes from "./pages/Admin/Iso27001Acoes";
+import NistCsfAcoes from "./pages/Admin/NistCsfAcoes";
 import CriarAcao from "./pages/Admin/CriarAcao";
 import Membros from "./pages/Admin/Membros";
 import Clientes from "./pages/Admin/Clientes";
@@ -34,30 +34,30 @@ const App = () => {
             {/* Admin Routes */}
             <Route element={<AdminOnlyAcess allowedRoles={["admin"]} />}>
               <Route path="/admin/dashboard" element={<Dashboard />} />
-              <Route path="/admin/tasks" element={<Acoes />} />
+              <Route path="/admin/acoes" element={<Acoes />} />
               <Route path="/admin/kanban" element={<AdminKanban />} />
               <Route
-                path="/admin/tasks/iso-27001"
-                element={<Iso27001Tasks />}
+                path="/admin/acoes/iso-27001"
+                element={<Iso27001Acoes />}
               />
-              <Route path="/admin/tasks/nist-csf" element={<NistCsfTasks />} />
+              <Route path="/admin/acoes/nist-csf" element={<NistCsfAcoes />} />
               <Route path="/admin/acao-modal" element={<CriarAcao />} />
               <Route path="/admin/users" element={<Membros />} />
               <Route path="/admin/clientes" element={<Clientes />} />
               <Route
-                path="/admin/task-details/:id"
+                path="/admin/acao-details/:id"
                 element={<AdminAcaoDetalhar />}
               />
             </Route>
 
             <Route element={<AdminOnlyAcess allowedRoles={["member"]} />}>
               <Route path="/user/dashboard" element={<Dashboard />} />
-              <Route path="/user/tasks" element={<Acoes />} />
+              <Route path="/user/acoes" element={<Acoes />} />
               <Route path="/user/kanban" element={<AdminKanban />} />
-              <Route path="/user/tasks/iso-27001" element={<Iso27001Tasks />} />
-              <Route path="/user/tasks/nist-csf" element={<NistCsfTasks />} />
+              <Route path="/user/acoes/iso-27001" element={<Iso27001Acoes />} />
+              <Route path="/user/acoes/nist-csf" element={<NistCsfAcoes />} />
               <Route
-                path="/user/task-details/:id"
+                path="/user/acao-details/:id"
                 element={<AdminAcaoDetalhar />}
               />
             </Route>

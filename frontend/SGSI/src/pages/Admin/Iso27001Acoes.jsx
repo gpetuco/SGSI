@@ -9,12 +9,12 @@ import ListaSearch from "../../components/Inputs/ListaSearch";
 import { PRIORIDADE_DATA } from "../../utils/menus";
 import { UserContext } from "../../context/userContext";
 
-const NistCsfTasks = () => {
-  const [allTasks, setAllTasks] = useState([]);
+const Iso27001Acoes = () => {
+  const [allAcoes, setAllAcoes] = useState([]);
   const [filterStatus, setFilterStatus] = useState("All");
   const [selectedPrioridade, setSelectedPrioridade] = useState("All");
   const [selectedUser, setSelectedUser] = useState("All");
-  const [selectedFunction, setSelectedFunction] = useState("All");
+  const [selectedControlType, setSelectedControlType] = useState("All");
   const [selectedCompany, setSelectedCompany] = useState("All");
   const [userOptions, setUserOptions] = useState([
     { label: "Todos", value: "All" },
@@ -25,42 +25,46 @@ const NistCsfTasks = () => {
   const navigate = useNavigate();
   const { user } = React.useContext(UserContext);
 
-  const nistFunctionOptions = [
+  const isoControlTypeOptions = [
     { label: "Todos", value: "All" },
-    { label: "Govern", value: "Govern" },
-    { label: "Identify", value: "Identify" },
-    { label: "Protect", value: "Protect" },
-    { label: "Detect", value: "Detect" },
-    { label: "Respond", value: "Respond" },
-    { label: "Recover", value: "Recover" },
+    { label: "Organisational", value: "Organisational" },
+    { label: "People", value: "People" },
+    { label: "Physical", value: "Physical" },
+    { label: "Technological", value: "Technological" },
   ];
 
-  const getNistFunctionFromTitle = (title = "") => {
+  const getIsoControlTypeFromTitle = (title = "") => {
     const upper = String(title).toUpperCase();
-    if (upper.startsWith("GOVERN")) return "Govern";
-    if (upper.startsWith("IDENTIFY")) return "Identify";
-    if (upper.startsWith("PROTECT")) return "Protect";
-    if (upper.startsWith("DETECT")) return "Detect";
-    if (upper.startsWith("RESPOND")) return "Respond";
-    if (upper.startsWith("RECOVER")) return "Recover";
+    if (upper.startsWith("ORGANISATIONAL CONTROLS")) return "Organisational";
+    if (upper.startsWith("PEOPLE CONTROLS")) return "People";
+    if (upper.startsWith("PHYSICAL CONTROLS")) return "Physical";
+    if (upper.startsWith("TECHNOLOGICAL CONTROLS")) return "Technological";
     return null;
   };
 
-  const getAllTasks = async () => {
+  const getAllAcoes = async () => {
     try {
       const params = {
         status: filterStatus === "All" ? "" : filterStatus,
-        classification: "NIST CSF",
+        classification: "ISO 27001",
       };
       if (selectedUser !== "All") params.responsavel = selectedUser;
       if (selectedCompany !== "All") params.cliente = selectedCompany;
-      const response = await axiosReq.get(API_PATHS.TASKS.GET_ALL_TASKS, {
+      const response = await axiosReq.get(API_PATHS.ACOES.GET_ALL_ACOES, {
         params,
       });
 
-      setAllTasks(response.data?.tasks?.length > 0 ? response.data.tasks : []);
+      setAllAcoes(response.data?.acoes?.length > 0 ? response.data.acoes : []);
     } catch (error) {
-      console.error("Error fetching tasks:", error);
+      console.error("Error fetching acoes:", error);
+    }
+  };
+
+  const handleClick = (acaoData) => {
+    if (user?.role === "admin") {
+      navigate(`/admin/acao-modal`, { state: { acaoId: acaoData._id } });
+    } else {
+      navigate(`/user/acao-details/${acaoData._id}`);
     }
   };
 
@@ -81,7 +85,6 @@ const NistCsfTasks = () => {
     }
   };
 
-  // fetch companies for dropdown
   const fetchCompanies = async () => {
     try {
       const res = await axiosReq.get(API_PATHS.COMPANIES.LIST);
@@ -97,14 +100,6 @@ const NistCsfTasks = () => {
     }
   };
 
-  const handleClick = (taskData) => {
-    if (user?.role === "admin") {
-      navigate(`/admin/acao-modal`, { state: { taskId: taskData._id } });
-    } else {
-      navigate(`/user/task-details/${taskData._id}`);
-    }
-  };
-
   useEffect(() => {
     if (user?.role === "admin") {
       fetchUsers();
@@ -113,18 +108,17 @@ const NistCsfTasks = () => {
   }, [user]);
 
   useEffect(() => {
-    getAllTasks(filterStatus);
+    getAllAcoes(filterStatus);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterStatus, selectedUser, selectedCompany]);
 
   return (
-    <DashboardLayout activeMenu="NIST CSF">
+    <DashboardLayout activeMenu="ISO 27001">
       <div className="my-5">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between">
-          <h2 className="text-xl md:text-xl font-medium">NIST CSF</h2>
+          <h2 className="text-xl md:text-xl font-medium">ISO 27001</h2>
         </div>
 
-        {/* Filters: User, Status, Prioridade, NIST Function */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-2 mt-3 w-full lg:w-[1100px]">
           {user?.role === "admin" && (
             <div className="w-full md:w-[210px]">
@@ -167,13 +161,13 @@ const NistCsfTasks = () => {
           </div>
           <div className="w-full md:w-[210px]">
             <label className="text-xs font-medium text-slate-600">
-              Função NIST
+              Tipo de Controle
             </label>
             <Lista
-              options={nistFunctionOptions}
-              value={selectedFunction}
-              onChange={setSelectedFunction}
-              placeholder="Todas as funções"
+              options={isoControlTypeOptions}
+              value={selectedControlType}
+              onChange={setSelectedControlType}
+              placeholder="Todos os tipos"
             />
           </div>
           {user?.role === "admin" && (
@@ -193,12 +187,14 @@ const NistCsfTasks = () => {
 
         <div className="grid grid-cols-1 gap-4 mt-4">
           {(selectedPrioridade === "All"
-            ? allTasks
-            : allTasks.filter((t) => t.prioridade === selectedPrioridade)
+            ? allAcoes
+            : allAcoes.filter((t) => t.prioridade === selectedPrioridade)
           )
             ?.filter((t) => {
-              if (selectedFunction === "All") return true;
-              return getNistFunctionFromTitle(t.title) === selectedFunction;
+              if (selectedControlType === "All") return true;
+              return (
+                getIsoControlTypeFromTitle(t.title) === selectedControlType
+              );
             })
             .map((item) => (
               <Acao
@@ -224,4 +220,4 @@ const NistCsfTasks = () => {
   );
 };
 
-export default NistCsfTasks;
+export default Iso27001Acoes;

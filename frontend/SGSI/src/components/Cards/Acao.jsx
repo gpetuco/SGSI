@@ -48,10 +48,10 @@ const Acao = ({
 
   const getPrioridadeTagColor = () => {
     switch (prioridade) {
-      case "Low":
+      case "Baixa":
         return "text-emerald-600 bg-emerald-50 border border-emerald-500/10 dark:text-emerald-300 dark:bg-emerald-900/25 dark:border-emerald-400/20";
 
-      case "Medium":
+      case "Media":
         return "text-amber-600 bg-amber-50 border border-amber-500/10 dark:text-amber-300 dark:bg-amber-900/25 dark:border-amber-400/20";
 
       default:
@@ -61,11 +61,11 @@ const Acao = ({
 
   const getPrioridadeLabel = () => {
     switch (prioridade) {
-      case "Low":
+      case "Baixa":
         return "Baixa Prioridade";
-      case "Medium":
+      case "Media":
         return "Média Prioridade";
-      case "High":
+      case "Alta":
       default:
         return "Alta Prioridade";
     }

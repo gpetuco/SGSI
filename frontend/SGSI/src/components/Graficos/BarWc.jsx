@@ -16,13 +16,13 @@ import Modal from "../Modal";
 const BarWc = ({ data }) => {
   const getBarColor = (entry) => {
     switch (entry?.prioridade) {
-      case "Low":
+      case "Baixa":
         return "#00BC7D";
 
-      case "Medium":
+      case "Media":
         return "#FE9900";
 
-      case "High":
+      case "Alta":
         return "#FF1F57";
 
       default:

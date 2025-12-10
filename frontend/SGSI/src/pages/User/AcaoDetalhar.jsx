@@ -9,7 +9,7 @@ import moment from "moment";
 
 const AcaoDetalhar = () => {
   const { id } = useParams();
-  const [task, setTask] = useState(null);
+  const [acao, setAcao] = useState(null);
   const [openModal, setOpenModal] = useState(true);
 
   const getStatusTagColor = (status) => {
@@ -25,14 +25,14 @@ const AcaoDetalhar = () => {
     }
   };
 
-  // get Task info by ID
-  const getTaskDetailsByID = async () => {
+  // get Acao info by ID
+  const getAcaoDetailsByID = async () => {
     try {
-      const response = await axiosReq.get(API_PATHS.TASKS.GET_TASK_BY_ID(id));
+      const response = await axiosReq.get(API_PATHS.ACOES.GET_TASK_BY_ID(id));
 
       if (response.data) {
-        const taskInfo = response.data;
-        setTask(taskInfo);
+        const acaoInfo = response.data;
+        setAcao(acaoInfo);
       }
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -42,19 +42,19 @@ const AcaoDetalhar = () => {
   // handle todo check
   const updateItens = async (index) => {
     // eslint-disable-next-line no-unsafe-optional-chaining
-    const itens = [...task?.itens];
-    const taskId = id;
+    const itens = [...acao?.itens];
+    const acaoId = id;
 
     if (itens && itens[index]) {
       itens[index].concluido = !itens[index].concluido;
 
       try {
         const response = await axiosReq.put(
-          API_PATHS.TASKS.UPDATE_TODO_CHECKLIST(taskId),
+          API_PATHS.ACOES.UPDATE_TODO_CHECKLIST(acaoId),
           { itens }
         );
         if (response.status === 200) {
-          setTask(response.data?.task || task);
+          setAcao(response.data?.acao || acao);
         } else {
           itens[index].concluido = !itens[index].concluido;
         }
@@ -66,7 +66,7 @@ const AcaoDetalhar = () => {
 
   useEffect(() => {
     if (id) {
-      getTaskDetailsByID();
+      getAcaoDetailsByID();
     }
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -77,43 +77,43 @@ const AcaoDetalhar = () => {
   };
 
   return (
-    <DashboardLayout activeMenu="My Tasks">
+    <DashboardLayout activeMenu="My Acoes">
       <Modal
         isOpen={openModal}
         onClose={closeAndGoBack}
-        title={task?.title || "Task Details"}
+        title={acao?.title || "Acao Details"}
         variant="wide"
       >
-        {task && (
+        {acao && (
           <div className="grid grid-cols-1 mt-1">
             <div className="form-card">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm md:text-xl font-medium">
-                  {task?.title}
+                  {acao?.title}
                 </h2>
                 <div
                   className={`text-[11px] md:text-[13px] font-medium ${getStatusTagColor(
-                    task?.status
+                    acao?.status
                   )} px-4 py-0.5 rounded`}
                 >
-                  {task?.status}
+                  {acao?.status}
                 </div>
               </div>
 
               <div className="mt-4">
-                <InfoBox label="Descrição" value={task?.descricao} />
+                <InfoBox label="Descrição" value={acao?.descricao} />
               </div>
 
               <div className="grid grid-cols-12 gap-4 mt-4">
                 <div className="col-span-6 md:col-span-4">
-                  <InfoBox label="Prioridade" value={task?.prioridade} />
+                  <InfoBox label="Prioridade" value={acao?.prioridade} />
                 </div>
                 <div className="col-span-6 md:col-span-4">
                   <InfoBox
                     label="Previsto"
                     value={
-                      task?.dueDate
-                        ? moment(task?.dueDate).format("Do MMM YYYY")
+                      acao?.dueDate
+                        ? moment(acao?.dueDate).format("Do MMM YYYY")
                         : "N/A"
                     }
                   />
@@ -124,7 +124,7 @@ const AcaoDetalhar = () => {
                   </label>
                   <FotosUsuarios
                     avatars={
-                      task?.responsavel?.map((item) => item?.profileImageUrl) ||
+                      acao?.responsavel?.map((item) => item?.profileImageUrl) ||
                       []
                     }
                     maxVisible={5}
@@ -136,7 +136,7 @@ const AcaoDetalhar = () => {
                 <label className="text-xs font-medium text-slate-500">
                   Itens
                 </label>
-                {task?.itens?.map((item, index) => (
+                {acao?.itens?.map((item, index) => (
                   <Itens
                     key={`todo_${index}`}
                     text={item.text}

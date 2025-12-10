@@ -43,7 +43,7 @@ const ItensInput = ({ todoList, setTodoList }) => {
       <div className="flex items-center gap-5 mt-4">
         <input
           type="text"
-          placeholder="Enter Task"
+          placeholder="Enter Acao"
           value={option}
           onChange={({ target }) => setOption(target.value)}
           className="w-full text-[13px] text-black dark:text-white outline-none bg-white dark:bg-slate-700 border border-gray-100 dark:border-slate-500 px-3 py-2 rounded-md"
