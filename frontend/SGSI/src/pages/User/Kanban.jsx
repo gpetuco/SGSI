@@ -4,7 +4,7 @@ import axiosReq from "../../utils/axiosReq";
 import { API_PATHS } from "../../utils/apiUrl";
 import Acao from "../../components/Cards/Acao";
 import { useNavigate } from "react-router-dom";
-import SelectDropdown from "../../components/Inputs/SelectDropdown";
+import Lista from "../../components/Inputs/Lista";
 import { PRIORITY_DATA } from "../../utils/menus";
 
 const Column = ({ title, tasks, onOpen }) => {
@@ -95,7 +95,7 @@ const Kanban = () => {
               <label className="text-xs font-medium text-slate-600">
                 Priority
               </label>
-              <SelectDropdown
+              <Lista
                 options={[{ label: "All", value: "All" }, ...PRIORITY_DATA]}
                 value={selectedPriority}
                 onChange={setSelectedPriority}

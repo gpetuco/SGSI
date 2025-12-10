@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useUserAuth } from "../../hooks/useUserAuth";
+import { hookUsuarioPermission } from "../../hooks/hookUsuarioPermission";
 import { useContext } from "react";
 import { UserContext } from "../../context/userContext";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
@@ -16,7 +16,7 @@ import BarWc from "../../components/Graficos/BarWc";
 const COLORS = ["#8D51FF", "#00B8DB", "#7BCE00"];
 
 const UserDashboard = () => {
-  useUserAuth();
+  hookUsuarioPermission();
 
   const { user } = useContext(UserContext);
 

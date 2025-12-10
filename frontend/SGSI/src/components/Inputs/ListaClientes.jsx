@@ -3,7 +3,7 @@ import axiosReq from "../../utils/axiosReq";
 import { API_PATHS } from "../../utils/apiUrl";
 import { LuChevronDown, LuSearch } from "react-icons/lu";
 
-const SelectCompany = ({
+const ListaClientes = ({
   value,
   onChange,
   placeholder = "Selecione o cliente",
@@ -17,7 +17,6 @@ const SelectCompany = ({
       const res = await axiosReq.get(API_PATHS.COMPANIES.LIST);
       setCompanies(Array.isArray(res.data) ? res.data : []);
     } catch (e) {
-      // eslint-disable-next-line no-console
       console.error("Falha ao carregar clientes", e);
     }
   };
@@ -85,4 +84,4 @@ const SelectCompany = ({
   );
 };
 
-export default SelectCompany;
+export default ListaClientes;

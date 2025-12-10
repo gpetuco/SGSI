@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { LuChevronDown, LuSearch } from "react-icons/lu";
-import UserAvatar from "../UserAvatar";
+import ImagemUsuario from "../ImagemUsuario";
 
-const SelectDropdownSearch = ({
+const ListaSearch = ({
   options = [],
   value,
   onChange,
@@ -36,7 +36,7 @@ const SelectDropdownSearch = ({
       >
         <span className="flex items-center gap-2 truncate">
           {showAvatar && (
-            <UserAvatar
+            <ImagemUsuario
               src={current?.avatar}
               name={current?.label}
               size="w-5 h-5"
@@ -72,7 +72,7 @@ const SelectDropdownSearch = ({
                 className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600 flex items-center gap-2"
               >
                 {showAvatar && (
-                  <UserAvatar
+                  <ImagemUsuario
                     src={option.avatar}
                     name={option.label}
                     size="w-6 h-6"
@@ -95,4 +95,4 @@ const SelectDropdownSearch = ({
   );
 };
 
-export default SelectDropdownSearch;
+export default ListaSearch;

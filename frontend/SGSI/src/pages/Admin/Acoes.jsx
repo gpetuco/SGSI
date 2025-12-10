@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
 import { API_PATHS } from "../../utils/apiUrl";
 import Acao from "../../components/Cards/Acao";
-import SelectDropdown from "../../components/Inputs/SelectDropdown";
-import SelectDropdownSearch from "../../components/Inputs/SelectDropdownSearch";
+import Lista from "../../components/Inputs/Lista";
+import ListaSearch from "../../components/Inputs/ListaSearch";
 import { CLASSIFICATION_DATA, PRIORITY_DATA } from "../../utils/menus";
 import { UserContext } from "../../context/userContext";
 
@@ -113,7 +113,7 @@ const Acoes = () => {
                 <label className="text-xs font-medium text-slate-600">
                   Responsável
                 </label>
-                <SelectDropdownSearch
+                <ListaSearch
                   options={userOptions}
                   value={selectedUser}
                   onChange={setSelectedUser}
@@ -126,7 +126,7 @@ const Acoes = () => {
               <label className="text-xs font-medium text-slate-600">
                 Classificação
               </label>
-              <SelectDropdown
+              <Lista
                 options={[
                   { label: "Todos", value: "All" },
                   ...CLASSIFICATION_DATA,
@@ -140,7 +140,7 @@ const Acoes = () => {
               <label className="text-xs font-medium text-slate-600">
                 Status
               </label>
-              <SelectDropdown
+              <Lista
                 options={[
                   { label: "Todos", value: "All" },
                   { label: "Pendente", value: "Pending" },
@@ -156,7 +156,7 @@ const Acoes = () => {
               <label className="text-xs font-medium text-slate-600">
                 Prioridade
               </label>
-              <SelectDropdown
+              <Lista
                 options={[{ label: "Todos", value: "All" }, ...PRIORITY_DATA]}
                 value={selectedPriority}
                 onChange={setSelectedPriority}
@@ -168,7 +168,7 @@ const Acoes = () => {
                 <label className="text-xs font-medium text-slate-600">
                   Cliente
                 </label>
-                <SelectDropdown
+                <Lista
                   options={companyOptions}
                   value={selectedCompany}
                   onChange={setSelectedCompany}

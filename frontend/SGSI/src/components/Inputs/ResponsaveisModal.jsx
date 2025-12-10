@@ -4,9 +4,9 @@ import axiosReq from "../../utils/axiosReq";
 import { LuUsers } from "react-icons/lu";
 import Modal from "../Modal";
 import FotosUsuarios from "../FotosUsuarios";
-import UserAvatar from "../UserAvatar";
+import ImagemUsuario from "../ImagemUsuario";
 
-const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
+const ResponsaveisModal = ({ selectedUsers, setSelectedUsers }) => {
   const [allUsers, setAllUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tempSelectedUsers, setTempSelectedUsers] = useState([]);
@@ -43,7 +43,7 @@ const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
     setIsModalOpen(false);
   };
 
-  const selectedUserAvatars = allUsers
+  const selectedImagemUsuarios = allUsers
     .filter((user) => selectedUsers.includes(user._id))
     .map((user) => user.profileImageUrl);
 
@@ -61,15 +61,15 @@ const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
 
   return (
     <div className="space-y-4 mt-2">
-      {selectedUserAvatars.length === 0 && (
+      {selectedImagemUsuarios.length === 0 && (
         <button className="card-btn" onClick={openModal}>
           <LuUsers className="text-sm" /> Atribuir Responsáveis
         </button>
       )}
 
-      {selectedUserAvatars.length > 0 && (
+      {selectedImagemUsuarios.length > 0 && (
         <div className="cursor-pointer" onClick={openModal}>
-          <FotosUsuarios avatars={selectedUserAvatars} maxVisible={3} />
+          <FotosUsuarios avatars={selectedImagemUsuarios} maxVisible={3} />
         </div>
       )}
 
@@ -84,7 +84,7 @@ const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
               key={user._id}
               className="flex items-center gap-4 p-3 border-b border-gray-200"
             >
-              <UserAvatar
+              <ImagemUsuario
                 src={user.profileImageUrl}
                 name={user.name}
                 size="w-10 h-10"
@@ -119,4 +119,4 @@ const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
   );
 };
 
-export default SelectUsers;
+export default ResponsaveisModal;

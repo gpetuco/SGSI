@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { LuUser, LuUpload, LuTrash } from "react-icons/lu";
 
-const ProfilePhotoSelector = ({ image, setImage }) => {
+const ImagemInput = ({ image, setImage }) => {
   const inputRef = useRef(null);
   const [previewUrl, setPreviewUrl] = useState(null);
 
@@ -67,4 +67,4 @@ const ProfilePhotoSelector = ({ image, setImage }) => {
   );
 };
 
-export default ProfilePhotoSelector;
+export default ImagemInput;

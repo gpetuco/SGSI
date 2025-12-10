@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { LuChevronDown } from "react-icons/lu";
 
-const SelectDropdown = ({ options, value, onChange, placeholder }) => {
+const Lista = ({ options, value, onChange, placeholder }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSelect = (option) => {
@@ -11,7 +11,6 @@ const SelectDropdown = ({ options, value, onChange, placeholder }) => {
 
   return (
     <div className="relative w-full">
-      {/* Dropdown Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full text-sm text-black dark:text-slate-100 outline-none bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-500 px-2.5 py-3 rounded-md mt-2 flex justify-between items-center"
@@ -28,7 +27,6 @@ const SelectDropdown = ({ options, value, onChange, placeholder }) => {
         </span>
       </button>
 
-      {/* Dropdown Menu */}
       {isOpen && (
         <div className="absolute w-full bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-500 rounded-md mt-1 shadow-md z-10 max-h-60 overflow-y-auto">
           {options.map((option) => (
@@ -46,5 +44,4 @@ const SelectDropdown = ({ options, value, onChange, placeholder }) => {
   );
 };
 
-export default SelectDropdown;
-
+export default Lista;

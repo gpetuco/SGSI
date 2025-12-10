@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import AuthLayout from "../../components/layouts/AuthLayout";
 import { emailVerificacao } from "../../utils/helper";
-import ProfilePhotoSelector from "../../components/Inputs/ProfilePhotoSelector";
+import ImagemInput from "../../components/Inputs/ImagemInput";
 import Input from "../../components/Inputs/Input";
 import { Link, useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
@@ -129,7 +129,7 @@ const SignUp = () => {
               </label>
             </div>
           </div>
-          <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} />
+          <ImagemInput image={profilePic} setImage={setProfilePic} />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input

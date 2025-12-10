@@ -5,7 +5,7 @@ import { API_PATHS } from "../../utils/apiUrl";
 import toast from "react-hot-toast";
 import { LuCopy } from "react-icons/lu";
 
-const Clients = () => {
+const Clientes = () => {
   const [companies, setCompanies] = useState([]);
   const [name, setName] = useState("");
   const [error, setError] = useState("");
@@ -148,4 +148,4 @@ const Clients = () => {
   );
 };
 
-export default Clients;
+export default Clientes;

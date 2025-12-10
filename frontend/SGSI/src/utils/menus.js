@@ -53,7 +53,7 @@ export const SIDE_MENU_DATA = [
     id: "04b",
     label: "Clientes",
     icon: LuBuilding2,
-    path: "/admin/clients",
+    path: "/admin/clientes",
   },
   {
     id: "05",

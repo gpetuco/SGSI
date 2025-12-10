@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
 import { API_PATHS } from "../../utils/apiUrl";
 import Acao from "../../components/Cards/Acao";
-import SelectDropdown from "../../components/Inputs/SelectDropdown";
-import SelectDropdownSearch from "../../components/Inputs/SelectDropdownSearch";
+import Lista from "../../components/Inputs/Lista";
+import ListaSearch from "../../components/Inputs/ListaSearch";
 import { PRIORITY_DATA } from "../../utils/menus";
 import { UserContext } from "../../context/userContext";
 
@@ -131,7 +131,7 @@ const NistCsfTasks = () => {
               <label className="text-xs font-medium text-slate-600">
                 Responsável
               </label>
-              <SelectDropdownSearch
+              <ListaSearch
                 options={userOptions}
                 value={selectedUser}
                 onChange={setSelectedUser}
@@ -142,7 +142,7 @@ const NistCsfTasks = () => {
           )}
           <div className="w-full md:w-[210px]">
             <label className="text-xs font-medium text-slate-600">Status</label>
-            <SelectDropdown
+            <Lista
               options={[
                 { label: "Todos", value: "All" },
                 { label: "Pendente", value: "Pending" },
@@ -158,7 +158,7 @@ const NistCsfTasks = () => {
             <label className="text-xs font-medium text-slate-600">
               Prioridade
             </label>
-            <SelectDropdown
+            <Lista
               options={[{ label: "Todos", value: "All" }, ...PRIORITY_DATA]}
               value={selectedPriority}
               onChange={setSelectedPriority}
@@ -169,7 +169,7 @@ const NistCsfTasks = () => {
             <label className="text-xs font-medium text-slate-600">
               Função NIST
             </label>
-            <SelectDropdown
+            <Lista
               options={nistFunctionOptions}
               value={selectedFunction}
               onChange={setSelectedFunction}
@@ -181,7 +181,7 @@ const NistCsfTasks = () => {
               <label className="text-xs font-medium text-slate-600">
                 Cliente
               </label>
-              <SelectDropdown
+              <Lista
                 options={companyOptions}
                 value={selectedCompany}
                 onChange={setSelectedCompany}

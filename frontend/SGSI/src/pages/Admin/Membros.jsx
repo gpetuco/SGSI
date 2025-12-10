@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { API_PATHS } from "../../utils/apiUrl";
 import axiosReq from "../../utils/axiosReq";
-import UserAvatar from "../../components/UserAvatar";
+import ImagemUsuario from "../../components/ImagemUsuario";
 
 const Membros = () => {
   const [allUsers, setAllUsers] = useState([]);
@@ -60,7 +60,7 @@ const Membros = () => {
                 >
                   <td className="py-3 px-4">
                     <div className="flex items-center gap-2">
-                      <UserAvatar
+                      <ImagemUsuario
                         src={user.profileImageUrl}
                         name={user.name}
                         size="w-7 h-7"

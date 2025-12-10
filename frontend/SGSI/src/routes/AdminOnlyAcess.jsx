@@ -1,8 +1,8 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 
-const PrivateRoute = ({ allowedRoles }) => {
+const AdminOnlyAcess = ({ allowedRoles }) => {
   return <Outlet />;
 };
 
-export default PrivateRoute;
+export default AdminOnlyAcess;

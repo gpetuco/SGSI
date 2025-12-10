@@ -7,7 +7,7 @@ export const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // New state to track loading
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user) return;
@@ -36,7 +36,7 @@ const UserProvider = ({ children }) => {
 
   const updateUser = (userData) => {
     setUser(userData);
-    localStorage.setItem("token", userData.token); // Save token
+    localStorage.setItem("token", userData.token);
     setLoading(false);
   };
 

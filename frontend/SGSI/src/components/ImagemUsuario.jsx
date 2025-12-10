@@ -6,7 +6,7 @@ const sizeToClass = (size) => {
   return size;
 };
 
-const UserAvatar = ({ src, name = "", size, className = "" }) => {
+const ImagemUsuario = ({ src, name = "", size, className = "" }) => {
   const initial = (name || "").trim().charAt(0).toUpperCase();
   const sizeCls = sizeToClass(size);
 
@@ -33,4 +33,4 @@ const UserAvatar = ({ src, name = "", size, className = "" }) => {
   );
 };
 
-export default UserAvatar;
+export default ImagemUsuario;

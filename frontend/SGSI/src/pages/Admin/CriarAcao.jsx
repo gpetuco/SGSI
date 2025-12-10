@@ -8,12 +8,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { LuTrash2 } from "react-icons/lu";
 import { HiOutlineTrash, HiMiniPlus } from "react-icons/hi2";
-import SelectDropdown from "../../components/Inputs/SelectDropdown";
+import Lista from "../../components/Inputs/Lista";
 import { NIST_CSF_DATA } from "../../utils/nistCsfData";
 import { ISO_27001_DATA } from "../../utils/iso27001Data";
-import SelectUsers from "../../components/Inputs/SelectUsers";
-import SelectCompany from "../../components/Inputs/SelectCompany";
-import TodoListInput from "../../components/Inputs/TodoListInput";
+import ResponsaveisModal from "../../components/Inputs/ResponsaveisModal";
+import ListaClientes from "../../components/Inputs/ListaClientes";
+import ItensInput from "../../components/Inputs/ItensInput";
 import Excluir from "../../components/Excluir";
 import Modal from "../../components/Modal";
 
@@ -533,7 +533,7 @@ const CriarAcao = () => {
                   Classificação
                 </label>
 
-                <SelectDropdown
+                <Lista
                   options={CLASSIFICATION_DATA}
                   value={taskData.classification}
                   onChange={(value) => handleClassificationChange(value)}
@@ -546,7 +546,7 @@ const CriarAcao = () => {
                   Prioridade
                 </label>
 
-                <SelectDropdown
+                <Lista
                   options={PRIORITY_DATA}
                   value={taskData.priority}
                   onChange={(value) => handleValueChange("priority", value)}
@@ -578,7 +578,7 @@ const CriarAcao = () => {
 
               {isCascadeFramework ? (
                 <div className="relative">
-                  <SelectDropdown
+                  <Lista
                     options={functionOptions}
                     value={taskData.title}
                     onChange={(value) => handleNistTitleChange(value)}
@@ -607,7 +607,7 @@ const CriarAcao = () => {
                   <div
                     className={!taskData.title ? "opacity-50" : "opacity-100"}
                   >
-                    <SelectDropdown
+                    <Lista
                       options={categoryOptions}
                       value={taskData.descricao}
                       onChange={(value) => handleNistDescricaoChange(value)}
@@ -694,7 +694,7 @@ const CriarAcao = () => {
                               : "opacity-100"
                           }
                         >
-                          <SelectDropdown
+                          <Lista
                             options={subcategoryOptions}
                             value={newTodoText}
                             onChange={(value) => setNewTodoText(value)}
@@ -771,7 +771,7 @@ const CriarAcao = () => {
                                 : "opacity-100"
                             }
                           >
-                            <SelectDropdown
+                            <Lista
                               options={subcategoryOptions}
                               value={newTodoText}
                               onChange={(value) => setNewTodoText(value)}
@@ -795,7 +795,7 @@ const CriarAcao = () => {
                       </div>
                     </>
                   ) : (
-                    <TodoListInput
+                    <ItensInput
                       todoList={taskData?.itens}
                       setTodoList={(value) => handleValueChange("itens", value)}
                     />
@@ -807,7 +807,7 @@ const CriarAcao = () => {
               <label className="text-xs font-medium text-slate-600">
                 Cliente
               </label>
-              <SelectCompany
+              <ListaClientes
                 value={taskData.cliente}
                 onChange={(value) => handleValueChange("cliente", value)}
               />
@@ -818,7 +818,7 @@ const CriarAcao = () => {
                 Responsável
               </label>
 
-              <SelectUsers
+              <ResponsaveisModal
                 selectedUsers={taskData.responsavel}
                 setSelectedUsers={(value) => {
                   handleValueChange("responsavel", value);

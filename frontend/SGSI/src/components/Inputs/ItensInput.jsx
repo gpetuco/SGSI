@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { HiMiniPlus, HiOutlineTrash } from "react-icons/hi2";
 
-const TodoListInput = ({ todoList, setTodoList }) => {
+const ItensInput = ({ todoList, setTodoList }) => {
   const [option, setOption] = useState("");
 
-  // Function to handle adding an option
   const handleAddOption = () => {
     if (option.trim()) {
       setTodoList([...todoList, option.trim()]);
@@ -12,7 +11,6 @@ const TodoListInput = ({ todoList, setTodoList }) => {
     }
   };
 
-  // Function to handle deleting an option
   const handleDeleteOption = (index) => {
     const updatedArr = todoList.filter((_, idx) => idx !== index);
     setTodoList(updatedArr);
@@ -51,7 +49,10 @@ const TodoListInput = ({ todoList, setTodoList }) => {
           className="w-full text-[13px] text-black dark:text-white outline-none bg-white dark:bg-slate-700 border border-gray-100 dark:border-slate-500 px-3 py-2 rounded-md"
         />
 
-        <button className="card-btn text-nowrap dark:!text-white" onClick={handleAddOption}>
+        <button
+          className="card-btn text-nowrap dark:!text-white"
+          onClick={handleAddOption}
+        >
           <HiMiniPlus className="text-lg" /> Add
         </button>
       </div>
@@ -59,4 +60,4 @@ const TodoListInput = ({ todoList, setTodoList }) => {
   );
 };
 
-export default TodoListInput;
+export default ItensInput;

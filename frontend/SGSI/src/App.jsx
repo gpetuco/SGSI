@@ -16,9 +16,9 @@ import Iso27001Tasks from "./pages/Admin/Iso27001Tasks";
 import NistCsfTasks from "./pages/Admin/NistCsfTasks";
 import CriarAcao from "./pages/Admin/CriarAcao";
 import Membros from "./pages/Admin/Membros";
-import Clients from "./pages/Admin/Clients";
+import Clientes from "./pages/Admin/Clientes";
 
-import PrivateRoute from "./routes/PrivateRoute";
+import AdminOnlyAcess from "./routes/AdminOnlyAcess";
 import UserProvider, { UserContext } from "./context/userContext";
 import { Toaster } from "react-hot-toast";
 
@@ -32,7 +32,7 @@ const App = () => {
             <Route path="/signUp" element={<SignUp />} />
 
             {/* Admin Routes */}
-            <Route element={<PrivateRoute allowedRoles={["admin"]} />}>
+            <Route element={<AdminOnlyAcess allowedRoles={["admin"]} />}>
               <Route path="/admin/dashboard" element={<Dashboard />} />
               <Route path="/admin/tasks" element={<Acoes />} />
               <Route path="/admin/kanban" element={<AdminKanban />} />
@@ -43,14 +43,14 @@ const App = () => {
               <Route path="/admin/tasks/nist-csf" element={<NistCsfTasks />} />
               <Route path="/admin/acao-modal" element={<CriarAcao />} />
               <Route path="/admin/users" element={<Membros />} />
-              <Route path="/admin/clients" element={<Clients />} />
+              <Route path="/admin/clientes" element={<Clientes />} />
               <Route
                 path="/admin/task-details/:id"
                 element={<AdminAcaoDetalhar />}
               />
             </Route>
 
-            <Route element={<PrivateRoute allowedRoles={["member"]} />}>
+            <Route element={<AdminOnlyAcess allowedRoles={["member"]} />}>
               <Route path="/user/dashboard" element={<Dashboard />} />
               <Route path="/user/tasks" element={<Acoes />} />
               <Route path="/user/kanban" element={<AdminKanban />} />
