@@ -30,5 +30,5 @@ app.use("/api/companies", companyRoutes);
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const PORTA = process.env.PORTA || 5000;
+app.listen(PORTA, () => console.log(`Servidor: Porta ${PORTA}`));

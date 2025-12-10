@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { URLS_API } from "../../utils/apiUrl";
-import axiosReq from "../../utils/axiosReq";
-import { LuUsers } from "react-icons/lu";
 import Popup from "../Popup";
 import FotosUsuarios from "../FotosUsuarios";
 import ImagemUsuario from "../ImagemUsuario";
+import { URLS_API } from "../../utils/apiUrl";
+import axiosReq from "../../utils/axiosReq";
+import { LuUsers } from "react-icons/lu";
 
 const ResponsaveisPopup = ({ selectedUsers, setSelectedUsers }) => {
   const [allUsers, setAllUsers] = useState([]);
@@ -29,7 +29,7 @@ const ResponsaveisPopup = ({ selectedUsers, setSelectedUsers }) => {
     }
   };
 
-  const toggleUserSelection = (userId) => {
+  const selecaoUsuario = (userId) => {
     setTempSelectedUsers((prev) =>
       prev.includes(userId)
         ? prev.filter((id) => id !== userId)
@@ -37,12 +37,12 @@ const ResponsaveisPopup = ({ selectedUsers, setSelectedUsers }) => {
     );
   };
 
-  const handleAssign = () => {
+  const selecionar = () => {
     setSelectedUsers(tempSelectedUsers);
     setIsPopupOpen(false);
   };
 
-  const selectedImagemUsuarios = allUsers
+  const fotoUsuariosSelecionados = allUsers
     .filter((user) => selectedUsers.includes(user._id))
     .map((user) => user.profileImageUrl);
 
@@ -60,16 +60,16 @@ const ResponsaveisPopup = ({ selectedUsers, setSelectedUsers }) => {
 
   return (
     <div className="space-y-4 mt-2">
-      {selectedImagemUsuarios.length === 0 && (
+      {fotoUsuariosSelecionados.length === 0 && (
         <button className="content-box-btn" onClick={openPopup}>
           <LuUsers className="text-sm" /> Atribuir Responsáveis
         </button>
       )}
 
-      {selectedImagemUsuarios.length > 0 && (
+      {fotoUsuariosSelecionados.length > 0 && (
         <div className="cursor-pointer" onClick={openPopup}>
           <FotosUsuarios
-            fotosPerfilUsuario={selectedImagemUsuarios}
+            fotosPerfilUsuario={fotoUsuariosSelecionados}
             mostra={3}
           />
         </div>
@@ -101,7 +101,7 @@ const ResponsaveisPopup = ({ selectedUsers, setSelectedUsers }) => {
               <input
                 type="checkbox"
                 checked={tempSelectedUsers.includes(user._id)}
-                onChange={() => toggleUserSelection(user._id)}
+                onChange={() => selecaoUsuario(user._id)}
                 className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none"
               />
             </div>
@@ -115,7 +115,7 @@ const ResponsaveisPopup = ({ selectedUsers, setSelectedUsers }) => {
           >
             Cancelar
           </button>
-          <button className="content-box-button" onClick={handleAssign}>
+          <button className="content-box-button" onClick={selecionar}>
             Atribuir
           </button>
         </div>

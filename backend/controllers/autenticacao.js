@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 const tokenUsuario = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
+  return jwt.sign({ id: userId }, process.env.JWT_ACCESS, { expiresIn: "7d" });
 };
 
 const login = async (req, res) => {
@@ -64,7 +64,7 @@ const cadastroUsuario = async (req, res) => {
       empresa = company._id;
     } else if (
       adminInviteToken &&
-      adminInviteToken == process.env.ADMIN_INVITE_TOKEN
+      adminInviteToken == process.env.TOKEN_ADMIN
     ) {
       role = "admin";
     }

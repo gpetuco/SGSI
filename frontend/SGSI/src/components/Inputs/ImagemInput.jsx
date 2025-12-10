@@ -8,10 +8,8 @@ const ImagemInput = ({ image, setImage }) => {
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Update the image state
       setImage(file);
 
-      // Generate preview URL from the file
       const preview = URL.createObjectURL(file);
       setPreviewUrl(preview);
     }
