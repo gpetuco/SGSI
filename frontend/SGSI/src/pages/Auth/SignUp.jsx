@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import AuthLayout from "../../components/layouts/AuthLayout";
-import { emailVerificacao } from "../../utils/helper";
+import { emailVerificacao } from "../../utils/utils";
 import ImagemInput from "../../components/Inputs/ImagemInput";
 import Input from "../../components/Inputs/Input";
 import { Link, useNavigate } from "react-router-dom";

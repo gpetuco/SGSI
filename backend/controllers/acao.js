@@ -181,7 +181,7 @@ const criarAcao = async (req, res) => {
       classification,
       dueDate,
       responsavel,
-      createdBy: req.user._id,
+      criadoPor: req.user._id,
       itens,
       cliente: clienteId,
     });

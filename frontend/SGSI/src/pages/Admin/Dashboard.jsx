@@ -6,7 +6,7 @@ import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
 import { API_PATHS } from "../../utils/apiUrl";
-import { formatMilhar } from "../../utils/helper";
+import { formatMilhar } from "../../utils/utils";
 import Info from "../../components/Cards/Info";
 import PieWc from "../../components/Graficos/PizzaWc";
 import AreaWc from "../../components/Graficos/AreaWc";

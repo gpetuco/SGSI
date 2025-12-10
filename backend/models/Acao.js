@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const todoSchema = new mongoose.Schema({
+const item = new mongoose.Schema({
   text: { type: String, required: true },
   concluido: { type: Boolean, default: false },
 });
@@ -26,13 +26,13 @@ const acaoSchema = new mongoose.Schema(
     },
     dueDate: { type: Date, required: true },
     responsavel: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    criadoPor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     cliente: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Company",
       default: null,
     },
-    itens: [todoSchema],
+    itens: [item],
     progress: { type: Number, default: 0 },
     concluidoAt: { type: Date },
   },
