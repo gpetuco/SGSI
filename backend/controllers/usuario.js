@@ -11,24 +11,24 @@ const getUsers = async (req, res) => {
 
     const usersWithTaskCounts = await Promise.all(
       users.map(async (user) => {
-        const pendingTasks = await Task.countDocuments({
+        const acoesPendentes = await Task.countDocuments({
           responsavel: user._id,
-          status: "Pending",
+          status: "Pendente",
         });
         const inProgressTasks = await Task.countDocuments({
           responsavel: user._id,
           status: "In Progress",
         });
-        const completedTasks = await Task.countDocuments({
+        const acoesConcluidas = await Task.countDocuments({
           responsavel: user._id,
-          status: "Completed",
+          status: "Concluído",
         });
 
         return {
           ...user._doc,
-          pendingTasks,
+          acoesPendentes,
           inProgressTasks,
-          completedTasks,
+          acoesConcluidas,
         };
       })
     );

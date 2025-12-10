@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const todoSchema = new mongoose.Schema({
   text: { type: String, required: true },
-  completed: { type: Boolean, default: false },
+  concluido: { type: Boolean, default: false },
 });
 
 const taskSchema = new mongoose.Schema(
@@ -14,15 +14,15 @@ const taskSchema = new mongoose.Schema(
       enum: ["NIST CSF", "ISO 27001"],
       default: "NIST CSF",
     },
-    priority: {
+    prioridade: {
       type: String,
       enum: ["Low", "Medium", "High"],
       default: "Medium",
     },
     status: {
       type: String,
-      enum: ["Pending", "In Progress", "Completed"],
-      default: "Pending",
+      enum: ["Pendente", "In Progress", "Concluído"],
+      default: "Pendente",
     },
     dueDate: { type: Date, required: true },
     responsavel: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
@@ -34,38 +34,34 @@ const taskSchema = new mongoose.Schema(
     },
     itens: [todoSchema],
     progress: { type: Number, default: 0 },
-    completedAt: { type: Date },
+    concluidoAt: { type: Date },
   },
   { timestamps: true }
 );
 
-// Recalculate progress from itens before save
 taskSchema.pre("save", function (next) {
   try {
     const hasChecklist = Array.isArray(this.itens) && this.itens.length > 0;
     if (hasChecklist) {
       const total = this.itens.length;
-      const done = this.itens.filter((t) => !!t.completed).length;
+      const done = this.itens.filter((t) => !!t.concluido).length;
       const pct = Math.round((done / total) * 100);
       this.progress = pct;
 
       if (done === 0) {
-        // No items completed: keep task as Pending
-        if (this.status !== "Pending") this.status = "Pending";
-        if (this.completedAt) this.completedAt = null;
+        if (this.status !== "Pendente") this.status = "Pendente";
+        if (this.concluidoAt) this.concluidoAt = null;
       } else if (done < total) {
-        // Some items completed, not all: In Progress
         if (this.status !== "In Progress") this.status = "In Progress";
-        if (this.completedAt) this.completedAt = null;
+        if (this.concluidoAt) this.concluidoAt = null;
       } else {
-        // All items completed
-        this.status = "Completed";
-        if (!this.completedAt) this.completedAt = new Date();
+        this.status = "Concluído";
+        if (!this.concluidoAt) this.concluidoAt = new Date();
       }
     } else {
-      if (this.isModified("status") && this.status === "Completed") {
+      if (this.isModified("status") && this.status === "Concluído") {
         this.progress = 100;
-        if (!this.completedAt) this.completedAt = new Date();
+        if (!this.concluidoAt) this.concluidoAt = new Date();
       } else {
         this.progress = this.progress || 0;
       }

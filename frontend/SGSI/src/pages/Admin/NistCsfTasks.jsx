@@ -6,13 +6,13 @@ import { API_PATHS } from "../../utils/apiUrl";
 import Acao from "../../components/Cards/Acao";
 import Lista from "../../components/Inputs/Lista";
 import ListaSearch from "../../components/Inputs/ListaSearch";
-import { PRIORITY_DATA } from "../../utils/menus";
+import { PRIORIDADE_DATA } from "../../utils/menus";
 import { UserContext } from "../../context/userContext";
 
 const NistCsfTasks = () => {
   const [allTasks, setAllTasks] = useState([]);
   const [filterStatus, setFilterStatus] = useState("All");
-  const [selectedPriority, setSelectedPriority] = useState("All");
+  const [selectedPrioridade, setSelectedPrioridade] = useState("All");
   const [selectedUser, setSelectedUser] = useState("All");
   const [selectedFunction, setSelectedFunction] = useState("All");
   const [selectedCompany, setSelectedCompany] = useState("All");
@@ -124,7 +124,7 @@ const NistCsfTasks = () => {
           <h2 className="text-xl md:text-xl font-medium">NIST CSF</h2>
         </div>
 
-        {/* Filters: User, Status, Priority, NIST Function */}
+        {/* Filters: User, Status, Prioridade, NIST Function */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-2 mt-3 w-full lg:w-[1100px]">
           {user?.role === "admin" && (
             <div className="w-full md:w-[210px]">
@@ -145,9 +145,9 @@ const NistCsfTasks = () => {
             <Lista
               options={[
                 { label: "Todos", value: "All" },
-                { label: "Pendente", value: "Pending" },
+                { label: "Pendente", value: "Pendente" },
                 { label: "Em Andamento", value: "In Progress" },
-                { label: "Concluído", value: "Completed" },
+                { label: "Concluído", value: "Concluído" },
               ]}
               value={filterStatus}
               onChange={setFilterStatus}
@@ -159,9 +159,9 @@ const NistCsfTasks = () => {
               Prioridade
             </label>
             <Lista
-              options={[{ label: "Todos", value: "All" }, ...PRIORITY_DATA]}
-              value={selectedPriority}
-              onChange={setSelectedPriority}
+              options={[{ label: "Todos", value: "All" }, ...PRIORIDADE_DATA]}
+              value={selectedPrioridade}
+              onChange={setSelectedPrioridade}
               placeholder="All Priorities"
             />
           </div>
@@ -192,9 +192,9 @@ const NistCsfTasks = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-4 mt-4">
-          {(selectedPriority === "All"
+          {(selectedPrioridade === "All"
             ? allTasks
-            : allTasks.filter((t) => t.priority === selectedPriority)
+            : allTasks.filter((t) => t.prioridade === selectedPrioridade)
           )
             ?.filter((t) => {
               if (selectedFunction === "All") return true;
@@ -205,14 +205,14 @@ const NistCsfTasks = () => {
                 key={item._id}
                 title={item.title}
                 descricao={item.descricao}
-                priority={item.priority}
+                prioridade={item.prioridade}
                 classification={item.classification}
                 status={item.status}
                 progress={item.progress}
                 createdAt={item.createdAt}
                 dueDate={item.dueDate}
                 responsavel={item.responsavel?.map((a) => a.profileImageUrl)}
-                completedTodoCount={item.completedTodoCount || 0}
+                concluidoTodoCount={item.concluidoTodoCount || 0}
                 itens={item.itens || []}
                 clienteName={item.cliente?.name}
                 onClick={() => handleClick(item)}

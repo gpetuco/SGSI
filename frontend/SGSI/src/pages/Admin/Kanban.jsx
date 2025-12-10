@@ -6,7 +6,7 @@ import Acao from "../../components/Cards/Acao";
 import { useNavigate } from "react-router-dom";
 import Lista from "../../components/Inputs/Lista";
 import ListaSearch from "../../components/Inputs/ListaSearch";
-import { PRIORITY_DATA } from "../../utils/menus";
+import { PRIORIDADE_DATA } from "../../utils/menus";
 import { UserContext } from "../../context/userContext";
 
 const Column = ({ title, tasks, onOpen }) => {
@@ -27,14 +27,14 @@ const Column = ({ title, tasks, onOpen }) => {
               <Acao
                 title={item.title}
                 descricao={item.descricao}
-                priority={item.priority}
+                prioridade={item.prioridade}
                 classification={item.classification}
                 status={item.status}
                 progress={item.progress}
                 createdAt={item.createdAt}
                 dueDate={item.dueDate}
                 responsavel={item.responsavel?.map((p) => p.profileImageUrl)}
-                completedTodoCount={item.completedTodoCount || 0}
+                concluidoTodoCount={item.concluidoTodoCount || 0}
                 itens={item.itens || []}
                 clienteName={item.cliente?.name}
                 onClick={() => onOpen(item._id)}
@@ -52,7 +52,7 @@ const Kanban = () => {
   const [tasks, setTasks] = useState([]);
   const [filterStatus, setFilterStatus] = useState("All");
   const [selectedUser, setSelectedUser] = useState("All");
-  const [selectedPriority, setSelectedPriority] = useState("All");
+  const [selectedPrioridade, setSelectedPrioridade] = useState("All");
   const [userOptions, setUserOptions] = useState([
     { label: "Todos", value: "All" },
   ]);
@@ -128,16 +128,16 @@ const Kanban = () => {
 
   const grouped = useMemo(() => {
     const source =
-      selectedPriority === "All"
+      selectedPrioridade === "All"
         ? tasks
-        : tasks.filter((t) => t.priority === selectedPriority);
+        : tasks.filter((t) => t.prioridade === selectedPrioridade);
     const by = { "NIST CSF": [], "ISO 27001": [] };
     for (const t of source) {
       const key = t.classification;
       if (by[key]) by[key].push(t);
     }
     return by;
-  }, [tasks, selectedPriority]);
+  }, [tasks, selectedPrioridade]);
 
   const handleOpen = (taskId) => {
     if (user?.role === "admin") {
@@ -174,9 +174,9 @@ const Kanban = () => {
               <Lista
                 options={[
                   { label: "Todos", value: "All" },
-                  { label: "Pendente", value: "Pending" },
+                  { label: "Pendente", value: "Pendente" },
                   { label: "Em Andamento", value: "In Progress" },
-                  { label: "Concluído", value: "Completed" },
+                  { label: "Concluído", value: "Concluído" },
                 ]}
                 value={filterStatus}
                 onChange={setFilterStatus}
@@ -188,9 +188,9 @@ const Kanban = () => {
                 Prioridade
               </label>
               <Lista
-                options={[{ label: "Todos", value: "All" }, ...PRIORITY_DATA]}
-                value={selectedPriority}
-                onChange={setSelectedPriority}
+                options={[{ label: "Todos", value: "All" }, ...PRIORIDADE_DATA]}
+                value={selectedPrioridade}
+                onChange={setSelectedPrioridade}
                 placeholder="All Priorities"
               />
             </div>

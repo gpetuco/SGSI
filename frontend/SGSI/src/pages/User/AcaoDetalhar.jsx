@@ -17,7 +17,7 @@ const AcaoDetalhar = () => {
       case "In Progress":
         return "text-cyan-500 bg-cyan-50 border border-cyan-500/10";
 
-      case "Completed":
+      case "Concluído":
         return "text-lime-500 bg-lime-50 border border-lime-500/20";
 
       default:
@@ -46,7 +46,7 @@ const AcaoDetalhar = () => {
     const taskId = id;
 
     if (itens && itens[index]) {
-      itens[index].completed = !itens[index].completed;
+      itens[index].concluido = !itens[index].concluido;
 
       try {
         const response = await axiosReq.put(
@@ -56,10 +56,10 @@ const AcaoDetalhar = () => {
         if (response.status === 200) {
           setTask(response.data?.task || task);
         } else {
-          itens[index].completed = !itens[index].completed;
+          itens[index].concluido = !itens[index].concluido;
         }
       } catch (error) {
-        itens[index].completed = !itens[index].completed;
+        itens[index].concluido = !itens[index].concluido;
       }
     }
   };
@@ -106,7 +106,7 @@ const AcaoDetalhar = () => {
 
               <div className="grid grid-cols-12 gap-4 mt-4">
                 <div className="col-span-6 md:col-span-4">
-                  <InfoBox label="Priority" value={task?.priority} />
+                  <InfoBox label="Prioridade" value={task?.prioridade} />
                 </div>
                 <div className="col-span-6 md:col-span-4">
                   <InfoBox
@@ -140,7 +140,7 @@ const AcaoDetalhar = () => {
                   <Itens
                     key={`todo_${index}`}
                     text={item.text}
-                    isChecked={item?.completed}
+                    isChecked={item?.concluido}
                     onChange={() => updateItens(index)}
                   />
                 ))}

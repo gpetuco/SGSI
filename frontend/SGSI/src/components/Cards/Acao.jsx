@@ -7,14 +7,14 @@ import { UserContext } from "../../context/userContext";
 const Acao = ({
   title,
   descricao,
-  priority,
+  prioridade,
   classification,
   status,
   progress,
   createdAt,
   dueDate,
   responsavel,
-  completedTodoCount,
+  concluidoTodoCount,
   itens,
   onClick,
   className,
@@ -26,7 +26,7 @@ const Acao = ({
       case "In Progress":
         return "border-cyan-500/10 bg-cyan-50 text-cyan-500 border dark:text-cyan-300 dark:bg-cyan-900/30 dark:border-cyan-400/20";
 
-      case "Completed":
+      case "Concluído":
         return "text-lime-500 bg-lime-50 border border-lime-500/20 dark:text-lime-300 dark:bg-lime-900/25 dark:border-lime-400/20";
 
       default:
@@ -38,16 +38,16 @@ const Acao = ({
     switch (status) {
       case "In Progress":
         return "Em Andamento";
-      case "Completed":
+      case "Concluído":
         return "Concluído";
-      case "Pending":
+      case "Pendente":
       default:
         return "Pendente";
     }
   };
 
-  const getPriorityTagColor = () => {
-    switch (priority) {
+  const getPrioridadeTagColor = () => {
+    switch (prioridade) {
       case "Low":
         return "text-emerald-600 bg-emerald-50 border border-emerald-500/10 dark:text-emerald-300 dark:bg-emerald-900/25 dark:border-emerald-400/20";
 
@@ -59,8 +59,8 @@ const Acao = ({
     }
   };
 
-  const getPriorityLabel = () => {
-    switch (priority) {
+  const getPrioridadeLabel = () => {
+    switch (prioridade) {
       case "Low":
         return "Baixa Prioridade";
       case "Medium":
@@ -109,9 +109,9 @@ const Acao = ({
                 {getStatusLabel()}
               </div>
               <div
-                className={`text-[12px] md:text-[13px] font-semibold ${getPriorityTagColor()} px-3.5 py-1.5 rounded-md whitespace-nowrap`}
+                className={`text-[12px] md:text-[13px] font-semibold ${getPrioridadeTagColor()} px-3.5 py-1.5 rounded-md whitespace-nowrap`}
               >
-                {getPriorityLabel()}
+                {getPrioridadeLabel()}
               </div>
               {classification && (
                 <div
@@ -128,7 +128,7 @@ const Acao = ({
           <span className="text-white">Progresso:</span>{" "}
           <span className="font-semibold text-gray-700 dark:text-white">
             {`${progress}% (`}
-            {completedTodoCount} / {itens.length || 0}
+            {concluidoTodoCount} / {itens.length || 0}
             {")"}
           </span>
         </p>

@@ -5,7 +5,7 @@ import { API_PATHS } from "../../utils/apiUrl";
 import Acao from "../../components/Cards/Acao";
 import { useNavigate } from "react-router-dom";
 import Lista from "../../components/Inputs/Lista";
-import { PRIORITY_DATA } from "../../utils/menus";
+import { PRIORIDADE_DATA } from "../../utils/menus";
 
 const Column = ({ title, tasks, onOpen }) => {
   return (
@@ -26,14 +26,14 @@ const Column = ({ title, tasks, onOpen }) => {
                 key={item._id}
                 title={item.title}
                 descricao={item.descricao}
-                priority={item.priority}
+                prioridade={item.prioridade}
                 classification={item.classification}
                 status={item.status}
                 progress={item.progress}
                 createdAt={item.createdAt}
                 dueDate={item.dueDate}
                 responsavel={item.responsavel?.map((p) => p.profileImageUrl)}
-                completedTodoCount={item.completedTodoCount || 0}
+                concluidoTodoCount={item.concluidoTodoCount || 0}
                 itens={item.itens || []}
                 clienteName={item.cliente?.name}
                 onClick={() => onOpen(item._id)}
@@ -49,7 +49,7 @@ const Column = ({ title, tasks, onOpen }) => {
 
 const Kanban = () => {
   const [tasks, setTasks] = useState([]);
-  const [selectedPriority, setSelectedPriority] = useState("All");
+  const [selectedPrioridade, setSelectedPrioridade] = useState("All");
   const navigate = useNavigate();
 
   const getMyTasks = async () => {
@@ -68,15 +68,15 @@ const Kanban = () => {
 
   const grouped = useMemo(() => {
     const source =
-      selectedPriority === "All"
+      selectedPrioridade === "All"
         ? tasks
-        : tasks.filter((t) => t.priority === selectedPriority);
-    const by = { Pending: [], "In Progress": [], Completed: [] };
+        : tasks.filter((t) => t.prioridade === selectedPrioridade);
+    const by = { Pendente: [], "In Progress": [], Concluído: [] };
     for (const t of source) {
       if (by[t.status]) by[t.status].push(t);
     }
     return by;
-  }, [tasks, selectedPriority]);
+  }, [tasks, selectedPrioridade]);
 
   const handleOpen = (taskId) => {
     navigate(`/user/task-details/${taskId}`);
@@ -93,12 +93,12 @@ const Kanban = () => {
           <div className="grid grid-cols-1 md:grid-cols-1 gap-2 w-full md:w-[220px]">
             <div className="w-full md:w-[210px]">
               <label className="text-xs font-medium text-slate-600">
-                Priority
+                Prioridade
               </label>
               <Lista
-                options={[{ label: "All", value: "All" }, ...PRIORITY_DATA]}
-                value={selectedPriority}
-                onChange={setSelectedPriority}
+                options={[{ label: "All", value: "All" }, ...PRIORIDADE_DATA]}
+                value={selectedPrioridade}
+                onChange={setSelectedPrioridade}
                 placeholder="All Priorities"
               />
             </div>
@@ -107,8 +107,8 @@ const Kanban = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
           <Column
-            title="Pending"
-            tasks={grouped["Pending"]}
+            title="Pendente"
+            tasks={grouped["Pendente"]}
             onOpen={handleOpen}
           />
           <Column
@@ -117,8 +117,8 @@ const Kanban = () => {
             onOpen={handleOpen}
           />
           <Column
-            title="Completed"
-            tasks={grouped["Completed"]}
+            title="Concluído"
+            tasks={grouped["Concluído"]}
             onOpen={handleOpen}
           />
         </div>

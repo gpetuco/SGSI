@@ -29,23 +29,23 @@ const UserDashboard = () => {
   // Prepare Chart Data
   const prepareChartData = (data) => {
     const taskDistribution = data?.taskDistribution || null;
-    const taskPriorityLevels = data?.taskPriorityLevels || null;
+    const taskPrioridadeLevels = data?.taskPrioridadeLevels || null;
 
     const taskDistributionData = [
-      { status: "Pending", count: taskDistribution?.Pending || 0 },
+      { status: "Pendente", count: taskDistribution?.Pendente || 0 },
       { status: "In Progress", count: taskDistribution?.InProgress || 0 },
-      { status: "Completed", count: taskDistribution?.Completed || 0 },
+      { status: "Concluído", count: taskDistribution?.Concluído || 0 },
     ];
 
     setPieChartData(taskDistributionData);
 
-    const PriorityLevelData = [
-      { priority: "Low", count: taskPriorityLevels?.Low || 0 },
-      { priority: "Medium", count: taskPriorityLevels?.Medium || 0 },
-      { priority: "High", count: taskPriorityLevels?.High || 0 },
+    const PrioridadeLevelData = [
+      { prioridade: "Low", count: taskPrioridadeLevels?.Low || 0 },
+      { prioridade: "Medium", count: taskPrioridadeLevels?.Medium || 0 },
+      { prioridade: "High", count: taskPrioridadeLevels?.High || 0 },
     ];
 
-    setBarChartData(PriorityLevelData);
+    setBarChartData(PrioridadeLevelData);
   };
 
   const getDashboardData = async () => {
@@ -105,9 +105,9 @@ const UserDashboard = () => {
           />
 
           <Info
-            label="Pending Tasks"
+            label="Pendente Tasks"
             value={formatMilhar(
-              dashboardData?.charts?.taskDistribution?.Pending || 0
+              dashboardData?.charts?.taskDistribution?.Pendente || 0
             )}
             color="bg-violet-500"
           />
@@ -121,9 +121,9 @@ const UserDashboard = () => {
           />
 
           <Info
-            label="Completed Tasks"
+            label="Ações Concluídas"
             value={formatMilhar(
-              dashboardData?.charts?.taskDistribution?.Completed || 0
+              dashboardData?.charts?.taskDistribution?.Concluído || 0
             )}
             color="bg-lime-500"
           />
@@ -144,7 +144,7 @@ const UserDashboard = () => {
         <div>
           <div className="card">
             <div className="flex items-center justify-between">
-              <h5 className="font-medium">Task Priority Levels</h5>
+              <h5 className="font-medium">Task Prioridade Levels</h5>
             </div>
 
             <BarWc data={barChartData} />

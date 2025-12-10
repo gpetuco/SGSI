@@ -438,7 +438,7 @@ export const NIST_CSF_DATA = {
               name: "RC.RP-05: The integrity of restored assets is verified, systems and services are restored, and normal operating status is confirmed",
             },
             {
-              name: "RC.RP-06: The end of incident recovery is declared based on criteria, and incidentrelated documentation is completed",
+              name: "RC.RP-06: The end of incident recovery is declared based on criteria, and incidentrelated documentation is concluido",
             },
           ],
         },

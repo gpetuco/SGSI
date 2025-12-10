@@ -6,7 +6,7 @@ const Progress = ({ progress, status }) => {
       case "In Progress":
         return "text-yellow-500 bg-yellow-500 border border-yellow-500/10";
 
-      case "Completed":
+      case "Concluído":
         return "text-lime-500 bg-lime-500 border border-lime-500/10";
 
       default:

@@ -36,7 +36,7 @@ const StackedStatusByUser = ({
         <Legend />
         {/* Side-by-side grouped bars for each status */}
         <Bar
-          dataKey="Completed"
+          dataKey="Concluído"
           name="Concluído"
           fill="#7BCE00"
           radius={[6, 6, 0, 0]}
@@ -48,7 +48,7 @@ const StackedStatusByUser = ({
           radius={[6, 6, 0, 0]}
         />
         <Bar
-          dataKey="Pending"
+          dataKey="Pendente"
           name="Pendente"
           fill="#FF4B4B"
           radius={[6, 6, 0, 0]}

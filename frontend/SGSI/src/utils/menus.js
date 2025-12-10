@@ -102,16 +102,16 @@ export const SIDE_MENU_USER_DATA = [
   },
 ];
 
-export const PRIORITY_DATA = [
+export const PRIORIDADE_DATA = [
   { label: "Baixa", value: "Low" },
   { label: "Média", value: "Medium" },
   { label: "Alta", value: "High" },
 ];
 
 export const STATUS_DATA = [
-  { label: "Pendente", value: "Pending" },
+  { label: "Pendente", value: "Pendente" },
   { label: "Em Andamento", value: "In Progress" },
-  { label: "Concluído", value: "Completed" },
+  { label: "Concluído", value: "Concluído" },
 ];
 
 export const CLASSIFICATION_DATA = [

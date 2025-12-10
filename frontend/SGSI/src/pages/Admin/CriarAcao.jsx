@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useRef, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
-import { PRIORITY_DATA, CLASSIFICATION_DATA } from "../../utils/menus";
+import { PRIORIDADE_DATA, CLASSIFICATION_DATA } from "../../utils/menus";
 import axiosReq from "../../utils/axiosReq";
 import { API_PATHS } from "../../utils/apiUrl";
 import toast from "react-hot-toast";
@@ -21,7 +21,7 @@ const getStatusTagColor = (status) => {
   switch (status) {
     case "In Progress":
       return "text-cyan-500 bg-cyan-50 border border-cyan-500/10";
-    case "Completed":
+    case "Concluído":
       return "text-lime-500 bg-lime-50 border border-lime-500/20";
     default:
       return "text-violet-500 bg-violet-50 border border-violet-500/10";
@@ -32,9 +32,9 @@ const getStatusLabel = (status) => {
   switch (status) {
     case "In Progress":
       return "Em Andamento";
-    case "Completed":
+    case "Concluído":
       return "Concluído";
-    case "Pending":
+    case "Pendente":
     default:
       return "Pendente";
   }
@@ -50,7 +50,7 @@ const CriarAcao = () => {
     title: "",
     descricao: "",
     classification: "NIST CSF",
-    priority: "Low",
+    prioridade: "Low",
     dueDate: null,
     responsavel: [],
     cliente: "",
@@ -151,7 +151,7 @@ const CriarAcao = () => {
       title: "",
       descricao: "",
       classification: "NIST CSF",
-      priority: "Low",
+      prioridade: "Low",
       dueDate: null,
       responsavel: [],
       cliente: "",
@@ -166,7 +166,7 @@ const CriarAcao = () => {
     try {
       const todolist = taskData.itens?.map((item) => ({
         text: item,
-        completed: false,
+        concluido: false,
       }));
 
       const response = await axiosReq.post(API_PATHS.TASKS.CREATE_TASK, {
@@ -197,7 +197,7 @@ const CriarAcao = () => {
 
         return {
           text: item,
-          completed: matchedTask ? matchedTask.completed : false,
+          concluido: matchedTask ? matchedTask.concluido : false,
         };
       });
 
@@ -216,7 +216,7 @@ const CriarAcao = () => {
     }
   };
 
-  // Toggle a checklist item completed state (update status accordingly)
+  // Toggle a checklist item concluido state (update status accordingly)
   const toggleChecklistItem = async (index) => {
     if (!taskId) return;
     try {
@@ -224,7 +224,7 @@ const CriarAcao = () => {
         ? [...currentTask.itens]
         : [];
       if (!next[index]) return;
-      next[index] = { ...next[index], completed: !next[index].completed };
+      next[index] = { ...next[index], concluido: !next[index].concluido };
 
       const response = await axiosReq.put(
         API_PATHS.TASKS.UPDATE_TODO_CHECKLIST(taskId),
@@ -300,7 +300,7 @@ const CriarAcao = () => {
           title: taskInfo.title,
           descricao: taskInfo.descricao,
           classification: taskInfo.classification || "NIST CSF",
-          priority: taskInfo.priority,
+          prioridade: taskInfo.prioridade,
           dueDate: taskInfo.dueDate
             ? moment(taskInfo.dueDate).format("YYYY-MM-DD")
             : null,
@@ -362,13 +362,13 @@ const CriarAcao = () => {
     if (!taskId) return;
     try {
       const old = Array.isArray(currentTask?.itens) ? currentTask.itens : [];
-      const byText = new Map(old.map((o) => [o.text, !!o.completed]));
+      const byText = new Map(old.map((o) => [o.text, !!o.concluido]));
       const source = Array.isArray(nextTexts)
         ? nextTexts
         : taskData?.itens || [];
       const updated = source.map((txt, idx) => ({
         text: txt,
-        completed: byText.has(txt) ? byText.get(txt) : !!old[idx]?.completed,
+        concluido: byText.has(txt) ? byText.get(txt) : !!old[idx]?.concluido,
       }));
       const res = await axiosReq.put(
         API_PATHS.TASKS.UPDATE_TODO_CHECKLIST(taskId),
@@ -511,10 +511,10 @@ const CriarAcao = () => {
               {taskId && (
                 <div
                   className={`text-[11px] md:text-[13px] font-medium ${getStatusTagColor(
-                    currentTask?.status || "Pending"
+                    currentTask?.status || "Pendente"
                   )} px-3 py-1 rounded`}
                 >
-                  {getStatusLabel(currentTask?.status || "Pending")}
+                  {getStatusLabel(currentTask?.status || "Pendente")}
                 </div>
               )}
               {taskId && (
@@ -547,10 +547,10 @@ const CriarAcao = () => {
                 </label>
 
                 <Lista
-                  options={PRIORITY_DATA}
-                  value={taskData.priority}
-                  onChange={(value) => handleValueChange("priority", value)}
-                  placeholder="Select Priority"
+                  options={PRIORIDADE_DATA}
+                  value={taskData.prioridade}
+                  onChange={(value) => handleValueChange("prioridade", value)}
+                  placeholder="Selecione a prioridade"
                 />
               </div>
 
@@ -669,7 +669,7 @@ const CriarAcao = () => {
                       />
                       <input
                         type="checkbox"
-                        checked={!!currentTask?.itens?.[index]?.completed}
+                        checked={!!currentTask?.itens?.[index]?.concluido}
                         onChange={() => toggleChecklistItem(index)}
                         className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none cursor-pointer"
                       />

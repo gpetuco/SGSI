@@ -20,9 +20,9 @@ const Usuario = ({ userInfo }) => {
 
       <div className="flex items-end gap-3 mt-5">
         <StatCard
-          label="Pending"
-          count={userInfo?.pendingTasks || 0}
-          status="Pending"
+          label="Pendente"
+          count={userInfo?.acoesPendentes || 0}
+          status="Pendente"
         />
         <StatCard
           label="In Progress"
@@ -30,9 +30,9 @@ const Usuario = ({ userInfo }) => {
           status="In Progress"
         />
         <StatCard
-          label="Completed"
-          count={userInfo?.completedTasks || 0}
-          status="Completed"
+          label="Concluído"
+          count={userInfo?.acoesConcluidas || 0}
+          status="Concluído"
         />
       </div>
     </div>
@@ -47,7 +47,7 @@ const StatCard = ({ label, count, status }) => {
       case "In Progress":
         return "text-cyan-500 bg-gray-50";
 
-      case "Completed":
+      case "Concluído":
         return "text-indigo-500 bg-gray-50";
 
       default:

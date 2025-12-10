@@ -63,30 +63,30 @@ const Dashboard = () => {
 
   const prepareChartData = (data) => {
     const taskDistribution = data?.taskDistribution || null;
-    const taskPriorityLevels = data?.taskPriorityLevels || null;
+    const taskPrioridadeLevels = data?.taskPrioridadeLevels || null;
 
     const taskDistributionData = [
-      { status: "Pendente", count: taskDistribution?.Pending || 0 },
+      { status: "Pendente", count: taskDistribution?.Pendente || 0 },
       { status: "Em Andamento", count: taskDistribution?.InProgress || 0 },
-      { status: "Concluído", count: taskDistribution?.Completed || 0 },
+      { status: "Concluído", count: taskDistribution?.Concluído || 0 },
     ];
 
     setPieChartData(taskDistributionData);
 
-    const PriorityLevelData = [
-      { priority: "Baixa", count: taskPriorityLevels?.Low || 0 },
-      { priority: "Média", count: taskPriorityLevels?.Medium || 0 },
-      { priority: "Alta", count: taskPriorityLevels?.High || 0 },
+    const PrioridadeLevelData = [
+      { prioridade: "Baixa", count: taskPrioridadeLevels?.Low || 0 },
+      { prioridade: "Média", count: taskPrioridadeLevels?.Medium || 0 },
+      { prioridade: "Alta", count: taskPrioridadeLevels?.High || 0 },
     ];
 
-    setBarChartData(PriorityLevelData);
+    setBarChartData(PrioridadeLevelData);
 
     const statusByFramework = data?.statusByFramework || {};
     const stacked = ["ISO 27001", "NIST CSF"].map((fw) => ({
       framework: fw,
-      Pending: statusByFramework?.[fw]?.Pending || 0,
+      Pendente: statusByFramework?.[fw]?.Pendente || 0,
       InProgress: statusByFramework?.[fw]?.InProgress || 0,
-      Completed: statusByFramework?.[fw]?.Completed || 0,
+      Concluído: statusByFramework?.[fw]?.Concluído || 0,
     }));
     setStackedStatusData(stacked);
 
@@ -94,8 +94,8 @@ const Dashboard = () => {
     const line = [
       {
         name: "Pendente",
-        "NIST CSF": statusByFramework?.["NIST CSF"]?.Pending || 0,
-        "ISO 27001": statusByFramework?.["ISO 27001"]?.Pending || 0,
+        "NIST CSF": statusByFramework?.["NIST CSF"]?.Pendente || 0,
+        "ISO 27001": statusByFramework?.["ISO 27001"]?.Pendente || 0,
       },
       {
         name: "Em Andamento",
@@ -104,8 +104,8 @@ const Dashboard = () => {
       },
       {
         name: "Concluído",
-        "NIST CSF": statusByFramework?.["NIST CSF"]?.Completed || 0,
-        "ISO 27001": statusByFramework?.["ISO 27001"]?.Completed || 0,
+        "NIST CSF": statusByFramework?.["NIST CSF"]?.Concluído || 0,
+        "ISO 27001": statusByFramework?.["ISO 27001"]?.Concluído || 0,
       },
     ];
     setFrameworkLineData(line);
@@ -127,9 +127,9 @@ const Dashboard = () => {
     const tbu = (data?.tasksByUser || []).map((i) => ({
       user: i.user,
       userId: i.userId,
-      Pending: i.Pending || 0,
+      Pendente: i.Pendente || 0,
       InProgress: i.InProgress || 0,
-      Completed: i.Completed || 0,
+      Concluído: i.Concluído || 0,
       total: i.total || 0,
     }));
     const isoCompletionRaw = data?.completionByIsoControlType || [];
@@ -226,7 +226,7 @@ const Dashboard = () => {
           <Info
             label="Pendentes"
             value={formatMilhar(
-              dashboardData?.charts?.taskDistribution?.Pending || 0
+              dashboardData?.charts?.taskDistribution?.Pendente || 0
             )}
             color="bg-violet-500"
           />
@@ -242,7 +242,7 @@ const Dashboard = () => {
           <Info
             label="Concluídas"
             value={formatMilhar(
-              dashboardData?.charts?.taskDistribution?.Completed || 0
+              dashboardData?.charts?.taskDistribution?.Concluído || 0
             )}
             color="bg-lime-500"
           />
@@ -458,10 +458,10 @@ const Dashboard = () => {
           {(() => {
             const entry =
               stackedStatusData.find((e) => e.framework === fwModal.fw) || {};
-            const pending = entry.Pending || 0;
+            const pendente = entry.Pendente || 0;
             const inProgress = entry.InProgress || 0;
-            const completed = entry.Completed || 0;
-            const total = pending + inProgress + completed;
+            const concluido = entry.Concluído || 0;
+            const total = pendente + inProgress + concluido;
             return (
               <div>
                 <div className="flex items-center justify-center gap-10 md:gap-16 py-6">
@@ -507,7 +507,7 @@ const Dashboard = () => {
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white-important">
                     <span className="inline-block w-2.5 h-2.5 rounded-full bg-violet-500"></span>
                     <span className="font-medium">
-                      {pending} Ações Pendentes
+                      {pendente} Ações Pendentes
                     </span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white-important">
@@ -519,7 +519,7 @@ const Dashboard = () => {
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white-important">
                     <span className="inline-block w-2.5 h-2.5 rounded-full bg-lime-500"></span>
                     <span className="font-medium">
-                      {completed} Ações Concluídas
+                      {concluido} Ações Concluídas
                     </span>
                   </div>
                 </div>
@@ -538,7 +538,7 @@ const Dashboard = () => {
 
             <AreaWc
               data={barChartData}
-              xKey="priority"
+              xKey="prioridade"
               areas={[{ dataKey: "count", color: "#1368ec", name: "Ações" }]}
             />
           </div>

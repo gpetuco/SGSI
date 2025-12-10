@@ -6,7 +6,7 @@ import { API_PATHS } from "../../utils/apiUrl";
 import Acao from "../../components/Cards/Acao";
 import Lista from "../../components/Inputs/Lista";
 import ListaSearch from "../../components/Inputs/ListaSearch";
-import { CLASSIFICATION_DATA, PRIORITY_DATA } from "../../utils/menus";
+import { CLASSIFICATION_DATA, PRIORIDADE_DATA } from "../../utils/menus";
 import { UserContext } from "../../context/userContext";
 
 const Acoes = () => {
@@ -15,7 +15,7 @@ const Acoes = () => {
   const [filterStatus, setFilterStatus] = useState("All");
   const [selectedUser, setSelectedUser] = useState("All");
   const [selectedFramework, setSelectedFramework] = useState("All");
-  const [selectedPriority, setSelectedPriority] = useState("All");
+  const [selectedPrioridade, setSelectedPrioridade] = useState("All");
   const [selectedCompany, setSelectedCompany] = useState("All");
   const [userOptions, setUserOptions] = useState([
     { label: "Todos", value: "All" },
@@ -143,9 +143,9 @@ const Acoes = () => {
               <Lista
                 options={[
                   { label: "Todos", value: "All" },
-                  { label: "Pendente", value: "Pending" },
+                  { label: "Pendente", value: "Pendente" },
                   { label: "Em Andamento", value: "In Progress" },
-                  { label: "Concluído", value: "Completed" },
+                  { label: "Concluído", value: "Concluído" },
                 ]}
                 value={filterStatus}
                 onChange={setFilterStatus}
@@ -157,9 +157,9 @@ const Acoes = () => {
                 Prioridade
               </label>
               <Lista
-                options={[{ label: "Todos", value: "All" }, ...PRIORITY_DATA]}
-                value={selectedPriority}
-                onChange={setSelectedPriority}
+                options={[{ label: "Todos", value: "All" }, ...PRIORIDADE_DATA]}
+                value={selectedPrioridade}
+                onChange={setSelectedPrioridade}
                 placeholder="Todas"
               />
             </div>
@@ -192,15 +192,15 @@ const Acoes = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-4 mt-4">
-          {(selectedPriority === "All"
+          {(selectedPrioridade === "All"
             ? allTasks
-            : allTasks.filter((t) => t.priority === selectedPriority)
+            : allTasks.filter((t) => t.prioridade === selectedPrioridade)
           )?.map((item) => (
             <Acao
               key={item._id}
               title={item.title}
               descricao={item.descricao}
-              priority={item.priority}
+              prioridade={item.prioridade}
               classification={item.classification}
               status={item.status}
               progress={item.progress}
@@ -209,7 +209,7 @@ const Acoes = () => {
               responsavel={item.responsavel?.map(
                 (member) => member.profileImageUrl
               )}
-              completedTodoCount={item.completedTodoCount || 0}
+              concluidoTodoCount={item.concluidoTodoCount || 0}
               itens={item.itens || []}
               clienteName={item.cliente?.name}
               onClick={() => handleClick(item)}

@@ -19,7 +19,7 @@ const AcaoDetalhar = () => {
       case "In Progress":
         return "text-cyan-500 bg-cyan-50 border border-cyan-500/10";
 
-      case "Completed":
+      case "Concluído":
         return "text-lime-500 bg-lime-50 border border-lime-500/20";
 
       default:
@@ -31,16 +31,16 @@ const AcaoDetalhar = () => {
     switch (status) {
       case "In Progress":
         return "Em Andamento";
-      case "Completed":
+      case "Concluído":
         return "Concluído";
-      case "Pending":
+      case "Pendente":
       default:
         return "Pendente";
     }
   };
 
-  const getPriorityLabel = (priority) => {
-    switch (priority) {
+  const getPrioridadeLabel = (prioridade) => {
+    switch (prioridade) {
       case "Low":
         return "Baixa";
       case "Medium":
@@ -75,7 +75,7 @@ const AcaoDetalhar = () => {
     const taskId = id;
 
     if (itens && itens[index]) {
-      itens[index].completed = !itens[index].completed;
+      itens[index].concluido = !itens[index].concluido;
 
       try {
         const response = await axiosReq.put(
@@ -85,10 +85,10 @@ const AcaoDetalhar = () => {
         if (response.status === 200) {
           setTask(response.data?.task || task);
         } else {
-          itens[index].completed = !itens[index].completed;
+          itens[index].concluido = !itens[index].concluido;
         }
       } catch (error) {
-        itens[index].completed = !itens[index].completed;
+        itens[index].concluido = !itens[index].concluido;
       }
     }
   };
@@ -137,7 +137,7 @@ const AcaoDetalhar = () => {
                 <div className="col-span-6 md:col-span-4">
                   <InfoBox
                     label="Prioridade"
-                    value={getPriorityLabel(task?.priority)}
+                    value={getPrioridadeLabel(task?.prioridade)}
                   />
                 </div>
                 <div className="col-span-6 md:col-span-4">
@@ -160,7 +160,7 @@ const AcaoDetalhar = () => {
                   <Itens
                     key={`todo_${index}`}
                     text={item.text}
-                    isChecked={item?.completed}
+                    isChecked={item?.concluido}
                     readOnly={user?.role === "member"}
                     onChange={() => updateItens(index)}
                   />

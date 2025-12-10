@@ -15,7 +15,7 @@ import Modal from "../Modal";
 
 const BarWc = ({ data }) => {
   const getBarColor = (entry) => {
-    switch (entry?.priority) {
+    switch (entry?.prioridade) {
       case "Low":
         return "#00BC7D";
 
@@ -35,7 +35,7 @@ const BarWc = ({ data }) => {
       return (
         <div className="bg-white dark:bg-slate-700 shadow-md rounded-lg p-2 border border-gray-300 dark:border-slate-500">
           <p className="text-xs font-semibold text-purple-800 dark:text-purple-300 mb-1">
-            {payload[0].payload.priority}
+            {payload[0].payload.prioridade}
           </p>
           <p className="text-sm text-gray-600 dark:text-slate-200">
             \n Count:{" "}
@@ -57,7 +57,7 @@ const BarWc = ({ data }) => {
         <CartesianGrid stroke="none" />
 
         <XAxis
-          dataKey="priority"
+          dataKey="prioridade"
           tick={{ fontSize: 12, fill: "var(--sgsi-text-muted)" }}
           stroke="none"
         />
@@ -70,7 +70,7 @@ const BarWc = ({ data }) => {
 
         <Bar
           dataKey="count"
-          nameKey="priority"
+          nameKey="prioridade"
           fill="#FF8042"
           radius={[10, 10, 0, 0]}
           activeDot={{ r: 8, fill: "yellow" }}
@@ -97,7 +97,7 @@ const BarWc = ({ data }) => {
       <Modal
         isOpen={open}
         onClose={() => setOpen(false)}
-        title="Priority"
+        title="Prioridade"
         variant="wide"
       >
         <div style={{ height: "65vh" }}>
