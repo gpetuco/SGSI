@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { SIDE_MENU_DATA, SIDE_MENU_USER_DATA } from "../../utils/data";
+import { SIDE_MENU_DATA, SIDE_MENU_USER_DATA } from "../../utils/menus";
 import { UserContext } from "../../context/userContext";
 import { useNavigate } from "react-router-dom";
 import UserAvatar from "../UserAvatar";
@@ -37,7 +37,11 @@ const SideMenu = ({ activeMenu }) => {
     <div className="w-64 h-screen overflow-y-auto bg-white border-r border-gray-200/50 sticky top-0 z-20">
       <div className="flex flex-col items-center justify-center mb-7 pt-5">
         <div className="relative">
-          <UserAvatar src={user?.profileImageUrl} name={user?.name} size="w-20 h-20" />
+          <UserAvatar
+            src={user?.profileImageUrl}
+            name={user?.name}
+            size="w-20 h-20"
+          />
         </div>
 
         {user?.role === "admin" && (
@@ -50,7 +54,9 @@ const SideMenu = ({ activeMenu }) => {
           {user?.name || ""}
         </h5>
 
-        <p className="text-[12px] text-gray-500 dark:text-slate-300">{user?.email || ""}</p>
+        <p className="text-[12px] text-gray-500 dark:text-slate-300">
+          {user?.email || ""}
+        </p>
       </div>
 
       {sideMenuData.map((item, index) => (

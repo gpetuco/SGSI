@@ -1,6 +1,6 @@
 import React from "react";
 
-const DeleteAlert = ({ content, onDelete }) => {
+const Excluir = ({ content, onDelete }) => {
   return (
     <div>
       <p className="text-sm">{content}</p>
@@ -18,4 +18,4 @@ const DeleteAlert = ({ content, onDelete }) => {
   );
 };
 
-export default DeleteAlert;
+export default Excluir;

@@ -1,6 +1,6 @@
 const express = require("express");
 const { protect, adminOnly } = require("../middlewares/authMiddleware");
-const { createCompany, getCompanies } = require("../controllers/companyController");
+const { createCompany, getCompanies } = require("../controllers/cliente");
 
 const router = express.Router();
 
@@ -9,4 +9,3 @@ router.get("/", protect, adminOnly, getCompanies);
 router.post("/", protect, adminOnly, createCompany);
 
 module.exports = router;
-

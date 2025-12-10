@@ -4,13 +4,12 @@ import { useContext } from "react";
 import { UserContext } from "../../context/userContext";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../utils/axiosInstance";
-import { API_PATHS } from "../../utils/apiPaths";
+import axiosReq from "../../utils/axiosReq";
+import { API_PATHS } from "../../utils/apiUrl";
 // Use Intl for pt-BR date formatting
 import { addThousandsSeparator } from "../../utils/helper";
-import InfoCard from "../../components/Cards/InfoCard";
+import Info from "../../components/Cards/Info";
 import { LuArrowRight } from "react-icons/lu";
-import TaskListTable from "../../components/TaskListTable";
 import CustomPieChart from "../../components/Charts/CustomPieChart";
 import CustomBarChart from "../../components/Charts/CustomBarChart";
 
@@ -51,7 +50,7 @@ const UserDashboard = () => {
 
   const getDashboardData = async () => {
     try {
-      const response = await axiosInstance.get(
+      const response = await axiosReq.get(
         API_PATHS.TASKS.GET_USER_DASHBOARD_DATA
       );
       if (response.data) {
@@ -97,7 +96,7 @@ const UserDashboard = () => {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-5">
-          <InfoCard
+          <Info
             label="Total Tasks"
             value={addThousandsSeparator(
               dashboardData?.charts?.taskDistribution?.All || 0
@@ -105,7 +104,7 @@ const UserDashboard = () => {
             color="bg-primary"
           />
 
-          <InfoCard
+          <Info
             label="Pending Tasks"
             value={addThousandsSeparator(
               dashboardData?.charts?.taskDistribution?.Pending || 0
@@ -113,7 +112,7 @@ const UserDashboard = () => {
             color="bg-violet-500"
           />
 
-          <InfoCard
+          <Info
             label="In Progress Tasks"
             value={addThousandsSeparator(
               dashboardData?.charts?.taskDistribution?.InProgress || 0
@@ -121,7 +120,7 @@ const UserDashboard = () => {
             color="bg-cyan-500"
           />
 
-          <InfoCard
+          <Info
             label="Completed Tasks"
             value={addThousandsSeparator(
               dashboardData?.charts?.taskDistribution?.Completed || 0
@@ -149,20 +148,6 @@ const UserDashboard = () => {
             </div>
 
             <CustomBarChart data={barChartData} />
-          </div>
-        </div>
-
-        <div className="md:col-span-2">
-          <div className="card">
-            <div className="flex items-center justify-between ">
-              <h5 className="text-lg">Recent Tasks</h5>
-
-              <button className="card-btn" onClick={onSeeMore}>
-                See All <LuArrowRight className="text-base" />
-              </button>
-            </div>
-
-            <TaskListTable tableData={dashboardData?.recentTasks || []} />
           </div>
         </div>
       </div>

@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
-import axiosInstance from "../../utils/axiosInstance";
-import { API_PATHS } from "../../utils/apiPaths";
-import TaskCard from "../../components/Cards/TaskCard";
+import axiosReq from "../../utils/axiosReq";
+import { API_PATHS } from "../../utils/apiUrl";
+import Acao from "../../components/Cards/Acao";
 import { useNavigate } from "react-router-dom";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
-import { PRIORITY_DATA } from "../../utils/data";
+import { PRIORITY_DATA } from "../../utils/menus";
 
 const Column = ({ title, tasks, onOpen }) => {
   return (
@@ -22,23 +22,23 @@ const Column = ({ title, tasks, onOpen }) => {
         ) : (
           tasks.map((item) => (
             <div className="h-[280px]">
-            <TaskCard
-              key={item._id}
-              title={item.title}
-              description={item.description}
-              priority={item.priority}
-              classification={item.classification}
-              status={item.status}
-              progress={item.progress}
-              createdAt={item.createdAt}
-              dueDate={item.dueDate}
-              assignedTo={item.assignedTo?.map((p) => p.profileImageUrl)}
-              completedTodoCount={item.completedTodoCount || 0}
-              todoChecklist={item.todoChecklist || []}
-              clienteName={item.cliente?.name}
-              onClick={() => onOpen(item._id)}
-              className="h-full"
-            />
+              <Acao
+                key={item._id}
+                title={item.title}
+                descricao={item.descricao}
+                priority={item.priority}
+                classification={item.classification}
+                status={item.status}
+                progress={item.progress}
+                createdAt={item.createdAt}
+                dueDate={item.dueDate}
+                assignedTo={item.assignedTo?.map((p) => p.profileImageUrl)}
+                completedTodoCount={item.completedTodoCount || 0}
+                itens={item.itens || []}
+                clienteName={item.cliente?.name}
+                onClick={() => onOpen(item._id)}
+                className="h-full"
+              />
             </div>
           ))
         )}
@@ -54,7 +54,7 @@ const Kanban = () => {
 
   const getMyTasks = async () => {
     try {
-      const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS);
+      const response = await axiosReq.get(API_PATHS.TASKS.GET_ALL_TASKS);
       setTasks(response.data?.tasks || []);
     } catch (error) {
       console.error("Error fetching tasks:", error);
@@ -67,7 +67,10 @@ const Kanban = () => {
   }, []);
 
   const grouped = useMemo(() => {
-    const source = selectedPriority === "All" ? tasks : tasks.filter((t) => t.priority === selectedPriority);
+    const source =
+      selectedPriority === "All"
+        ? tasks
+        : tasks.filter((t) => t.priority === selectedPriority);
     const by = { Pending: [], "In Progress": [], Completed: [] };
     for (const t of source) {
       if (by[t.status]) by[t.status].push(t);
@@ -89,7 +92,9 @@ const Kanban = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-1 gap-2 w-full md:w-[220px]">
             <div className="w-full md:w-[210px]">
-              <label className="text-xs font-medium text-slate-600">Priority</label>
+              <label className="text-xs font-medium text-slate-600">
+                Priority
+              </label>
               <SelectDropdown
                 options={[{ label: "All", value: "All" }, ...PRIORITY_DATA]}
                 value={selectedPriority}
@@ -101,9 +106,21 @@ const Kanban = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-          <Column title="Pending" tasks={grouped["Pending"]} onOpen={handleOpen} />
-          <Column title="In Progress" tasks={grouped["In Progress"]} onOpen={handleOpen} />
-          <Column title="Completed" tasks={grouped["Completed"]} onOpen={handleOpen} />
+          <Column
+            title="Pending"
+            tasks={grouped["Pending"]}
+            onOpen={handleOpen}
+          />
+          <Column
+            title="In Progress"
+            tasks={grouped["In Progress"]}
+            onOpen={handleOpen}
+          />
+          <Column
+            title="Completed"
+            tasks={grouped["Completed"]}
+            onOpen={handleOpen}
+          />
         </div>
       </div>
     </DashboardLayout>
@@ -111,4 +128,3 @@ const Kanban = () => {
 };
 
 export default Kanban;
-

@@ -1,12 +1,12 @@
 ﻿import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../utils/axiosInstance";
-import { API_PATHS } from "../../utils/apiPaths";
-import TaskCard from "../../components/Cards/TaskCard";
+import axiosReq from "../../utils/axiosReq";
+import { API_PATHS } from "../../utils/apiUrl";
+import Acao from "../../components/Cards/Acao";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
 import SelectDropdownSearch from "../../components/Inputs/SelectDropdownSearch";
-import { CLASSIFICATION_DATA, PRIORITY_DATA } from "../../utils/data";
+import { CLASSIFICATION_DATA, PRIORITY_DATA } from "../../utils/menus";
 import { UserContext } from "../../context/userContext";
 
 const ManageTasks = () => {
@@ -37,7 +37,7 @@ const ManageTasks = () => {
       if (selectedUser !== "All") params.assignedTo = selectedUser;
       if (selectedCompany !== "All") params.cliente = selectedCompany;
 
-      const response = await axiosInstance.get(API_PATHS.TASKS.GET_ALL_TASKS, {
+      const response = await axiosReq.get(API_PATHS.TASKS.GET_ALL_TASKS, {
         params,
       });
 
@@ -58,7 +58,7 @@ const ManageTasks = () => {
   // fetch users for dropdown
   const fetchUsers = async () => {
     try {
-      const res = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
+      const res = await axiosReq.get(API_PATHS.USERS.GET_ALL_USERS);
       const opts = [{ label: "Todos", value: "All" }].concat(
         (res.data || []).map((u) => ({
           label: u.name,
@@ -74,7 +74,7 @@ const ManageTasks = () => {
 
   const fetchCompanies = async () => {
     try {
-      const res = await axiosInstance.get(API_PATHS.COMPANIES.LIST);
+      const res = await axiosReq.get(API_PATHS.COMPANIES.LIST);
       const opts = [{ label: "Todos", value: "All" }].concat(
         (res.data || []).map((c) => ({
           label: c.name,
@@ -196,10 +196,10 @@ const ManageTasks = () => {
             ? allTasks
             : allTasks.filter((t) => t.priority === selectedPriority)
           )?.map((item) => (
-            <TaskCard
+            <Acao
               key={item._id}
               title={item.title}
-              description={item.description}
+              descricao={item.descricao}
               priority={item.priority}
               classification={item.classification}
               status={item.status}
@@ -210,7 +210,7 @@ const ManageTasks = () => {
                 (member) => member.profileImageUrl
               )}
               completedTodoCount={item.completedTodoCount || 0}
-              todoChecklist={item.todoChecklist || []}
+              itens={item.itens || []}
               clienteName={item.cliente?.name}
               onClick={() => handleClick(item)}
             />

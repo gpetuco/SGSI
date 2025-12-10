@@ -1,6 +1,6 @@
 import React from "react";
 
-const UserCard = ({ userInfo }) => {
+const Usuario = ({ userInfo }) => {
   return (
     <div className="user-card p-2">
       <div className="flex items-center justify-between">
@@ -39,7 +39,7 @@ const UserCard = ({ userInfo }) => {
   );
 };
 
-export default UserCard;
+export default Usuario;
 
 const StatCard = ({ label, count, status }) => {
   const getStatusTagColor = () => {

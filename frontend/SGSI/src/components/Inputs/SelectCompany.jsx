@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
-import axiosInstance from "../../utils/axiosInstance";
-import { API_PATHS } from "../../utils/apiPaths";
+import axiosReq from "../../utils/axiosReq";
+import { API_PATHS } from "../../utils/apiUrl";
 import { LuChevronDown, LuSearch } from "react-icons/lu";
 
-const SelectCompany = ({ value, onChange, placeholder = "Selecione o cliente" }) => {
+const SelectCompany = ({
+  value,
+  onChange,
+  placeholder = "Selecione o cliente",
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [companies, setCompanies] = useState([]);
   const [query, setQuery] = useState("");
 
   const fetchCompanies = async () => {
     try {
-      const res = await axiosInstance.get(API_PATHS.COMPANIES.LIST);
+      const res = await axiosReq.get(API_PATHS.COMPANIES.LIST);
       setCompanies(Array.isArray(res.data) ? res.data : []);
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -70,7 +74,9 @@ const SelectCompany = ({ value, onChange, placeholder = "Selecione o cliente" })
               </div>
             ))}
             {filtered.length === 0 && (
-              <div className="px-3 py-2 text-sm text-gray-500">Nenhum cliente encontrado</div>
+              <div className="px-3 py-2 text-sm text-gray-500">
+                Nenhum cliente encontrado
+              </div>
             )}
           </div>
         </div>

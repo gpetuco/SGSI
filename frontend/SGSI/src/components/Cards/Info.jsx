@@ -1,6 +1,6 @@
 import React from "react";
 
-const InfoCard = ({ icon, label, value, color }) => {
+const Info = ({ icon, label, value, color }) => {
   return (
     <div className="flex items-center gap-3">
       <div className={`w-5 md:w-5 h-5 md:h-5 ${color}`} />
@@ -15,4 +15,4 @@ const InfoCard = ({ icon, label, value, color }) => {
   );
 };
 
-export default InfoCard;
+export default Info;

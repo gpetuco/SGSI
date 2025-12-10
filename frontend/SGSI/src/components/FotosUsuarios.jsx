@@ -1,6 +1,6 @@
 import React from "react";
 
-const AvatarGroup = ({ avatars, maxVisible = 3 }) => {
+const FotosUsuarios = ({ avatars, maxVisible = 3 }) => {
   return (
     <div className="flex items-center">
       {avatars.slice(0, maxVisible).map((avatar, index) => (
@@ -20,4 +20,4 @@ const AvatarGroup = ({ avatars, maxVisible = 3 }) => {
   );
 };
 
-export default AvatarGroup;
+export default FotosUsuarios;

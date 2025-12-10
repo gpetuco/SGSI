@@ -4,8 +4,8 @@ import { validateEmail } from "../../utils/helper";
 import ProfilePhotoSelector from "../../components/Inputs/ProfilePhotoSelector";
 import Input from "../../components/Inputs/Input";
 import { Link, useNavigate } from "react-router-dom";
-import axiosInstance from "../../utils/axiosInstance";
-import { API_PATHS } from "../../utils/apiPaths";
+import axiosReq from "../../utils/axiosReq";
+import { API_PATHS } from "../../utils/apiUrl";
 import { UserContext } from "../../context/userContext";
 import uploadImage from "../../utils/uploadImage";
 
@@ -69,10 +69,7 @@ const SignUp = () => {
         }
         payload.empresaId = empresaId;
       }
-      const response = await axiosInstance.post(
-        API_PATHS.AUTH.REGISTER,
-        payload
-      );
+      const response = await axiosReq.post(API_PATHS.AUTH.REGISTER, payload);
 
       const { token, role } = response.data;
 

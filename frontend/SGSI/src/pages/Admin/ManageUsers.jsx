@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
-import { API_PATHS } from "../../utils/apiPaths";
-import axiosInstance from "../../utils/axiosInstance";
+import { API_PATHS } from "../../utils/apiUrl";
+import axiosReq from "../../utils/axiosReq";
 import UserAvatar from "../../components/UserAvatar";
 
 const ManageUsers = () => {
@@ -9,7 +9,7 @@ const ManageUsers = () => {
 
   const getAllUsers = async () => {
     try {
-      const response = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
+      const response = await axiosReq.get(API_PATHS.USERS.GET_ALL_USERS);
       if (response.data?.length > 0) {
         setAllUsers(response.data);
       }

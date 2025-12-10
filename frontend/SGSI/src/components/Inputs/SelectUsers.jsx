@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { API_PATHS } from "../../utils/apiPaths";
-import axiosInstance from "../../utils/axiosInstance";
+import { API_PATHS } from "../../utils/apiUrl";
+import axiosReq from "../../utils/axiosReq";
 import { LuUsers } from "react-icons/lu";
 import Modal from "../Modal";
-import AvatarGroup from "../AvatarGroup";
+import FotosUsuarios from "../FotosUsuarios";
 import UserAvatar from "../UserAvatar";
 
 const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
@@ -21,7 +21,7 @@ const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
 
   const getAllUsers = async () => {
     try {
-      const response = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
+      const response = await axiosReq.get(API_PATHS.USERS.GET_ALL_USERS);
       if (response.data?.length > 0) {
         setAllUsers(response.data);
       }
@@ -69,7 +69,7 @@ const SelectUsers = ({ selectedUsers, setSelectedUsers }) => {
 
       {selectedUserAvatars.length > 0 && (
         <div className="cursor-pointer" onClick={openModal}>
-          <AvatarGroup avatars={selectedUserAvatars} maxVisible={3} />
+          <FotosUsuarios avatars={selectedUserAvatars} maxVisible={3} />
         </div>
       )}
 

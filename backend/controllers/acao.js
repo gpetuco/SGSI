@@ -9,7 +9,6 @@ const getTasks = async (req, res) => {
     const isAdmin = req.user.role === "admin";
     const restrictToMe = assignedTo === "me";
 
-    // Base filter shared between list and summary
     let baseFilter = {};
 
     if (status) {
@@ -27,7 +26,6 @@ const getTasks = async (req, res) => {
         baseFilter.assignedTo = assignedTo;
       }
     } else {
-      // Non-admin users are always scoped to their own empresa (cliente)
       if (!req.user.empresa) {
         return res.json({
           tasks: [],
@@ -49,7 +47,6 @@ const getTasks = async (req, res) => {
       }
     }
 
-    // For admins using ?assignedTo=me explicitly
     const listFilter = {
       ...baseFilter,
       ...(isAdmin && restrictToMe ? { assignedTo: req.user._id } : {}),
@@ -59,14 +56,11 @@ const getTasks = async (req, res) => {
       .populate("assignedTo", "name email profileImageUrl")
       .populate("cliente", "name");
 
-    // Add completed todoChecklist count and computed progress to each task
     tasks = await Promise.all(
       tasks.map(async (task) => {
-        const total = Array.isArray(task.todoChecklist)
-          ? task.todoChecklist.length
-          : 0;
-        const completedCount = Array.isArray(task.todoChecklist)
-          ? task.todoChecklist.filter((item) => item.completed).length
+        const total = Array.isArray(task.itens) ? task.itens.length : 0;
+        const completedCount = Array.isArray(task.itens)
+          ? task.itens.filter((item) => item.completed).length
           : 0;
         const progressPct =
           total > 0
@@ -80,7 +74,6 @@ const getTasks = async (req, res) => {
       })
     );
 
-    // Status summary counts (same scoping as list)
     const summaryBaseFilter = {
       ...baseFilter,
       ...(isAdmin && restrictToMe ? { assignedTo: req.user._id } : {}),
@@ -128,10 +121,13 @@ const getTaskById = async (req, res) => {
 
     if (!task) return res.status(404).json({ message: "Task not found" });
 
-    // Members can only access tasks from their own empresa (cliente)
     if (req.user.role === "member") {
-      const userEmpresaId = req.user.empresa ? req.user.empresa.toString() : null;
-      const taskClienteId = task.cliente ? task.cliente._id?.toString() || task.cliente.toString() : null;
+      const userEmpresaId = req.user.empresa
+        ? req.user.empresa.toString()
+        : null;
+      const taskClienteId = task.cliente
+        ? task.cliente._id?.toString() || task.cliente.toString()
+        : null;
 
       if (!userEmpresaId || !taskClienteId || userEmpresaId !== taskClienteId) {
         return res.status(403).json({ message: "Access denied" });
@@ -151,12 +147,12 @@ const createTask = async (req, res) => {
   try {
     const {
       title,
-      description,
+      descricao,
       priority,
       classification,
       dueDate,
       assignedTo,
-      todoChecklist,
+      itens,
       cliente,
     } = req.body;
 
@@ -166,7 +162,6 @@ const createTask = async (req, res) => {
         .json({ message: "assignedTo must be an array of user IDs" });
     }
 
-    // Validate cliente if provided
     let clienteId = null;
     if (cliente) {
       try {
@@ -181,13 +176,13 @@ const createTask = async (req, res) => {
 
     const task = await Task.create({
       title,
-      description,
+      descricao,
       priority,
       classification,
       dueDate,
       assignedTo,
       createdBy: req.user._id,
-      todoChecklist,
+      itens,
       cliente: clienteId,
     });
 
@@ -207,11 +202,11 @@ const updateTask = async (req, res) => {
     if (!task) return res.status(404).json({ message: "Task not found" });
 
     task.title = req.body.title || task.title;
-    task.description = req.body.description || task.description;
+    task.descricao = req.body.descricao || task.descricao;
     task.priority = req.body.priority || task.priority;
     task.classification = req.body.classification || task.classification;
     task.dueDate = req.body.dueDate || task.dueDate;
-    task.todoChecklist = req.body.todoChecklist || task.todoChecklist;
+    task.itens = req.body.itens || task.itens;
     if (Object.prototype.hasOwnProperty.call(req.body, "cliente")) {
       if (!req.body.cliente) {
         task.cliente = null;
@@ -268,9 +263,10 @@ const updateTaskStatus = async (req, res) => {
     const task = await Task.findById(req.params.id);
     if (!task) return res.status(404).json({ message: "Task not found" });
 
-    // Members can only modify status of tasks from their own empresa (cliente)
     if (req.user.role === "member") {
-      const userEmpresaId = req.user.empresa ? req.user.empresa.toString() : null;
+      const userEmpresaId = req.user.empresa
+        ? req.user.empresa.toString()
+        : null;
       const taskClienteId = task.cliente ? task.cliente.toString() : null;
 
       if (!userEmpresaId || !taskClienteId || userEmpresaId !== taskClienteId) {
@@ -291,11 +287,10 @@ const updateTaskStatus = async (req, res) => {
     task.status = newStatus;
 
     if (task.status === "Completed") {
-      task.todoChecklist.forEach((item) => (item.completed = true));
+      task.itens.forEach((item) => (item.completed = true));
       task.progress = 100;
       if (!task.completedAt) task.completedAt = new Date();
     } else {
-      // if moving away from Completed, clear completedAt
       if (prevStatus === "Completed") task.completedAt = undefined;
     }
 
@@ -311,14 +306,15 @@ const updateTaskStatus = async (req, res) => {
 // @access  Private
 const updateTaskChecklist = async (req, res) => {
   try {
-    const { todoChecklist } = req.body;
+    const { itens } = req.body;
     const task = await Task.findById(req.params.id);
 
     if (!task) return res.status(404).json({ message: "Task not found" });
 
-    // Members can only modify checklist of tasks from their own empresa (cliente)
     if (req.user.role === "member") {
-      const userEmpresaId = req.user.empresa ? req.user.empresa.toString() : null;
+      const userEmpresaId = req.user.empresa
+        ? req.user.empresa.toString()
+        : null;
       const taskClienteId = task.cliente ? task.cliente.toString() : null;
 
       if (!userEmpresaId || !taskClienteId || userEmpresaId !== taskClienteId) {
@@ -334,19 +330,14 @@ const updateTaskChecklist = async (req, res) => {
         .json({ message: "Not authorized to update checklist" });
     }
 
-    task.todoChecklist = todoChecklist; // Replace with updated checklist
+    task.itens = itens;
 
-    // Auto-update progress based on checklist completion
-    const completedCount = task.todoChecklist.filter(
-      (item) => item.completed
-    ).length;
-    const totalItems = task.todoChecklist.length;
+    const completedCount = task.itens.filter((item) => item.completed).length;
+    const totalItems = task.itens.length;
     task.progress =
       totalItems > 0 ? Math.round((completedCount / totalItems) * 100) : 0;
 
-    // Derive status directly from counts to avoid rounding issues
     if (totalItems === 0) {
-      // No checklist: preserve status unless explicitly set elsewhere
     } else if (completedCount === 0) {
       task.status = "Pending";
       if (task.completedAt) task.completedAt = undefined;
@@ -386,8 +377,6 @@ const getDashboardData = async (req, res) => {
       if (endDate) baseMatch.createdAt.$lte = new Date(endDate);
     }
 
-    // Scope by empresa (cliente) for non-admin users.
-    // Admins can optionally filter by ?cliente.
     if (isAdmin) {
       if (cliente) {
         baseMatch.cliente = cliente;
@@ -426,7 +415,6 @@ const getDashboardData = async (req, res) => {
       baseMatch.cliente = req.user.empresa;
     }
 
-    // Statistics (with filters)
     const totalTasks = await Task.countDocuments(baseMatch);
     const pendingTasks = await Task.countDocuments({
       ...baseMatch,
@@ -442,7 +430,6 @@ const getDashboardData = async (req, res) => {
       dueDate: { $lt: new Date() },
     });
 
-    // Status distribution
     const taskStatuses = ["Pending", "In Progress", "Completed"];
     const taskDistributionRaw = await Task.aggregate([
       { $match: baseMatch },
@@ -456,7 +443,6 @@ const getDashboardData = async (req, res) => {
     }, {});
     taskDistribution["All"] = totalTasks;
 
-    // Priority levels
     const taskPriorities = ["Low", "Medium", "High"];
     const taskPriorityLevelsRaw = await Task.aggregate([
       { $match: baseMatch },
@@ -468,7 +454,6 @@ const getDashboardData = async (req, res) => {
       return acc;
     }, {});
 
-    // Recent tasks
     const recentTasks = await Task.find(baseMatch)
       .sort({ createdAt: -1 })
       .limit(10)
@@ -477,7 +462,6 @@ const getDashboardData = async (req, res) => {
       )
       .populate("assignedTo", "name profileImageUrl");
 
-    // Status by framework
     const frameworks = ["NIST CSF", "ISO 27001"];
     const statusByFrameworkRaw = await Task.aggregate([
       { $match: baseMatch },
@@ -503,16 +487,15 @@ const getDashboardData = async (req, res) => {
       return acc;
     }, {});
 
-    // Completion by framework (average progress from todoChecklist)
     const completionByFrameworkAgg = await Task.aggregate([
       { $match: baseMatch },
       {
         $addFields: {
-          totalTodos: { $size: { $ifNull: ["$todoChecklist", []] } },
+          totalTodos: { $size: { $ifNull: ["$itens", []] } },
           doneTodos: {
             $size: {
               $filter: {
-                input: { $ifNull: ["$todoChecklist", []] },
+                input: { $ifNull: ["$itens", []] },
                 as: "t",
                 cond: { $eq: ["$$t.completed", true] },
               },
@@ -559,17 +542,16 @@ const getDashboardData = async (req, res) => {
       return { framework: fw, percent: row ? row.percent : 0 };
     });
 
-    // Completion by NIST CSF function (Govern, Identify, Protect, Detect, Respond, Recover)
     const nistMatch = { ...baseMatch, classification: "NIST CSF" };
     const completionByNistFunctionAgg = await Task.aggregate([
       { $match: nistMatch },
       {
         $addFields: {
-          totalTodos: { $size: { $ifNull: ["$todoChecklist", []] } },
+          totalTodos: { $size: { $ifNull: ["$itens", []] } },
           doneTodos: {
             $size: {
               $filter: {
-                input: { $ifNull: ["$todoChecklist", []] },
+                input: { $ifNull: ["$itens", []] },
                 as: "t",
                 cond: { $eq: ["$$t.completed", true] },
               },
@@ -691,17 +673,16 @@ const getDashboardData = async (req, res) => {
       };
     });
 
-    // Completion by ISO 27001 control type (Organisational, People, Physical, Technological)
     const isoMatch = { ...baseMatch, classification: "ISO 27001" };
     const completionByIsoControlTypeAgg = await Task.aggregate([
       { $match: isoMatch },
       {
         $addFields: {
-          totalTodos: { $size: { $ifNull: ["$todoChecklist", []] } },
+          totalTodos: { $size: { $ifNull: ["$itens", []] } },
           doneTodos: {
             $size: {
               $filter: {
-                input: { $ifNull: ["$todoChecklist", []] },
+                input: { $ifNull: ["$itens", []] },
                 as: "t",
                 cond: { $eq: ["$$t.completed", true] },
               },
@@ -803,7 +784,6 @@ const getDashboardData = async (req, res) => {
       };
     });
 
-    // On-time rate among completed
     const completedInScope = await Task.find({
       ...baseMatch,
       status: "Completed",
@@ -816,7 +796,6 @@ const getDashboardData = async (req, res) => {
         ? Math.round((onTime / completedInScope.length) * 100)
         : 0;
 
-    // Tasks by user (Top 5)
     const tasksByUserAgg = await Task.aggregate([
       { $match: baseMatch },
       { $unwind: "$assignedTo" },
@@ -897,14 +876,13 @@ const getDashboardData = async (req, res) => {
 // @access  Private
 const getUserDashboardData = async (req, res) => {
   try {
-    const userId = req.user._id; // Only fetch data for the logged-in user
+    const userId = req.user._id;
     const empresaId = req.user.empresa || null;
 
     const baseMatch = empresaId
       ? { assignedTo: userId, cliente: empresaId }
       : { assignedTo: userId };
 
-    // Fetch statistics for user-specific tasks
     const totalTasks = await Task.countDocuments(baseMatch);
     const pendingTasks = await Task.countDocuments({
       ...baseMatch,
@@ -920,7 +898,6 @@ const getUserDashboardData = async (req, res) => {
       dueDate: { $lt: new Date() },
     });
 
-    // Task distribution by status
     const taskStatuses = ["Pending", "In Progress", "Completed"];
     const taskDistributionRaw = await Task.aggregate([
       { $match: baseMatch },
@@ -935,7 +912,6 @@ const getUserDashboardData = async (req, res) => {
     }, {});
     taskDistribution["All"] = totalTasks;
 
-    // Task distribution by priority
     const taskPriorities = ["Low", "Medium", "High"];
     const taskPriorityLevelsRaw = await Task.aggregate([
       { $match: baseMatch },
@@ -948,7 +924,6 @@ const getUserDashboardData = async (req, res) => {
       return acc;
     }, {});
 
-    // Fetch recent 10 tasks for the logged-in user
     const recentTasks = await Task.find(baseMatch)
       .sort({ createdAt: -1 })
       .limit(10)
@@ -971,7 +946,7 @@ const getUserDashboardData = async (req, res) => {
       recentTasks,
     });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Erro:", error: error.message });
   }
 };
 

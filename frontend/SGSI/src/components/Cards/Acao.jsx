@@ -1,12 +1,12 @@
 import React from "react";
 import Progress from "../Progress";
-import AvatarGroup from "../AvatarGroup";
+import FotosUsuarios from "../FotosUsuarios";
 import moment from "moment";
 import { UserContext } from "../../context/userContext";
 
-const TaskCard = ({
+const Acao = ({
   title,
-  description,
+  descricao,
   priority,
   classification,
   status,
@@ -15,7 +15,7 @@ const TaskCard = ({
   dueDate,
   assignedTo,
   completedTodoCount,
-  todoChecklist,
+  itens,
   onClick,
   className,
   clienteName,
@@ -24,7 +24,7 @@ const TaskCard = ({
   const getStatusTagColor = () => {
     switch (status) {
       case "In Progress":
-        return "text-cyan-500 bg-cyan-50 border border-cyan-500/10 dark:text-cyan-300 dark:bg-cyan-900/30 dark:border-cyan-400/20";
+        return "border-cyan-500/10 bg-cyan-50 text-cyan-500 border dark:text-cyan-300 dark:bg-cyan-900/30 dark:border-cyan-400/20";
 
       case "Completed":
         return "text-lime-500 bg-lime-50 border border-lime-500/20 dark:text-lime-300 dark:bg-lime-900/25 dark:border-lime-400/20";
@@ -97,7 +97,7 @@ const TaskCard = ({
             </p>
 
             <p className="text-xs md:text-[13px] text-gray-500 mt-1.5 line-clamp-2 leading-[18px]">
-              {description}
+              {descricao}
             </p>
           </div>
 
@@ -128,7 +128,7 @@ const TaskCard = ({
           <span className="text-white">Progresso:</span>{" "}
           <span className="font-semibold text-gray-700 dark:text-white">
             {`${progress}% (`}
-            {completedTodoCount} / {todoChecklist.length || 0}
+            {completedTodoCount} / {itens.length || 0}
             {")"}
           </span>
         </p>
@@ -156,7 +156,9 @@ const TaskCard = ({
           </div>
 
           <div className="flex items-center justify-between mt-3">
-            {user?.role === "admin" && <AvatarGroup avatars={assignedTo || []} />}
+            {user?.role === "admin" && (
+              <FotosUsuarios avatars={assignedTo || []} />
+            )}
           </div>
         </div>
       </div>
@@ -164,4 +166,4 @@ const TaskCard = ({
   );
 };
 
-export default TaskCard;
+export default Acao;

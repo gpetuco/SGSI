@@ -1,7 +1,7 @@
 import axios from "axios";
-import { BASE_URL } from "./apiPaths";
+import { BASE_URL } from "./apiUrl";
 
-const axiosInstance = axios.create({
+const axiosReq = axios.create({
   baseURL: BASE_URL,
   timeout: 10000,
   headers: {
@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
 });
 
 // Request Interceptor
-axiosInstance.interceptors.request.use(
+axiosReq.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("token");
     if (accessToken) {
@@ -25,7 +25,7 @@ axiosInstance.interceptors.request.use(
 );
 
 // Response Interceptor
-axiosInstance.interceptors.response.use(
+axiosReq.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -45,4 +45,4 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-export default axiosInstance;
+export default axiosReq;

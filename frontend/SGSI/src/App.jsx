@@ -10,7 +10,6 @@ import Dashboard from "./pages/Admin/Dashboard";
 import Login from "./pages/Auth/Login";
 import SignUp from "./pages/Auth/SignUp";
 import ManageTasks from "./pages/Admin/ManageTasks";
-import AdminMyTasks from "./pages/Admin/MyTasks";
 import AdminViewTaskDetails from "./pages/Admin/ViewTaskDetails";
 import AdminKanban from "./pages/Admin/Kanban";
 import Iso27001Tasks from "./pages/Admin/Iso27001Tasks";
@@ -45,7 +44,6 @@ const App = () => {
               <Route path="/admin/create-task" element={<CreateTask />} />
               <Route path="/admin/users" element={<ManageUsers />} />
               <Route path="/admin/clients" element={<Clients />} />
-              <Route path="/admin/my-tasks" element={<AdminMyTasks />} />
               <Route
                 path="/admin/task-details/:id"
                 element={<AdminViewTaskDetails />}
@@ -57,15 +55,8 @@ const App = () => {
               <Route path="/user/dashboard" element={<Dashboard />} />
               <Route path="/user/tasks" element={<ManageTasks />} />
               <Route path="/user/kanban" element={<AdminKanban />} />
-              <Route
-                path="/user/tasks/iso-27001"
-                element={<Iso27001Tasks />}
-              />
-              <Route
-                path="/user/tasks/nist-csf"
-                element={<NistCsfTasks />}
-              />
-              <Route path="/user/my-tasks" element={<AdminMyTasks />} />
+              <Route path="/user/tasks/iso-27001" element={<Iso27001Tasks />} />
+              <Route path="/user/tasks/nist-csf" element={<NistCsfTasks />} />
               <Route
                 path="/user/task-details/:id"
                 element={<AdminViewTaskDetails />}

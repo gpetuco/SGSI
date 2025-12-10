@@ -1,8 +1,8 @@
 ﻿import React, { useEffect, useRef, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
-import { PRIORITY_DATA, CLASSIFICATION_DATA } from "../../utils/data";
-import axiosInstance from "../../utils/axiosInstance";
-import { API_PATHS } from "../../utils/apiPaths";
+import { PRIORITY_DATA, CLASSIFICATION_DATA } from "../../utils/menus";
+import axiosReq from "../../utils/axiosReq";
+import { API_PATHS } from "../../utils/apiUrl";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
@@ -14,7 +14,7 @@ import { ISO_27001_DATA } from "../../utils/iso27001Data";
 import SelectUsers from "../../components/Inputs/SelectUsers";
 import SelectCompany from "../../components/Inputs/SelectCompany";
 import TodoListInput from "../../components/Inputs/TodoListInput";
-import DeleteAlert from "../../components/DeleteAlert";
+import Excluir from "../../components/Excluir";
 import Modal from "../../components/Modal";
 
 const getStatusTagColor = (status) => {
@@ -48,13 +48,13 @@ const CreateTask = () => {
 
   const [taskData, setTaskData] = useState({
     title: "",
-    description: "",
+    descricao: "",
     classification: "NIST CSF",
     priority: "Low",
     dueDate: null,
     assignedTo: [],
     cliente: "",
-    todoChecklist: [],
+    itens: [],
   });
 
   const [currentTask, setCurrentTask] = useState(null);
@@ -69,7 +69,7 @@ const CreateTask = () => {
   const [loading, setLoading] = useState(false); // salvar (criar/atualizar)
   const [loadingTask, setLoadingTask] = useState(!!taskId); // carregar dados iniciais em modo edição
 
-  const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
+  const [openExcluir, setOpenExcluir] = useState(false);
 
   // Helpers for NIST CSF / ISO 27001 cascata
   const isCascadeFramework =
@@ -100,8 +100,8 @@ const CreateTask = () => {
     : [];
 
   const selectedCategory =
-    selectedFunction && taskData.description
-      ? selectedFunction.categories.find((c) => c.name === taskData.description)
+    selectedFunction && taskData.descricao
+      ? selectedFunction.categories.find((c) => c.name === taskData.descricao)
       : null;
 
   const subcategoryOptions = selectedCategory
@@ -121,8 +121,8 @@ const CreateTask = () => {
       ...prev,
       classification: value,
       title: "",
-      description: "",
-      todoChecklist: [],
+      descricao: "",
+      itens: [],
     }));
   };
 
@@ -131,17 +131,17 @@ const CreateTask = () => {
     setTaskData((prev) => ({
       ...prev,
       title: value,
-      description: "",
-      todoChecklist: [],
+      descricao: "",
+      itens: [],
     }));
   };
 
-  const handleNistDescriptionChange = (value) => {
+  const handleNistDescricaoChange = (value) => {
     // when category changes, clear checklist selections
     setTaskData((prev) => ({
       ...prev,
-      description: value,
-      todoChecklist: [],
+      descricao: value,
+      itens: [],
     }));
   };
 
@@ -149,13 +149,13 @@ const CreateTask = () => {
     //reset form
     setTaskData({
       title: "",
-      description: "",
+      descricao: "",
       classification: "NIST CSF",
       priority: "Low",
       dueDate: null,
       assignedTo: [],
       cliente: "",
-      todoChecklist: [],
+      itens: [],
     });
   };
 
@@ -164,15 +164,15 @@ const CreateTask = () => {
     setLoading(true);
 
     try {
-      const todolist = taskData.todoChecklist?.map((item) => ({
+      const todolist = taskData.itens?.map((item) => ({
         text: item,
         completed: false,
       }));
 
-      const response = await axiosInstance.post(API_PATHS.TASKS.CREATE_TASK, {
+      const response = await axiosReq.post(API_PATHS.TASKS.CREATE_TASK, {
         ...taskData,
         dueDate: new Date(taskData.dueDate).toISOString(),
-        todoChecklist: todolist,
+        itens: todolist,
       });
 
       toast.success("Ação criada com sucesso!");
@@ -191,9 +191,9 @@ const CreateTask = () => {
     setLoading(true);
 
     try {
-      const todolist = taskData.todoChecklist?.map((item) => {
-        const prevTodoChecklist = currentTask?.todoChecklist || [];
-        const matchedTask = prevTodoChecklist.find((task) => task.text == item);
+      const todolist = taskData.itens?.map((item) => {
+        const prevItens = currentTask?.itens || [];
+        const matchedTask = prevItens.find((task) => task.text == item);
 
         return {
           text: item,
@@ -201,14 +201,11 @@ const CreateTask = () => {
         };
       });
 
-      const response = await axiosInstance.put(
-        API_PATHS.TASKS.UPDATE_TASK(taskId),
-        {
-          ...taskData,
-          dueDate: new Date(taskData.dueDate).toISOString(),
-          todoChecklist: todolist,
-        }
-      );
+      const response = await axiosReq.put(API_PATHS.TASKS.UPDATE_TASK(taskId), {
+        ...taskData,
+        dueDate: new Date(taskData.dueDate).toISOString(),
+        itens: todolist,
+      });
 
       toast.success("Ação salva com sucesso!");
     } catch (error) {
@@ -223,23 +220,23 @@ const CreateTask = () => {
   const toggleChecklistItem = async (index) => {
     if (!taskId) return;
     try {
-      const next = Array.isArray(currentTask?.todoChecklist)
-        ? [...currentTask.todoChecklist]
+      const next = Array.isArray(currentTask?.itens)
+        ? [...currentTask.itens]
         : [];
       if (!next[index]) return;
       next[index] = { ...next[index], completed: !next[index].completed };
 
-      const response = await axiosInstance.put(
+      const response = await axiosReq.put(
         API_PATHS.TASKS.UPDATE_TODO_CHECKLIST(taskId),
-        { todoChecklist: next }
+        { itens: next }
       );
       if (response.status === 200) {
         const updated = response.data?.task;
         setCurrentTask(updated);
         setTaskData((prev) => ({
           ...prev,
-          todoChecklist: Array.isArray(updated?.todoChecklist)
-            ? updated.todoChecklist.map((i) => i.text)
+          itens: Array.isArray(updated?.itens)
+            ? updated.itens.map((i) => i.text)
             : [],
         }));
       }
@@ -256,7 +253,7 @@ const CreateTask = () => {
       setError("Título é obrigatório.");
       return;
     }
-    if (!taskData.description.trim()) {
+    if (!taskData.descricao.trim()) {
       setError("Descrição é obrigatória.");
       return;
     }
@@ -274,7 +271,7 @@ const CreateTask = () => {
       return;
     }
 
-    if (taskData.todoChecklist?.length === 0) {
+    if (taskData.itens?.length === 0) {
       setError("Adicione pelo menos um item.");
       return;
     }
@@ -291,7 +288,7 @@ const CreateTask = () => {
   const getTaskDetailsByID = async () => {
     try {
       setLoadingTask(true);
-      const response = await axiosInstance.get(
+      const response = await axiosReq.get(
         API_PATHS.TASKS.GET_TASK_BY_ID(taskId)
       );
 
@@ -301,7 +298,7 @@ const CreateTask = () => {
 
         setTaskData((prevState) => ({
           title: taskInfo.title,
-          description: taskInfo.description,
+          descricao: taskInfo.descricao,
           classification: taskInfo.classification || "NIST CSF",
           priority: taskInfo.priority,
           dueDate: taskInfo.dueDate
@@ -312,8 +309,7 @@ const CreateTask = () => {
             (taskInfo?.cliente && taskInfo?.cliente?._id) ||
             taskInfo?.cliente ||
             "",
-          todoChecklist:
-            taskInfo?.todoChecklist?.map((item) => item?.text) || [],
+          itens: taskInfo?.itens?.map((item) => item?.text) || [],
         }));
       }
     } catch (error) {
@@ -365,20 +361,18 @@ const CreateTask = () => {
   const commitChecklistChanges = async (nextTexts) => {
     if (!taskId) return;
     try {
-      const old = Array.isArray(currentTask?.todoChecklist)
-        ? currentTask.todoChecklist
-        : [];
+      const old = Array.isArray(currentTask?.itens) ? currentTask.itens : [];
       const byText = new Map(old.map((o) => [o.text, !!o.completed]));
       const source = Array.isArray(nextTexts)
         ? nextTexts
-        : taskData?.todoChecklist || [];
+        : taskData?.itens || [];
       const updated = source.map((txt, idx) => ({
         text: txt,
         completed: byText.has(txt) ? byText.get(txt) : !!old[idx]?.completed,
       }));
-      const res = await axiosInstance.put(
+      const res = await axiosReq.put(
         API_PATHS.TASKS.UPDATE_TODO_CHECKLIST(taskId),
-        { todoChecklist: updated }
+        { itens: updated }
       );
       if (res.status === 200) {
         setCurrentTask(res.data?.task);
@@ -394,18 +388,18 @@ const CreateTask = () => {
 
   const handleEditItemChange = (index, value) => {
     setTaskData((prev) => {
-      const next = [...(prev.todoChecklist || [])];
+      const next = [...(prev.itens || [])];
       next[index] = value;
-      return { ...prev, todoChecklist: next };
+      return { ...prev, itens: next };
     });
   };
 
   const enterEditAtIndex = (index) => {
     setTaskData((prev) => ({
       ...prev,
-      todoChecklist: Array.isArray(currentTask?.todoChecklist)
-        ? currentTask.todoChecklist.map((i) => i.text)
-        : prev.todoChecklist,
+      itens: Array.isArray(currentTask?.itens)
+        ? currentTask.itens.map((i) => i.text)
+        : prev.itens,
     }));
     setSuppressOutsideOnce(true);
     setEditFocusIndex(index);
@@ -414,10 +408,10 @@ const CreateTask = () => {
 
   const handleDeleteItem = (index) => {
     setTaskData((prev) => {
-      const next = (prev.todoChecklist || []).filter((_, i) => i !== index);
+      const next = (prev.itens || []).filter((_, i) => i !== index);
       // Persist immediately in update mode to keep indices aligned
       commitChecklistChanges(next);
-      return { ...prev, todoChecklist: next };
+      return { ...prev, itens: next };
     });
   };
 
@@ -425,13 +419,11 @@ const CreateTask = () => {
     const v = (newTodoText || "").trim();
     if (!v) return;
     setTaskData((prev) => {
-      const exists = (prev.todoChecklist || []).some((t) => t === v);
-      const next = exists
-        ? prev.todoChecklist
-        : [...(prev.todoChecklist || []), v];
+      const exists = (prev.itens || []).some((t) => t === v);
+      const next = exists ? prev.itens : [...(prev.itens || []), v];
       // Persist immediately in update mode
       commitChecklistChanges(next);
-      return { ...prev, todoChecklist: next };
+      return { ...prev, itens: next };
     });
     setNewTodoText("");
   };
@@ -441,10 +433,10 @@ const CreateTask = () => {
   // Delete Task
   const deleteTask = async () => {
     try {
-      await axiosInstance.delete(API_PATHS.TASKS.DELETE_TASK(taskId));
+      await axiosReq.delete(API_PATHS.TASKS.DELETE_TASK(taskId));
 
-      setOpenDeleteAlert(false);
-      toast.success("Task details deleted successfully");
+      setOpenExcluir(false);
+      toast.success("Ação excluída com sucesso!");
       navigate("/admin/tasks");
     } catch (error) {
       console.error(
@@ -528,7 +520,7 @@ const CreateTask = () => {
               {taskId && (
                 <button
                   className="flex items-center gap-1.5 text-[13px] font-medium text-rose-500 bg-rose-50 rounded px-2 py-1 border border-rose-100 hover:border-rose-300 cursor-pointer"
-                  onClick={() => setOpenDeleteAlert(true)}
+                  onClick={() => setOpenExcluir(true)}
                 >
                   <LuTrash2 className="text-base" /> Apagar
                 </button>
@@ -617,8 +609,8 @@ const CreateTask = () => {
                   >
                     <SelectDropdown
                       options={categoryOptions}
-                      value={taskData.description}
-                      onChange={(value) => handleNistDescriptionChange(value)}
+                      value={taskData.descricao}
+                      onChange={(value) => handleNistDescricaoChange(value)}
                       placeholder={
                         taskData.title
                           ? "Selecione um item"
@@ -632,9 +624,9 @@ const CreateTask = () => {
                   placeholder="Describe task"
                   className="form-input"
                   rows={4}
-                  value={taskData.description}
+                  value={taskData.descricao}
                   onChange={({ target }) =>
-                    handleValueChange("description", target.value)
+                    handleValueChange("descricao", target.value)
                   }
                 />
               )}
@@ -649,7 +641,7 @@ const CreateTask = () => {
 
               {taskId ? (
                 <div className="mt-1" ref={editChecklistRef}>
-                  {(taskData?.todoChecklist || []).map((text, index) => (
+                  {(taskData?.itens || []).map((text, index) => (
                     <div
                       key={`todo_row_${index}`}
                       className="grid grid-cols-[1fr_auto_auto] items-center gap-x-3 mt-2 pr-3"
@@ -667,10 +659,8 @@ const CreateTask = () => {
                           isCascadeFramework
                             ? undefined
                             : (e) => {
-                                const next = (
-                                  taskData?.todoChecklist || []
-                                ).map((t, i) =>
-                                  i === index ? e.target.value : t
+                                const next = (taskData?.itens || []).map(
+                                  (t, i) => (i === index ? e.target.value : t)
                                 );
                                 commitChecklistChanges(next);
                               }
@@ -679,9 +669,7 @@ const CreateTask = () => {
                       />
                       <input
                         type="checkbox"
-                        checked={
-                          !!currentTask?.todoChecklist?.[index]?.completed
-                        }
+                        checked={!!currentTask?.itens?.[index]?.completed}
                         onChange={() => toggleChecklistItem(index)}
                         className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none cursor-pointer"
                       />
@@ -701,7 +689,7 @@ const CreateTask = () => {
                       <div className="relative">
                         <div
                           className={
-                            !taskData.title || !taskData.description
+                            !taskData.title || !taskData.descricao
                               ? "opacity-50"
                               : "opacity-100"
                           }
@@ -711,7 +699,7 @@ const CreateTask = () => {
                             value={newTodoText}
                             onChange={(value) => setNewTodoText(value)}
                             placeholder={
-                              taskData.description
+                              taskData.descricao
                                 ? "Selecione um item"
                                 : taskData.title
                                 ? "Selecione Descrição antes"
@@ -750,7 +738,7 @@ const CreateTask = () => {
                 <div className="mt-1">
                   {isCascadeFramework ? (
                     <>
-                      {(taskData?.todoChecklist || []).map((text, index) => (
+                      {(taskData?.itens || []).map((text, index) => (
                         <div
                           key={`todo_row_create_${index}`}
                           className="grid grid-cols-[1fr_auto_auto] items-center gap-x-3 mt-2 pr-3"
@@ -778,7 +766,7 @@ const CreateTask = () => {
                         <div className="relative">
                           <div
                             className={
-                              !taskData.title || !taskData.description
+                              !taskData.title || !taskData.descricao
                                 ? "opacity-50"
                                 : "opacity-100"
                             }
@@ -788,7 +776,7 @@ const CreateTask = () => {
                               value={newTodoText}
                               onChange={(value) => setNewTodoText(value)}
                               placeholder={
-                                taskData.description
+                                taskData.descricao
                                   ? "Selecione um item"
                                   : taskData.title
                                   ? "Selecione Descrição antes"
@@ -808,10 +796,8 @@ const CreateTask = () => {
                     </>
                   ) : (
                     <TodoListInput
-                      todoList={taskData?.todoChecklist}
-                      setTodoList={(value) =>
-                        handleValueChange("todoChecklist", value)
-                      }
+                      todoList={taskData?.itens}
+                      setTodoList={(value) => handleValueChange("itens", value)}
                     />
                   )}
                 </div>
@@ -848,11 +834,11 @@ const CreateTask = () => {
       </Modal>
 
       <Modal
-        isOpen={openDeleteAlert}
-        onClose={() => setOpenDeleteAlert(false)}
+        isOpen={openExcluir}
+        onClose={() => setOpenExcluir(false)}
         title="Apagar ação"
       >
-        <DeleteAlert
+        <Excluir
           content="Você deseja apagar essa ação?"
           onDelete={() => deleteTask()}
         />

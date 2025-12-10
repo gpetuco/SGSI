@@ -4,7 +4,7 @@ const {
   loginUser,
   getUserProfile,
   updateUserProfile,
-} = require("../controllers/authController");
+} = require("../controllers/autenticacao");
 const { protect } = require("../middlewares/authMiddleware");
 const upload = require("../middlewares/uploadMiddleware");
 

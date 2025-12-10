@@ -10,7 +10,7 @@ const {
   deleteTask,
   updateTaskStatus,
   updateTaskChecklist,
-} = require("../controllers/taskController");
+} = require("../controllers/acao");
 
 const router = express.Router();
 

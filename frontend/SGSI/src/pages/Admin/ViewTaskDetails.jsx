@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axiosInstance from "../../utils/axiosInstance";
-import { API_PATHS } from "../../utils/apiPaths";
+import axiosReq from "../../utils/axiosReq";
+import { API_PATHS } from "../../utils/apiUrl";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import Modal from "../../components/Modal";
-import AvatarGroup from "../../components/AvatarGroup";
+import FotosUsuarios from "../../components/FotosUsuarios";
 import moment from "moment";
 import { UserContext } from "../../context/userContext";
 
@@ -54,9 +54,7 @@ const ViewTaskDetails = () => {
   // get Task info by ID
   const getTaskDetailsByID = async () => {
     try {
-      const response = await axiosInstance.get(
-        API_PATHS.TASKS.GET_TASK_BY_ID(id)
-      );
+      const response = await axiosReq.get(API_PATHS.TASKS.GET_TASK_BY_ID(id));
 
       if (response.data) {
         const taskInfo = response.data;
@@ -67,33 +65,30 @@ const ViewTaskDetails = () => {
     }
   };
 
-  // handle todo check
-  const updateTodoChecklist = async (index) => {
-    // Members are read-only: do not allow checklist updates
+  const updateItens = async (index) => {
     if (user?.role === "member") {
       return;
     }
 
     // eslint-disable-next-line no-unsafe-optional-chaining
-    const todoChecklist = [...task?.todoChecklist];
+    const itens = [...task?.itens];
     const taskId = id;
 
-    if (todoChecklist && todoChecklist[index]) {
-      todoChecklist[index].completed = !todoChecklist[index].completed;
+    if (itens && itens[index]) {
+      itens[index].completed = !itens[index].completed;
 
       try {
-        const response = await axiosInstance.put(
+        const response = await axiosReq.put(
           API_PATHS.TASKS.UPDATE_TODO_CHECKLIST(taskId),
-          { todoChecklist }
+          { itens }
         );
         if (response.status === 200) {
           setTask(response.data?.task || task);
         } else {
-          // Optionally revert the toggle if the API call fails.
-          todoChecklist[index].completed = !todoChecklist[index].completed;
+          itens[index].completed = !itens[index].completed;
         }
       } catch (error) {
-        todoChecklist[index].completed = !todoChecklist[index].completed;
+        itens[index].completed = !itens[index].completed;
       }
     }
   };
@@ -125,17 +120,17 @@ const ViewTaskDetails = () => {
                 <h2 className="text-sm md:text-xl font-medium">
                   {task?.title}
                 </h2>
-              <div
+                <div
                   className={`text-[11px] md:text-[13px] font-medium ${getStatusTagColor(
                     task?.status
                   )} px-4 py-0.5 rounded whitespace-nowrap`}
                 >
                   {getStatusLabel(task?.status)}
-              </div>
+                </div>
               </div>
 
               <div className="mt-4">
-                <InfoBox label="Descrição" value={task?.description} />
+                <InfoBox label="Descrição" value={task?.descricao} />
               </div>
 
               <div className="grid grid-cols-12 gap-4 mt-4">
@@ -161,13 +156,13 @@ const ViewTaskDetails = () => {
                 <label className="text-xs font-medium text-slate-500">
                   Itens
                 </label>
-                {task?.todoChecklist?.map((item, index) => (
-                  <TodoCheckList
+                {task?.itens?.map((item, index) => (
+                  <Itens
                     key={`todo_${index}`}
                     text={item.text}
                     isChecked={item?.completed}
                     readOnly={user?.role === "member"}
-                    onChange={() => updateTodoChecklist(index)}
+                    onChange={() => updateItens(index)}
                   />
                 ))}
               </div>
@@ -193,7 +188,7 @@ const InfoBox = ({ label, value }) => {
   );
 };
 
-const TodoCheckList = ({ text, isChecked, onChange, readOnly }) => {
+const Itens = ({ text, isChecked, onChange, readOnly }) => {
   return (
     <div className="flex items-center gap-3 p-3">
       <input

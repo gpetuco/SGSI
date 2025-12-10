@@ -8,7 +8,7 @@ const todoSchema = new mongoose.Schema({
 const taskSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-    description: { type: String },
+    descricao: { type: String },
     classification: {
       type: String,
       enum: ["NIST CSF", "ISO 27001"],
@@ -32,21 +32,20 @@ const taskSchema = new mongoose.Schema(
       ref: "Company",
       default: null,
     },
-    todoChecklist: [todoSchema],
+    itens: [todoSchema],
     progress: { type: Number, default: 0 },
     completedAt: { type: Date },
   },
   { timestamps: true }
 );
 
-// Recalculate progress from todoChecklist before save
+// Recalculate progress from itens before save
 taskSchema.pre("save", function (next) {
   try {
-    const hasChecklist =
-      Array.isArray(this.todoChecklist) && this.todoChecklist.length > 0;
+    const hasChecklist = Array.isArray(this.itens) && this.itens.length > 0;
     if (hasChecklist) {
-      const total = this.todoChecklist.length;
-      const done = this.todoChecklist.filter((t) => !!t.completed).length;
+      const total = this.itens.length;
+      const done = this.itens.filter((t) => !!t.completed).length;
       const pct = Math.round((done / total) * 100);
       this.progress = pct;
 

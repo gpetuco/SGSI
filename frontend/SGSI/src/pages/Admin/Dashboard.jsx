@@ -4,13 +4,12 @@ import { useContext } from "react";
 import { UserContext } from "../../context/userContext";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../utils/axiosInstance";
-import { API_PATHS } from "../../utils/apiPaths";
+import axiosReq from "../../utils/axiosReq";
+import { API_PATHS } from "../../utils/apiUrl";
 // Use Intl for pt-BR date formatting
 import { addThousandsSeparator } from "../../utils/helper";
-import InfoCard from "../../components/Cards/InfoCard";
+import Info from "../../components/Cards/Info";
 import { LuArrowRight } from "react-icons/lu";
-import TaskListTable from "../../components/TaskListTable";
 import CustomPieChart from "../../components/Charts/CustomPieChart";
 import CustomBarChart from "../../components/Charts/CustomBarChart";
 import CustomAreaChart from "../../components/Charts/CustomAreaChart";
@@ -19,7 +18,7 @@ import StackedStatusByFramework from "../../components/Charts/StackedStatusByFra
 import PercentBarByFramework from "../../components/Charts/PercentBarByFramework";
 import StackedStatusByUser from "../../components/Charts/StackedStatusByUser";
 import SelectDropdown from "../../components/Inputs/SelectDropdown";
-import { CLASSIFICATION_DATA } from "../../utils/data";
+import { CLASSIFICATION_DATA } from "../../utils/menus";
 import {
   PieChart as RePieChart,
   Pie as RePie,
@@ -163,10 +162,9 @@ const Dashboard = () => {
       if (classificationFilter !== "All")
         params.classification = classificationFilter;
 
-      const response = await axiosInstance.get(
-        API_PATHS.TASKS.GET_DASHBOARD_DATA,
-        { params }
-      );
+      const response = await axiosReq.get(API_PATHS.TASKS.GET_DASHBOARD_DATA, {
+        params,
+      });
       if (response.data) {
         setDashboardData(response.data);
         prepareChartData(response.data?.charts || null);
@@ -229,7 +227,7 @@ const Dashboard = () => {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-5">
-          <InfoCard
+          <Info
             label="Ações"
             value={addThousandsSeparator(
               dashboardData?.charts?.taskDistribution?.All || 0
@@ -237,7 +235,7 @@ const Dashboard = () => {
             color="bg-primary"
           />
 
-          <InfoCard
+          <Info
             label="Pendentes"
             value={addThousandsSeparator(
               dashboardData?.charts?.taskDistribution?.Pending || 0
@@ -245,7 +243,7 @@ const Dashboard = () => {
             color="bg-violet-500"
           />
 
-          <InfoCard
+          <Info
             label="Em Andamento"
             value={addThousandsSeparator(
               dashboardData?.charts?.taskDistribution?.InProgress || 0
@@ -253,7 +251,7 @@ const Dashboard = () => {
             color="bg-cyan-500"
           />
 
-          <InfoCard
+          <Info
             label="Concluídas"
             value={addThousandsSeparator(
               dashboardData?.charts?.taskDistribution?.Completed || 0
@@ -338,7 +336,7 @@ const Dashboard = () => {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 md:gap-6">
             {nistFunctionCompletionData.map((fn) => (
-              <InfoCard
+              <Info
                 key={fn.function}
                 label={`${fn.function} (${fn.total})`}
                 value={`${fn.percent}%`}
@@ -406,7 +404,7 @@ const Dashboard = () => {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-3 md:gap-6">
             {isoControlCompletionData.map((ctrl) => (
-              <InfoCard
+              <Info
                 key={ctrl.type}
                 label={`${ctrl.type} (${ctrl.total})`}
                 value={`${ctrl.percent}%`}

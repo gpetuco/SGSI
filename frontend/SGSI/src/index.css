@@ -39,7 +39,7 @@ html.dark {
 }
 
 /* Dark: make native date picker icon light */
-html.dark input[type='date']::-webkit-calendar-picker-indicator {
+html.dark input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1) brightness(1.4);
 }
 
@@ -131,8 +131,12 @@ html.dark ::placeholder {
 }
 
 /* Tone down generic light shadow utilities when in dark */
-.dark .shadow-gray-100 { --tw-shadow-color: rgba(0, 0, 0, 0.45) !important; }
-.dark .shadow-md { box-shadow: 0 6px 18px var(--tw-shadow-color) !important; }
+.dark .shadow-gray-100 {
+  --tw-shadow-color: rgba(0, 0, 0, 0.45) !important;
+}
+.dark .shadow-md {
+  box-shadow: 0 6px 18px var(--tw-shadow-color) !important;
+}
 
 .dark .input-box {
   background-color: var(--sgsi-surface-2);
@@ -196,19 +200,41 @@ html.dark ::placeholder {
   color: #9fb0c8 !important;
 }
 
-/* Dark equivalents for light tag backgrounds used on TaskCard */
-.dark .bg-blue-50 { background-color: rgba(37, 99, 235, 0.16) !important; }
-.dark .bg-violet-50 { background-color: rgba(124, 58, 237, 0.16) !important; }
-.dark .bg-cyan-50 { background-color: rgba(34, 211, 238, 0.16) !important; }
-.dark .bg-lime-50 { background-color: rgba(132, 204, 22, 0.16) !important; }
-.dark .bg-emerald-50 { background-color: rgba(16, 185, 129, 0.16) !important; }
-.dark .bg-amber-50 { background-color: rgba(245, 158, 11, 0.16) !important; }
-.dark .bg-rose-50 { background-color: rgba(244, 63, 94, 0.16) !important; }
+/* Dark equivalents for light tag backgrounds used on Acao */
+.dark .bg-blue-50 {
+  background-color: rgba(37, 99, 235, 0.16) !important;
+}
+.dark .bg-violet-50 {
+  background-color: rgba(124, 58, 237, 0.16) !important;
+}
+.dark .bg-cyan-50 {
+  background-color: rgba(34, 211, 238, 0.16) !important;
+}
+.dark .bg-lime-50 {
+  background-color: rgba(132, 204, 22, 0.16) !important;
+}
+.dark .bg-emerald-50 {
+  background-color: rgba(16, 185, 129, 0.16) !important;
+}
+.dark .bg-amber-50 {
+  background-color: rgba(245, 158, 11, 0.16) !important;
+}
+.dark .bg-rose-50 {
+  background-color: rgba(244, 63, 94, 0.16) !important;
+}
 
 /* Subtle scrollbars for dark */
-html.dark ::-webkit-scrollbar { width: 10px; height: 10px; }
-html.dark ::-webkit-scrollbar-thumb { background: #3b475a; border-radius: 8px; }
-html.dark ::-webkit-scrollbar-track { background: #1f2631; }
+html.dark ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: #3b475a;
+  border-radius: 8px;
+}
+html.dark ::-webkit-scrollbar-track {
+  background: #1f2631;
+}
 
 /* Fix light hover utility in dark (readability for dropdowns) */
 .dark .hover\:bg-gray-100:hover {
@@ -217,9 +243,15 @@ html.dark ::-webkit-scrollbar-track { background: #1f2631; }
 }
 
 /* Subtle row hover for tables (light/dark) */
-.row-hover { transition: background-color 150ms ease; }
-.row-hover:hover { background-color: #f4f6f8; }
-html.dark .row-hover:hover { background-color: #364152 !important; }
+.row-hover {
+  transition: background-color 150ms ease;
+}
+.row-hover:hover {
+  background-color: #f4f6f8;
+}
+html.dark .row-hover:hover {
+  background-color: #364152 !important;
+}
 
 /* Zoom button style for charts */
 .chart-zoom-btn {
@@ -233,4 +265,6 @@ html.dark .chart-zoom-btn {
 }
 
 /* Force white text in dark mode when readability is required */
-html.dark .text-white-important { color: #ffffff !important; }
+html.dark .text-white-important {
+  color: #ffffff !important;
+}
