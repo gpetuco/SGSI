@@ -7,7 +7,7 @@ import ImagemUsuario from "../../components/ImagemUsuario";
 const Membros = () => {
   const [allUsers, setAllUsers] = useState([]);
 
-  const getAllUsers = async () => {
+  const getUsuarios = async () => {
     try {
       const response = await axiosReq.get(API_PATHS.USERS.GET_ALL_USERS);
       if (response.data?.length > 0) {
@@ -19,7 +19,7 @@ const Membros = () => {
   };
 
   useEffect(() => {
-    getAllUsers();
+    getUsuarios();
 
     return () => {};
   }, []);

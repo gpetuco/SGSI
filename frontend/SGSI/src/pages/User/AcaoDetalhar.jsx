@@ -3,14 +3,14 @@ import { useParams } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
 import { API_PATHS } from "../../utils/apiUrl";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
-import Modal from "../../components/Modal";
+import Popup from "../../components/Popup";
 import FotosUsuarios from "../../components/FotosUsuarios";
 import moment from "moment";
 
 const AcaoDetalhar = () => {
   const { id } = useParams();
   const [acao, setAcao] = useState(null);
-  const [openModal, setOpenModal] = useState(true);
+  const [openPopup, setOpenPopup] = useState(true);
 
   const getCorStatus = (status) => {
     switch (status) {
@@ -72,14 +72,14 @@ const AcaoDetalhar = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   const closeAndGoBack = () => {
-    setOpenModal(false);
+    setOpenPopup(false);
     setTimeout(() => window.history.back(), 0);
   };
 
   return (
     <DashboardLayout activeMenu="My Acoes">
-      <Modal
-        aberto={openModal}
+      <Popup
+        aberto={openPopup}
         onClose={closeAndGoBack}
         title={acao?.title || "Acao Details"}
         variant="wide"
@@ -148,7 +148,7 @@ const AcaoDetalhar = () => {
             </div>
           </div>
         )}
-      </Modal>
+      </Popup>
     </DashboardLayout>
   );
 };

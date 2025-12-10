@@ -10,7 +10,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import { LuZoomIn } from "react-icons/lu";
-import Modal from "../Modal";
+import Popup from "../Popup";
 
 const StackedStatusByFramework = ({ data, title = "Status by Framework" }) => {
   const [open, setOpen] = useState(false);
@@ -64,7 +64,7 @@ const StackedStatusByFramework = ({ data, title = "Status by Framework" }) => {
         <LuZoomIn className="text-lg" />
       </button>
       <ChartBody />
-      <Modal
+      <Popup
         aberto={open}
         onClose={() => setOpen(false)}
         title={title}
@@ -73,7 +73,7 @@ const StackedStatusByFramework = ({ data, title = "Status by Framework" }) => {
         <div style={{ height: "65vh" }}>
           <ChartBody height={"100%"} />
         </div>
-      </Modal>
+      </Popup>
     </div>
   );
 };

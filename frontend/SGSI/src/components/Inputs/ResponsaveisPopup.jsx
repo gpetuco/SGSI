@@ -2,24 +2,23 @@ import React, { useEffect, useState } from "react";
 import { API_PATHS } from "../../utils/apiUrl";
 import axiosReq from "../../utils/axiosReq";
 import { LuUsers } from "react-icons/lu";
-import Modal from "../Modal";
+import Popup from "../Popup";
 import FotosUsuarios from "../FotosUsuarios";
 import ImagemUsuario from "../ImagemUsuario";
 
-const ResponsaveisModal = ({ selectedUsers, setSelectedUsers }) => {
+const ResponsaveisPopup = ({ selectedUsers, setSelectedUsers }) => {
   const [allUsers, setAllUsers] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [tempSelectedUsers, setTempSelectedUsers] = useState([]);
 
-  const openModal = () => {
-    // Preload current selection so users appear checked in the modal
+  const openPopup = () => {
     setTempSelectedUsers(
       Array.isArray(selectedUsers) ? [...selectedUsers] : []
     );
-    setIsModalOpen(true);
+    setIsPopupOpen(true);
   };
 
-  const getAllUsers = async () => {
+  const getUsuarios = async () => {
     try {
       const response = await axiosReq.get(API_PATHS.USERS.GET_ALL_USERS);
       if (response.data?.length > 0) {
@@ -40,7 +39,7 @@ const ResponsaveisModal = ({ selectedUsers, setSelectedUsers }) => {
 
   const handleAssign = () => {
     setSelectedUsers(tempSelectedUsers);
-    setIsModalOpen(false);
+    setIsPopupOpen(false);
   };
 
   const selectedImagemUsuarios = allUsers
@@ -48,7 +47,7 @@ const ResponsaveisModal = ({ selectedUsers, setSelectedUsers }) => {
     .map((user) => user.profileImageUrl);
 
   useEffect(() => {
-    getAllUsers();
+    getUsuarios();
   }, []);
 
   useEffect(() => {
@@ -62,20 +61,20 @@ const ResponsaveisModal = ({ selectedUsers, setSelectedUsers }) => {
   return (
     <div className="space-y-4 mt-2">
       {selectedImagemUsuarios.length === 0 && (
-        <button className="content-box-btn" onClick={openModal}>
+        <button className="content-box-btn" onClick={openPopup}>
           <LuUsers className="text-sm" /> Atribuir Responsáveis
         </button>
       )}
 
       {selectedImagemUsuarios.length > 0 && (
-        <div className="cursor-pointer" onClick={openModal}>
+        <div className="cursor-pointer" onClick={openPopup}>
           <FotosUsuarios avatars={selectedImagemUsuarios} maxVisible={3} />
         </div>
       )}
 
-      <Modal
-        aberto={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+      <Popup
+        aberto={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
         title="Atribuir responsáveis"
       >
         <div className="space-y-4 h-[60vh] overflow-y-auto">
@@ -109,7 +108,7 @@ const ResponsaveisModal = ({ selectedUsers, setSelectedUsers }) => {
         <div className="flex justify-end gap-4 pt-4">
           <button
             className="content-box-btn"
-            onClick={() => setIsModalOpen(false)}
+            onClick={() => setIsPopupOpen(false)}
           >
             Cancelar
           </button>
@@ -117,9 +116,9 @@ const ResponsaveisModal = ({ selectedUsers, setSelectedUsers }) => {
             Atribuir
           </button>
         </div>
-      </Modal>
+      </Popup>
     </div>
   );
 };
 
-export default ResponsaveisModal;
+export default ResponsaveisPopup;

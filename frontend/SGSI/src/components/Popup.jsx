@@ -1,6 +1,6 @@
 import React from "react";
 
-const Modal = ({
+const Popup = ({
   children,
   aberto,
   onClose,
@@ -97,4 +97,4 @@ const Modal = ({
   );
 };
 
-export default Modal;
+export default Popup;

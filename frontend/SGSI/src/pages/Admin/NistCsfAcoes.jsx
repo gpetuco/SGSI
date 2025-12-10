@@ -99,7 +99,7 @@ const NistCsfAcoes = () => {
 
   const handleClick = (acaoData) => {
     if (user?.role === "admin") {
-      navigate(`/admin/acao-modal`, { state: { acaoId: acaoData._id } });
+      navigate(`/admin/acao-popup`, { state: { acaoId: acaoData._id } });
     } else {
       navigate(`/user/acao-details/${acaoData._id}`);
     }

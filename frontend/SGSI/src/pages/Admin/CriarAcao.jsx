@@ -11,11 +11,11 @@ import { HiOutlineTrash, HiMiniPlus } from "react-icons/hi2";
 import Lista from "../../components/Inputs/Lista";
 import { NIST_CSF_DATA } from "../../utils/nistCsfData";
 import { ISO_27001_DATA } from "../../utils/iso27001Data";
-import ResponsaveisModal from "../../components/Inputs/ResponsaveisModal";
+import ResponsaveisPopup from "../../components/Inputs/ResponsaveisPopup";
 import ListaClientes from "../../components/Inputs/ListaClientes";
 import ItensInput from "../../components/Inputs/ItensInput";
 import Excluir from "../../components/Excluir";
-import Modal from "../../components/Modal";
+import Popup from "../../components/Popup";
 
 const getCorStatus = (status) => {
   switch (status) {
@@ -44,7 +44,7 @@ const CriarAcao = () => {
   const location = useLocation();
   const { acaoId } = location.state || {};
   const navigate = useNavigate();
-  const [openFormModal, setOpenFormModal] = useState(true);
+  const [openFormPopup, setOpenFormPopup] = useState(true);
 
   const [acaoData, setAcaoData] = useState({
     title: "",
@@ -456,7 +456,7 @@ const CriarAcao = () => {
   }, [acaoId]);
 
   const closeAndGoBack = () => {
-    setOpenFormModal(false);
+    setOpenFormPopup(false);
     setTimeout(() => {
       navigate(-1);
     }, 0);
@@ -465,8 +465,8 @@ const CriarAcao = () => {
   if (acaoId && loadingAcao && !currentAcao) {
     return (
       <DashboardLayout activeMenu="Create Acao">
-        <Modal
-          aberto={openFormModal}
+        <Popup
+          aberto={openFormPopup}
           onClose={closeAndGoBack}
           title={"A��o"}
           variant="wide"
@@ -481,15 +481,15 @@ const CriarAcao = () => {
               </p>
             </div>
           </div>
-        </Modal>
+        </Popup>
       </DashboardLayout>
     );
   }
 
   return (
     <DashboardLayout activeMenu="Create Acao">
-      <Modal
-        aberto={openFormModal}
+      <Popup
+        aberto={openFormPopup}
         onClose={closeAndGoBack}
         title={"Ação"}
         variant="wide"
@@ -818,7 +818,7 @@ const CriarAcao = () => {
                 Responsável
               </label>
 
-              <ResponsaveisModal
+              <ResponsaveisPopup
                 selectedUsers={acaoData.responsavel}
                 setSelectedUsers={(value) => {
                   handleValueChange("responsavel", value);
@@ -831,9 +831,9 @@ const CriarAcao = () => {
             )}
           </div>
         </div>
-      </Modal>
+      </Popup>
 
-      <Modal
+      <Popup
         aberto={openExcluir}
         onClose={() => setOpenExcluir(false)}
         title="Apagar ação"
@@ -842,7 +842,7 @@ const CriarAcao = () => {
           content="Você deseja apagar essa ação?"
           onDelete={() => deleteAcao()}
         />
-      </Modal>
+      </Popup>
     </DashboardLayout>
   );
 };

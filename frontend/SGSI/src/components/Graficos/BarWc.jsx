@@ -11,7 +11,7 @@ import {
   Cell,
 } from "recharts";
 import { LuZoomIn } from "react-icons/lu";
-import Modal from "../Modal";
+import Popup from "../Popup";
 
 const BarWc = ({ data }) => {
   const getBarColor = (entry) => {
@@ -94,7 +94,7 @@ const BarWc = ({ data }) => {
         <LuZoomIn className="text-lg" />
       </button>
       <ChartBody />
-      <Modal
+      <Popup
         aberto={open}
         onClose={() => setOpen(false)}
         title="Prioridade"
@@ -103,7 +103,7 @@ const BarWc = ({ data }) => {
         <div style={{ height: "65vh" }}>
           <ChartBody height={"100%"} />
         </div>
-      </Modal>
+      </Popup>
     </div>
   );
 };

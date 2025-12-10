@@ -21,7 +21,7 @@ import {
   ResponsiveContainer as ReResponsiveContainer,
 } from "recharts";
 import { LuZoomIn } from "react-icons/lu";
-import Modal from "../../components/Modal";
+import Popup from "../../components/Popup";
 const COLORS = ["#ff0000", "#FACC15", "#22C55E"];
 const NIST_FUNCTION_COLORS = {
   Govern: "#8D51FF",
@@ -56,7 +56,7 @@ const Dashboard = () => {
     []
   );
   const [isoControlCompletionData, setIsoControlCompletionData] = useState([]);
-  const [fwModal, setFwModal] = useState({ open: false, fw: null, percent: 0 });
+  const [fwPopup, setFwPopup] = useState({ open: false, fw: null, percent: 0 });
 
   const [classificationFilter, setClassificationFilter] = useState("All");
   const [loading, setLoading] = useState(true);
@@ -270,7 +270,7 @@ const Dashboard = () => {
                 aria-label="Zoom"
                 className="chart-zoom-btn opacity-0 group-hover:opacity-100"
                 onClick={() =>
-                  setFwModal({
+                  setFwPopup({
                     open: true,
                     fw: fw.label,
                     percent: clamped,
@@ -446,16 +446,16 @@ const Dashboard = () => {
         </div>
       )}
 
-      {fwModal.open && (
-        <Modal
-          aberto={fwModal.open}
-          onClose={() => setFwModal({ open: false, fw: null, percent: 0 })}
-          title={`${fwModal.fw}`}
+      {fwPopup.open && (
+        <Popup
+          aberto={fwPopup.open}
+          onClose={() => setFwPopup({ open: false, fw: null, percent: 0 })}
+          title={`${fwPopup.fw}`}
           variant="wide"
         >
           {(() => {
             const entry =
-              stackedStatusData.find((e) => e.framework === fwModal.fw) || {};
+              stackedStatusData.find((e) => e.framework === fwPopup.fw) || {};
             const pendente = entry.Pendente || 0;
             const emAndamento = entry.EmAndamento || 0;
             const concluido = entry.Concluído || 0;
@@ -466,12 +466,12 @@ const Dashboard = () => {
                   <div className="text-center">
                     <div
                       className="text-sm font-bold uppercase"
-                      style={{ color: fwModal.color }}
+                      style={{ color: fwPopup.color }}
                     >
-                      {fwModal.fw}
+                      {fwPopup.fw}
                     </div>
                     <div className="text-6xl md:text-7xl font-extrabold leading-none mt-2">
-                      {fwModal.percent}%
+                      {fwPopup.percent}%
                     </div>
                   </div>
                   <div className="w-[160px] h-[160px]">
@@ -479,8 +479,8 @@ const Dashboard = () => {
                       <RePieChart>
                         <RePie
                           data={[
-                            { name: "done", value: fwModal.percent },
-                            { name: "remain", value: 100 - fwModal.percent },
+                            { name: "done", value: fwPopup.percent },
+                            { name: "remain", value: 100 - fwPopup.percent },
                           ]}
                           dataKey="value"
                           innerRadius={"60%"}
@@ -489,7 +489,7 @@ const Dashboard = () => {
                           endAngle={-270}
                           stroke="none"
                         >
-                          <ReCell fill={fwModal.color || "#1368ec"} />
+                          <ReCell fill={fwPopup.color || "#1368ec"} />
                           <ReCell fill="#CBD5E1" />
                         </RePie>
                       </RePieChart>
@@ -524,7 +524,7 @@ const Dashboard = () => {
               </div>
             );
           })()}
-        </Modal>
+        </Popup>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-4 md:my-6">

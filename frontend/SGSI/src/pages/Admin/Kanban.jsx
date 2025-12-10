@@ -141,7 +141,7 @@ const Kanban = () => {
 
   const handleOpen = (acaoId) => {
     if (user?.role === "admin") {
-      navigate(`/admin/acao-modal`, { state: { acaoId } });
+      navigate(`/admin/acao-popup`, { state: { acaoId } });
     } else {
       navigate(`/user/acao-details/${acaoId}`);
     }

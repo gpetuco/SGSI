@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
 import { API_PATHS } from "../../utils/apiUrl";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
-import Modal from "../../components/Modal";
+import Popup from "../../components/Popup";
 import FotosUsuarios from "../../components/FotosUsuarios";
 import moment from "moment";
 import { UserContext } from "../../context/userContext";
@@ -11,7 +11,7 @@ import { UserContext } from "../../context/userContext";
 const AcaoDetalhar = () => {
   const { id } = useParams();
   const [acao, setAcao] = useState(null);
-  const [openModal, setOpenModal] = useState(true);
+  const [openPopup, setOpenPopup] = useState(true);
   const { user } = React.useContext(UserContext);
 
   const getCorStatus = (status) => {
@@ -101,14 +101,14 @@ const AcaoDetalhar = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   const closeAndGoBack = () => {
-    setOpenModal(false);
+    setOpenPopup(false);
     setTimeout(() => window.history.back(), 0);
   };
 
   return (
     <DashboardLayout activeMenu="My Acoes">
-      <Modal
-        aberto={openModal}
+      <Popup
+        aberto={openPopup}
         onClose={closeAndGoBack}
         title={"Ação"}
         variant="wide"
@@ -169,7 +169,7 @@ const AcaoDetalhar = () => {
             </div>
           </div>
         )}
-      </Modal>
+      </Popup>
     </DashboardLayout>
   );
 };

@@ -41,7 +41,7 @@ const App = () => {
                 element={<Iso27001Acoes />}
               />
               <Route path="/admin/acoes/nist-csf" element={<NistCsfAcoes />} />
-              <Route path="/admin/acao-modal" element={<CriarAcao />} />
+              <Route path="/admin/acao-popup" element={<CriarAcao />} />
               <Route path="/admin/users" element={<Membros />} />
               <Route path="/admin/clientes" element={<Clientes />} />
               <Route

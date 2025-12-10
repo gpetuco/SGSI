@@ -10,7 +10,7 @@ import {
   Legend,
 } from "recharts";
 import { LuZoomIn } from "react-icons/lu";
-import Modal from "../Modal";
+import Popup from "../Popup";
 
 const DefaultTooltip = ({ active, payload, label }) => {
   if (!active || !payload || payload.length === 0) return null;
@@ -111,7 +111,7 @@ const AreaWc = ({
         <LuZoomIn className="text-lg" />
       </button>
       <ChartBody />
-      <Modal
+      <Popup
         aberto={open}
         onClose={() => setOpen(false)}
         title={title}
@@ -120,7 +120,7 @@ const AreaWc = ({
         <div style={{ height: "65vh" }}>
           <ChartBody h={"100%"} />
         </div>
-      </Modal>
+      </Popup>
     </div>
   );
 };

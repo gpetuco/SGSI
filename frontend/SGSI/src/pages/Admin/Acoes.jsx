@@ -49,7 +49,7 @@ const Acoes = () => {
 
   const handleClick = (acaoData) => {
     if (user?.role === "admin") {
-      navigate(`/admin/acao-modal`, { state: { acaoId: acaoData._id } });
+      navigate(`/admin/acao-popup`, { state: { acaoId: acaoData._id } });
     } else {
       navigate(`/user/acao-details/${acaoData._id}`);
     }
@@ -183,7 +183,7 @@ const Acoes = () => {
             <div className="w-full md:w-[190px]">
               <button
                 className="w-full text-sm font-medium text-white bg-primary px-2.5 py-3 rounded-md mt-2 hover:bg-primary/90 transition-colors"
-                onClick={() => navigate("/admin/acao-modal")}
+                onClick={() => navigate("/admin/acao-popup")}
               >
                 + Criar
               </button>

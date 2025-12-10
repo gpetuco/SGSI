@@ -10,7 +10,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import { LuZoomIn } from "react-icons/lu";
-import Modal from "../Modal";
+import Popup from "../Popup";
 
 const StackedStatusByUser = ({
   data = [],
@@ -67,7 +67,7 @@ const StackedStatusByUser = ({
         <LuZoomIn className="text-lg" />
       </button>
       <ChartBody />
-      <Modal
+      <Popup
         aberto={open}
         onClose={() => setOpen(false)}
         title={title}
@@ -76,7 +76,7 @@ const StackedStatusByUser = ({
         <div style={{ height: "65vh" }}>
           <ChartBody height={"100%"} />
         </div>
-      </Modal>
+      </Popup>
     </div>
   );
 };

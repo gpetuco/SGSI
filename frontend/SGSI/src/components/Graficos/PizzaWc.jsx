@@ -10,7 +10,7 @@ import {
 import TooltipWc from "./TooltipWc";
 import RotuloWc from "./RotuloWc";
 import { LuZoomIn } from "react-icons/lu";
-import Modal from "../Modal";
+import Popup from "../Popup";
 
 const PizzaWc = ({ data, colors, title = "Chart" }) => {
   const [open, setOpen] = useState(false);
@@ -48,7 +48,7 @@ const PizzaWc = ({ data, colors, title = "Chart" }) => {
         <LuZoomIn className="text-lg" />
       </button>
       <ChartBody />
-      <Modal
+      <Popup
         aberto={open}
         onClose={() => setOpen(false)}
         title={title}
@@ -57,7 +57,7 @@ const PizzaWc = ({ data, colors, title = "Chart" }) => {
         <div style={{ height: "65vh" }}>
           <ChartBody height={"100%"} />
         </div>
-      </Modal>
+      </Popup>
     </div>
   );
 };
