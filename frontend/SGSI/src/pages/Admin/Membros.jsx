@@ -4,7 +4,7 @@ import { API_PATHS } from "../../utils/apiUrl";
 import axiosReq from "../../utils/axiosReq";
 import UserAvatar from "../../components/UserAvatar";
 
-const ManageUsers = () => {
+const Membros = () => {
   const [allUsers, setAllUsers] = useState([]);
 
   const getAllUsers = async () => {
@@ -92,4 +92,4 @@ const ManageUsers = () => {
   );
 };
 
-export default ManageUsers;
+export default Membros;

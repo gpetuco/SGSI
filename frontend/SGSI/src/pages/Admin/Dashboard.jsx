@@ -6,7 +6,7 @@ import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
 import { API_PATHS } from "../../utils/apiUrl";
-import { addThousandsSeparator } from "../../utils/helper";
+import { formatMilhar } from "../../utils/helper";
 import Info from "../../components/Cards/Info";
 import PieWc from "../../components/Graficos/PizzaWc";
 import AreaWc from "../../components/Graficos/AreaWc";
@@ -217,7 +217,7 @@ const Dashboard = () => {
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-5">
           <Info
             label="Ações"
-            value={addThousandsSeparator(
+            value={formatMilhar(
               dashboardData?.charts?.taskDistribution?.All || 0
             )}
             color="bg-primary"
@@ -225,7 +225,7 @@ const Dashboard = () => {
 
           <Info
             label="Pendentes"
-            value={addThousandsSeparator(
+            value={formatMilhar(
               dashboardData?.charts?.taskDistribution?.Pending || 0
             )}
             color="bg-violet-500"
@@ -233,7 +233,7 @@ const Dashboard = () => {
 
           <Info
             label="Em Andamento"
-            value={addThousandsSeparator(
+            value={formatMilhar(
               dashboardData?.charts?.taskDistribution?.InProgress || 0
             )}
             color="bg-cyan-500"
@@ -241,7 +241,7 @@ const Dashboard = () => {
 
           <Info
             label="Concluídas"
-            value={addThousandsSeparator(
+            value={formatMilhar(
               dashboardData?.charts?.taskDistribution?.Completed || 0
             )}
             color="bg-lime-500"

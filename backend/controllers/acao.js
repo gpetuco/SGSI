@@ -143,7 +143,7 @@ const getTaskById = async (req, res) => {
 // @desc    Create a new task (Admin only)
 // @route   POST /api/tasks/
 // @access  Private (Admin)
-const createTask = async (req, res) => {
+const criarAcao = async (req, res) => {
   try {
     const {
       title,
@@ -953,7 +953,7 @@ const getUserDashboardData = async (req, res) => {
 module.exports = {
   getTasks,
   getTaskById,
-  createTask,
+  criarAcao,
   updateTask,
   deleteTask,
   updateTaskStatus,

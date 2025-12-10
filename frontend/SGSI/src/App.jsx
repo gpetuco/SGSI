@@ -9,13 +9,13 @@ import {
 import Dashboard from "./pages/Admin/Dashboard";
 import Login from "./pages/Auth/Login";
 import SignUp from "./pages/Auth/SignUp";
-import ManageTasks from "./pages/Admin/ManageTasks";
-import AdminViewTaskDetails from "./pages/Admin/ViewTaskDetails";
+import Acoes from "./pages/Admin/Acoes";
+import AdminAcaoDetalhar from "./pages/Admin/AcaoDetalhar";
 import AdminKanban from "./pages/Admin/Kanban";
 import Iso27001Tasks from "./pages/Admin/Iso27001Tasks";
 import NistCsfTasks from "./pages/Admin/NistCsfTasks";
-import CreateTask from "./pages/Admin/CreateTask";
-import ManageUsers from "./pages/Admin/ManageUsers";
+import CriarAcao from "./pages/Admin/CriarAcao";
+import Membros from "./pages/Admin/Membros";
 import Clients from "./pages/Admin/Clients";
 
 import PrivateRoute from "./routes/PrivateRoute";
@@ -34,36 +34,34 @@ const App = () => {
             {/* Admin Routes */}
             <Route element={<PrivateRoute allowedRoles={["admin"]} />}>
               <Route path="/admin/dashboard" element={<Dashboard />} />
-              <Route path="/admin/tasks" element={<ManageTasks />} />
+              <Route path="/admin/tasks" element={<Acoes />} />
               <Route path="/admin/kanban" element={<AdminKanban />} />
               <Route
                 path="/admin/tasks/iso-27001"
                 element={<Iso27001Tasks />}
               />
               <Route path="/admin/tasks/nist-csf" element={<NistCsfTasks />} />
-              <Route path="/admin/create-task" element={<CreateTask />} />
-              <Route path="/admin/users" element={<ManageUsers />} />
+              <Route path="/admin/acao-modal" element={<CriarAcao />} />
+              <Route path="/admin/users" element={<Membros />} />
               <Route path="/admin/clients" element={<Clients />} />
               <Route
                 path="/admin/task-details/:id"
-                element={<AdminViewTaskDetails />}
+                element={<AdminAcaoDetalhar />}
               />
             </Route>
 
-            {/* User Routes (members: same pages as admin, read-only) */}
             <Route element={<PrivateRoute allowedRoles={["member"]} />}>
               <Route path="/user/dashboard" element={<Dashboard />} />
-              <Route path="/user/tasks" element={<ManageTasks />} />
+              <Route path="/user/tasks" element={<Acoes />} />
               <Route path="/user/kanban" element={<AdminKanban />} />
               <Route path="/user/tasks/iso-27001" element={<Iso27001Tasks />} />
               <Route path="/user/tasks/nist-csf" element={<NistCsfTasks />} />
               <Route
                 path="/user/task-details/:id"
-                element={<AdminViewTaskDetails />}
+                element={<AdminAcaoDetalhar />}
               />
             </Route>
 
-            {/* Default Route */}
             <Route path="/" element={<Root />} />
           </Routes>
         </Router>

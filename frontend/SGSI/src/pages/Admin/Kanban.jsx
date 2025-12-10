@@ -141,7 +141,7 @@ const Kanban = () => {
 
   const handleOpen = (taskId) => {
     if (user?.role === "admin") {
-      navigate(`/admin/create-task`, { state: { taskId } });
+      navigate(`/admin/acao-modal`, { state: { taskId } });
     } else {
       navigate(`/user/task-details/${taskId}`);
     }

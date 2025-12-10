@@ -62,7 +62,7 @@ const Iso27001Tasks = () => {
 
   const handleClick = (taskData) => {
     if (user?.role === "admin") {
-      navigate(`/admin/create-task`, { state: { taskId: taskData._id } });
+      navigate(`/admin/acao-modal`, { state: { taskId: taskData._id } });
     } else {
       navigate(`/user/task-details/${taskData._id}`);
     }

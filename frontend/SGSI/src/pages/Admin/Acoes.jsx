@@ -9,7 +9,7 @@ import SelectDropdownSearch from "../../components/Inputs/SelectDropdownSearch";
 import { CLASSIFICATION_DATA, PRIORITY_DATA } from "../../utils/menus";
 import { UserContext } from "../../context/userContext";
 
-const ManageTasks = () => {
+const Acoes = () => {
   const [allTasks, setAllTasks] = useState([]);
 
   const [filterStatus, setFilterStatus] = useState("All");
@@ -49,7 +49,7 @@ const ManageTasks = () => {
 
   const handleClick = (taskData) => {
     if (user?.role === "admin") {
-      navigate(`/admin/create-task`, { state: { taskId: taskData._id } });
+      navigate(`/admin/acao-modal`, { state: { taskId: taskData._id } });
     } else {
       navigate(`/user/task-details/${taskData._id}`);
     }
@@ -105,9 +105,9 @@ const ManageTasks = () => {
       <div className="my-5">
         <h2 className="text-xl md:text-xl font-medium">Ações</h2>
 
-        <div className="mt-3 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-3">
+        <div className="mt-3 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-3 w-full">
           {/* Filtros */}
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-2 w-full lg:w-[1100px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 w-full">
             {user?.role === "admin" && (
               <div className="w-full md:w-[190px]">
                 <label className="text-xs font-medium text-slate-600">
@@ -183,7 +183,7 @@ const ManageTasks = () => {
             <div className="w-full md:w-[190px]">
               <button
                 className="w-full text-sm font-medium text-white bg-primary px-2.5 py-3 rounded-md mt-2 hover:bg-primary/90 transition-colors"
-                onClick={() => navigate("/admin/create-task")}
+                onClick={() => navigate("/admin/acao-modal")}
               >
                 + Criar
               </button>
@@ -221,4 +221,4 @@ const ManageTasks = () => {
   );
 };
 
-export default ManageTasks;
+export default Acoes;

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
 import { API_PATHS } from "../../utils/apiUrl";
 // Use Intl for pt-BR date formatting
-import { addThousandsSeparator } from "../../utils/helper";
+import { formatMilhar } from "../../utils/helper";
 import Info from "../../components/Cards/Info";
 import { LuArrowRight } from "react-icons/lu";
 import PizzaWc from "../../components/Graficos/PizzaWc";
@@ -98,7 +98,7 @@ const UserDashboard = () => {
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-5">
           <Info
             label="Total Tasks"
-            value={addThousandsSeparator(
+            value={formatMilhar(
               dashboardData?.charts?.taskDistribution?.All || 0
             )}
             color="bg-primary"
@@ -106,7 +106,7 @@ const UserDashboard = () => {
 
           <Info
             label="Pending Tasks"
-            value={addThousandsSeparator(
+            value={formatMilhar(
               dashboardData?.charts?.taskDistribution?.Pending || 0
             )}
             color="bg-violet-500"
@@ -114,7 +114,7 @@ const UserDashboard = () => {
 
           <Info
             label="In Progress Tasks"
-            value={addThousandsSeparator(
+            value={formatMilhar(
               dashboardData?.charts?.taskDistribution?.InProgress || 0
             )}
             color="bg-cyan-500"
@@ -122,7 +122,7 @@ const UserDashboard = () => {
 
           <Info
             label="Completed Tasks"
-            value={addThousandsSeparator(
+            value={formatMilhar(
               dashboardData?.charts?.taskDistribution?.Completed || 0
             )}
             color="bg-lime-500"

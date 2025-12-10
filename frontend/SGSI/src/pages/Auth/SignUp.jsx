@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import AuthLayout from "../../components/layouts/AuthLayout";
-import { validateEmail } from "../../utils/helper";
+import { emailVerificacao } from "../../utils/helper";
 import ProfilePhotoSelector from "../../components/Inputs/ProfilePhotoSelector";
 import Input from "../../components/Inputs/Input";
 import { Link, useNavigate } from "react-router-dom";
@@ -34,7 +34,7 @@ const SignUp = () => {
       return;
     }
 
-    if (!validateEmail(email)) {
+    if (!emailVerificacao(email)) {
       setError("Please enter a valid email address.");
       return;
     }

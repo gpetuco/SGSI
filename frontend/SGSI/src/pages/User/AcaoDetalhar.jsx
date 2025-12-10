@@ -6,13 +6,11 @@ import DashboardLayout from "../../components/layouts/DashboardLayout";
 import Modal from "../../components/Modal";
 import FotosUsuarios from "../../components/FotosUsuarios";
 import moment from "moment";
-import { UserContext } from "../../context/userContext";
 
-const ViewTaskDetails = () => {
+const AcaoDetalhar = () => {
   const { id } = useParams();
   const [task, setTask] = useState(null);
   const [openModal, setOpenModal] = useState(true);
-  const { user } = React.useContext(UserContext);
 
   const getStatusTagColor = (status) => {
     switch (status) {
@@ -24,30 +22,6 @@ const ViewTaskDetails = () => {
 
       default:
         return "text-violet-500 bg-violet-50 border border-violet-500/10";
-    }
-  };
-
-  const getStatusLabel = (status) => {
-    switch (status) {
-      case "In Progress":
-        return "Em Andamento";
-      case "Completed":
-        return "Concluído";
-      case "Pending":
-      default:
-        return "Pendente";
-    }
-  };
-
-  const getPriorityLabel = (priority) => {
-    switch (priority) {
-      case "Low":
-        return "Baixa";
-      case "Medium":
-        return "Média";
-      case "High":
-      default:
-        return "Alta";
     }
   };
 
@@ -65,11 +39,8 @@ const ViewTaskDetails = () => {
     }
   };
 
+  // handle todo check
   const updateItens = async (index) => {
-    if (user?.role === "member") {
-      return;
-    }
-
     // eslint-disable-next-line no-unsafe-optional-chaining
     const itens = [...task?.itens];
     const taskId = id;
@@ -110,7 +81,7 @@ const ViewTaskDetails = () => {
       <Modal
         isOpen={openModal}
         onClose={closeAndGoBack}
-        title={"Ação"}
+        title={task?.title || "Task Details"}
         variant="wide"
       >
         {task && (
@@ -123,9 +94,9 @@ const ViewTaskDetails = () => {
                 <div
                   className={`text-[11px] md:text-[13px] font-medium ${getStatusTagColor(
                     task?.status
-                  )} px-4 py-0.5 rounded whitespace-nowrap`}
+                  )} px-4 py-0.5 rounded`}
                 >
-                  {getStatusLabel(task?.status)}
+                  {task?.status}
                 </div>
               </div>
 
@@ -135,19 +106,28 @@ const ViewTaskDetails = () => {
 
               <div className="grid grid-cols-12 gap-4 mt-4">
                 <div className="col-span-6 md:col-span-4">
-                  <InfoBox
-                    label="Prioridade"
-                    value={getPriorityLabel(task?.priority)}
-                  />
+                  <InfoBox label="Priority" value={task?.priority} />
                 </div>
                 <div className="col-span-6 md:col-span-4">
                   <InfoBox
                     label="Previsto"
                     value={
                       task?.dueDate
-                        ? moment(task?.dueDate).format("DD/MM/YYYY")
+                        ? moment(task?.dueDate).format("Do MMM YYYY")
                         : "N/A"
                     }
+                  />
+                </div>
+                <div className="col-span-6 md:col-span-4">
+                  <label className="text-xs font-medium text-slate-500">
+                    Assigned To
+                  </label>
+                  <FotosUsuarios
+                    avatars={
+                      task?.responsavel?.map((item) => item?.profileImageUrl) ||
+                      []
+                    }
+                    maxVisible={5}
                   />
                 </div>
               </div>
@@ -161,7 +141,6 @@ const ViewTaskDetails = () => {
                     key={`todo_${index}`}
                     text={item.text}
                     isChecked={item?.completed}
-                    readOnly={user?.role === "member"}
                     onChange={() => updateItens(index)}
                   />
                 ))}
@@ -174,7 +153,7 @@ const ViewTaskDetails = () => {
   );
 };
 
-export default ViewTaskDetails;
+export default AcaoDetalhar;
 
 const InfoBox = ({ label, value }) => {
   return (
@@ -188,17 +167,14 @@ const InfoBox = ({ label, value }) => {
   );
 };
 
-const Itens = ({ text, isChecked, onChange, readOnly }) => {
+const Itens = ({ text, isChecked, onChange }) => {
   return (
     <div className="flex items-center gap-3 p-3">
       <input
         type="checkbox"
         checked={isChecked}
-        onChange={readOnly ? undefined : onChange}
-        disabled={readOnly}
-        className={`w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none ${
-          readOnly ? "cursor-default" : "cursor-pointer"
-        }`}
+        onChange={onChange}
+        className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none cursor-pointer"
       />
 
       <p className="text-[13px] text-gray-800">{text}</p>

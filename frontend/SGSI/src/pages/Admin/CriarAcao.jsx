@@ -40,7 +40,7 @@ const getStatusLabel = (status) => {
   }
 };
 
-const CreateTask = () => {
+const CriarAcao = () => {
   const location = useLocation();
   const { taskId } = location.state || {};
   const navigate = useNavigate();
@@ -847,4 +847,4 @@ const CreateTask = () => {
   );
 };
 
-export default CreateTask;
+export default CriarAcao;
