@@ -1,31 +1,31 @@
-const Acao = require("../models/Acao");
-const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 
-// @desc    Get all users (Admin only)
-// @route   GET /api/users/
-// @access  Private (Admin)
-const getUsers = async (req, res) => {
-  try {
-    const users = await User.find({ role: "admin" }).select("-password");
+////////////////
 
-    const usersWithAcaoCounts = await Promise.all(
-      users.map(async (user) => {
+const User = require("../models/User");
+const Acao = require("../models/Acao");
+
+const retornaUsuariosData = async (req, res) => {
+  try {
+    const usuarios = await User.find({ role: "admin" }).select("-password");
+
+    const usuariosComAcao = await Promise.all(
+      usuarios.map(async (usuario) => {
         const acoesPendentes = await Acao.countDocuments({
-          responsavel: user._id,
+          responsavel: usuario._id,
           status: "Pendente",
         });
         const acoesEmAndamento = await Acao.countDocuments({
-          responsavel: user._id,
+          responsavel: usuario._id,
           status: "Em Andamento",
         });
         const acoesConcluidas = await Acao.countDocuments({
-          responsavel: user._id,
+          responsavel: usuario._id,
           status: "Concluído",
         });
 
         return {
-          ...user._doc,
+          ...usuario._doc,
           acoesPendentes,
           acoesEmAndamento,
           acoesConcluidas,
@@ -33,23 +33,21 @@ const getUsers = async (req, res) => {
       })
     );
 
-    res.json(usersWithAcaoCounts);
+    res.json(usuariosComAcao);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Erro: ", error: error.message });
   }
 };
-// @desc    Get user by ID
-// @route   GET /api/users/:id
-// @access  Private
-const getUserById = async (req, res) => {
+
+const getUsuarioUniqueId = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select("-password");
-    if (!user)
+    const usuario = await User.findById(req.params.id).select("-password");
+    if (!usuario)
       return res.status(404).json({ message: "Usuário não encontrado." });
-    res.json(user);
+    res.json(usuario);
   } catch (error) {
     res.status(500).json({ message: "Erro:", error: error.message });
   }
 };
 
-module.exports = { getUsers, getUserById };
+module.exports = { retornaUsuariosData, getUsuarioUniqueId };

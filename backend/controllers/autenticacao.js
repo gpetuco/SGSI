@@ -12,24 +12,24 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
-    if (!user) {
+    const usuario = await User.findOne({ email });
+    if (!usuario) {
       return res.status(401).json({ message: "Email ou senha incorretos." });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+    const valido = await bcrypt.compare(password, usuario.password);
+    if (!valido) {
       return res.status(401).json({ message: "Email ou senha incorretos." });
     }
 
     res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      empresa: user.empresa,
-      profileImageUrl: user.profileImageUrl,
-      token: tokenUsuario(user._id),
+      _id: usuario._id,
+      name: usuario.name,
+      email: usuario.email,
+      empresa: usuario.empresa,
+      profileImageUrl: usuario.profileImageUrl,
+      role: usuario.role,
+      token: tokenUsuario(usuario._id),
     });
   } catch (error) {
     res.status(500).json({ message: "Erro: ", error: error.message });
@@ -70,12 +70,12 @@ const cadastroUsuario = async (req, res) => {
     }
 
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const senhaCrypt = await bcrypt.hash(password, salt);
 
     const user = await User.create({
       name,
       email,
-      password: hashedPassword,
+      password: senhaCrypt,
       profileImageUrl,
       role,
       empresa,
@@ -97,11 +97,11 @@ const cadastroUsuario = async (req, res) => {
 
 const getDadosUsuario = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
-    if (!user) {
+    const usuario = await User.findById(req.user.id).select("-password");
+    if (!usuario) {
       return res.status(404).json({ message: "Usuário não encontrado." });
     }
-    res.json(user);
+    res.json(usuario);
   } catch (error) {
     res.status(500).json({ message: "Erro: ", error: error.message });
   }
@@ -109,21 +109,21 @@ const getDadosUsuario = async (req, res) => {
 
 const editarDadosUsuario = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
+    const usuario = await User.findById(req.user.id);
 
-    if (!user) {
+    if (!usuario) {
       return res.status(404).json({ message: "Usuário não encontrado." });
     }
 
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
+    usuario.name = req.body.name || usuario.name;
+    usuario.email = req.body.email || usuario.email;
 
     if (req.body.password) {
       const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(req.body.password, salt);
+      usuario.password = await bcrypt.hash(req.body.password, salt);
     }
 
-    const atualizado = await user.save();
+    const atualizado = await usuario.save();
 
     res.json({
       _id: atualizado._id,

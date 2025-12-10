@@ -1,148 +1,5 @@
 const Acao = require("../models/Acao");
 
-// @desc    Get all acoes
-// @route   GET /api/acoes/
-// @access  Private
-const getAcoes = async (req, res) => {
-  try {
-    const { status, responsavel, classification, cliente } = req.query;
-    const isAdmin = req.user.role === "admin";
-    const restrictToMe = responsavel === "me";
-
-    let baseFilter = {};
-
-    if (status) {
-      baseFilter.status = status;
-    }
-    if (classification) {
-      baseFilter.classification = classification;
-    }
-
-    if (isAdmin) {
-      if (cliente) {
-        baseFilter.cliente = cliente;
-      }
-      if (responsavel && !restrictToMe) {
-        baseFilter.responsavel = responsavel;
-      }
-    } else {
-      if (!req.user.empresa) {
-        return res.json({
-          acoes: [],
-          statusSummary: {
-            all: 0,
-            acoesPendentes: 0,
-            acoesEmAndamento: 0,
-            acoesConcluidas: 0,
-          },
-        });
-      }
-
-      baseFilter.cliente = req.user.empresa;
-
-      if (restrictToMe) {
-        baseFilter.responsavel = req.user._id;
-      } else if (responsavel && responsavel !== "me") {
-        baseFilter.responsavel = responsavel;
-      }
-    }
-
-    const listFilter = {
-      ...baseFilter,
-      ...(isAdmin && restrictToMe ? { responsavel: req.user._id } : {}),
-    };
-
-    let acoes = await Acao.find(listFilter)
-      .populate("responsavel", "name email profileImageUrl")
-      .populate("cliente", "name");
-
-    acoes = await Promise.all(
-      acoes.map(async (acao) => {
-        const total = Array.isArray(acao.itens) ? acao.itens.length : 0;
-        const concluidoCount = Array.isArray(acao.itens)
-          ? acao.itens.filter((item) => item.concluido).length
-          : 0;
-        const progressPct =
-          total > 0
-            ? Math.round((concluidoCount / total) * 100)
-            : acao.progress || 0;
-        return {
-          ...acao._doc,
-          concluidoTodoCount: concluidoCount,
-          progress: progressPct,
-        };
-      })
-    );
-
-    const summaryBaseFilter = {
-      ...baseFilter,
-      ...(isAdmin && restrictToMe ? { responsavel: req.user._id } : {}),
-    };
-
-    const allAcoes = await Acao.countDocuments(summaryBaseFilter);
-
-    const acoesPendentes = await Acao.countDocuments({
-      ...summaryBaseFilter,
-      status: "Pendente",
-    });
-
-    const acoesEmAndamento = await Acao.countDocuments({
-      ...summaryBaseFilter,
-      status: "Em Andamento",
-    });
-
-    const acoesConcluidas = await Acao.countDocuments({
-      ...summaryBaseFilter,
-      status: "Concluído",
-    });
-
-    res.json({
-      acoes,
-      statusSummary: {
-        all: allAcoes,
-        acoesPendentes,
-        acoesEmAndamento,
-        acoesConcluidas,
-      },
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
-  }
-};
-
-// @desc    Get acao by ID
-// @route   GET /api/acoes/:id
-// @access  Private
-const getAcaoById = async (req, res) => {
-  try {
-    const acao = await Acao.findById(req.params.id)
-      .populate("responsavel", "name email profileImageUrl")
-      .populate("cliente", "name");
-
-    if (!acao) return res.status(404).json({ message: "Acao not found" });
-
-    if (req.user.role === "member") {
-      const userEmpresaId = req.user.empresa
-        ? req.user.empresa.toString()
-        : null;
-      const acaoClienteId = acao.cliente
-        ? acao.cliente._id?.toString() || acao.cliente.toString()
-        : null;
-
-      if (!userEmpresaId || !acaoClienteId || userEmpresaId !== acaoClienteId) {
-        return res.status(403).json({ message: "Acesso negado!" });
-      }
-    }
-
-    res.json(acao);
-  } catch (error) {
-    res.status(500).json({ message: "Erro:", error: error.message });
-  }
-};
-
-// @desc    Create a new acao (Admin only)
-// @route   POST /api/acoes/
-// @access  Private (Admin)
 const criarAcao = async (req, res) => {
   try {
     const {
@@ -159,7 +16,7 @@ const criarAcao = async (req, res) => {
     if (!Array.isArray(responsavel)) {
       return res
         .status(400)
-        .json({ message: "responsavel must be an array of user IDs" });
+        .json({ message: "responsavel deve ter IDs de usuarios" });
     }
 
     let clienteId = null;
@@ -186,27 +43,26 @@ const criarAcao = async (req, res) => {
       cliente: clienteId,
     });
 
-    res.status(201).json({ message: "Acao created successfully", acao });
+    res.status(201).json({ message: "Acao criada com sucesso", acao });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Erro: ", error: error.message });
   }
 };
 
-// @desc    Update acao details
-// @route   PUT /api/acoes/:id
-// @access  Private
 const updateAcao = async (req, res) => {
   try {
     const acao = await Acao.findById(req.params.id);
 
-    if (!acao) return res.status(404).json({ message: "Acao not found" });
+    if (!acao) return res.status(404).json({ message: "Acao nao encontrada" });
 
     acao.title = req.body.title || acao.title;
     acao.descricao = req.body.descricao || acao.descricao;
-    acao.prioridade = req.body.prioridade || acao.prioridade;
+
     acao.classification = req.body.classification || acao.classification;
-    acao.dueDate = req.body.dueDate || acao.dueDate;
+    acao.prioridade = req.body.prioridade || acao.prioridade;
     acao.itens = req.body.itens || acao.itens;
+    acao.dueDate = req.body.dueDate || acao.dueDate;
+
     if (Object.prototype.hasOwnProperty.call(req.body, "cliente")) {
       if (!req.body.cliente) {
         acao.cliente = null;
@@ -227,41 +83,142 @@ const updateAcao = async (req, res) => {
       if (!Array.isArray(req.body.responsavel)) {
         return res
           .status(400)
-          .json({ message: "responsavel must be an array of user IDs" });
+          .json({ message: "responsavel deve ser IDs de usuarios" });
       }
       acao.responsavel = req.body.responsavel;
     }
 
     const updatedAcao = await acao.save();
-    res.json({ message: "Acao updated successfully", updatedAcao });
+    res.json({ message: "Acao salva com sucesso", updatedAcao });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Erro: ", error: error.message });
   }
 };
 
-// @desc    Delete a acao (Admin only)
-// @route   DELETE /api/acoes/:id
-// @access  Private (Admin)
 const deleteAcao = async (req, res) => {
   try {
     const acao = await Acao.findById(req.params.id);
 
-    if (!acao) return res.status(404).json({ message: "Acao not found" });
+    if (!acao) return res.status(404).json({ message: "Acao nao encontrada" });
 
     await acao.deleteOne();
-    res.json({ message: "Acao deleted successfully" });
+    res.json({ message: "Acao excluida" });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Erro: ", error: error.message });
   }
 };
 
-// @desc    Update acao status
-// @route   PUT /api/acoes/:id/status
-// @access  Private
+const getAcoes = async (req, res) => {
+  try {
+    const { status, responsavel, classification, cliente } = req.query;
+    const isAdmin = req.user.role === "admin";
+    const restrictToMe = responsavel === "me";
+
+    let filtroAcoes = {};
+
+    if (status) {
+      filtroAcoes.status = status;
+    }
+    if (classification) {
+      filtroAcoes.classification = classification;
+    }
+
+    if (isAdmin) {
+      if (cliente) {
+        filtroAcoes.cliente = cliente;
+      }
+      if (responsavel && !restrictToMe) {
+        filtroAcoes.responsavel = responsavel;
+      }
+    } else {
+      if (!req.user.empresa) {
+        return res.json({
+          acoes: [],
+          statusSummary: {
+            all: 0,
+            acoesPendentes: 0,
+            acoesEmAndamento: 0,
+            acoesConcluidas: 0,
+          },
+        });
+      }
+
+      filtroAcoes.cliente = req.user.empresa;
+
+      if (restrictToMe) {
+        filtroAcoes.responsavel = req.user._id;
+      } else if (responsavel && responsavel !== "me") {
+        filtroAcoes.responsavel = responsavel;
+      }
+    }
+
+    const listFilter = {
+      ...filtroAcoes,
+      ...(isAdmin && restrictToMe ? { responsavel: req.user._id } : {}),
+    };
+
+    let acoes = await Acao.find(listFilter)
+      .populate("responsavel", "name email profileImageUrl")
+      .populate("cliente", "name");
+
+    acoes = await Promise.all(
+      acoes.map(async (acao) => {
+        const total = Array.isArray(acao.itens) ? acao.itens.length : 0;
+        const concluidoCount = Array.isArray(acao.itens)
+          ? acao.itens.filter((item) => item.concluido).length
+          : 0;
+        const progressPct =
+          total > 0
+            ? Math.round((concluidoCount / total) * 100)
+            : acao.progress || 0;
+        return {
+          ...acao._doc,
+          concluidoTodoCount: concluidoCount,
+          progress: progressPct,
+        };
+      })
+    );
+
+    const retornoFilter = {
+      ...filtroAcoes,
+      ...(isAdmin && restrictToMe ? { responsavel: req.user._id } : {}),
+    };
+
+    const allAcoes = await Acao.countDocuments(retornoFilter);
+
+    const acoesPendentes = await Acao.countDocuments({
+      ...retornoFilter,
+      status: "Pendente",
+    });
+
+    const acoesEmAndamento = await Acao.countDocuments({
+      ...retornoFilter,
+      status: "Em Andamento",
+    });
+
+    const acoesConcluidas = await Acao.countDocuments({
+      ...retornoFilter,
+      status: "Concluído",
+    });
+
+    res.json({
+      acoes,
+      statusSummary: {
+        all: allAcoes,
+        acoesPendentes,
+        acoesEmAndamento,
+        acoesConcluidas,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Erro: ", error: error.message });
+  }
+};
+
 const updateAcaoStatus = async (req, res) => {
   try {
     const acao = await Acao.findById(req.params.id);
-    if (!acao) return res.status(404).json({ message: "Acao not found" });
+    if (!acao) return res.status(404).json({ message: "Acao nao encontrada" });
 
     if (req.user.role === "member") {
       const userEmpresaId = req.user.empresa
@@ -270,7 +227,7 @@ const updateAcaoStatus = async (req, res) => {
       const acaoClienteId = acao.cliente ? acao.cliente.toString() : null;
 
       if (!userEmpresaId || !acaoClienteId || userEmpresaId !== acaoClienteId) {
-        return res.status(403).json({ message: "Not authorized" });
+        return res.status(403).json({ message: "Sem autorizacao" });
       }
     }
 
@@ -279,7 +236,7 @@ const updateAcaoStatus = async (req, res) => {
     );
 
     if (!isAssigned && req.user.role !== "admin") {
-      return res.status(403).json({ message: "Not authorized" });
+      return res.status(403).json({ message: "Sem autorizacao" });
     }
 
     const newStatus = req.body.status || acao.status;
@@ -295,21 +252,18 @@ const updateAcaoStatus = async (req, res) => {
     }
 
     await acao.save();
-    res.json({ message: "Acao status updated", acao });
+    res.json({ message: "Acao status salvo", acao });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Erro: ", error: error.message });
   }
 };
 
-// @desc    Update acao checklist
-// @route   PUT /api/acoes/:id/todo
-// @access  Private
 const updateAcaoChecklist = async (req, res) => {
   try {
     const { itens } = req.body;
     const acao = await Acao.findById(req.params.id);
 
-    if (!acao) return res.status(404).json({ message: "Acao not found" });
+    if (!acao) return res.status(404).json({ message: "Acao nao encontrada" });
 
     if (req.user.role === "member") {
       const userEmpresaId = req.user.empresa
@@ -318,16 +272,12 @@ const updateAcaoChecklist = async (req, res) => {
       const acaoClienteId = acao.cliente ? acao.cliente.toString() : null;
 
       if (!userEmpresaId || !acaoClienteId || userEmpresaId !== acaoClienteId) {
-        return res
-          .status(403)
-          .json({ message: "Not authorized to update checklist" });
+        return res.status(403).json({ message: "Sem autorizacao!" });
       }
     }
 
     if (!acao.responsavel.includes(req.user._id) && req.user.role !== "admin") {
-      return res
-        .status(403)
-        .json({ message: "Not authorized to update checklist" });
+      return res.status(403).json({ message: "Sem autorizacao!" });
     }
 
     acao.itens = itens;
@@ -357,13 +307,37 @@ const updateAcaoChecklist = async (req, res) => {
 
     res.json({ message: "Acao checklist updated", acao: updatedAcao });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Erro: ", error: error.message });
   }
 };
 
-// @desc    Dashboard Data (Admin only)
-// @route   GET /api/acoes/dashboard-data
-// @access  Private
+const getAcaoUnique = async (req, res) => {
+  try {
+    const acao = await Acao.findById(req.params.id)
+      .populate("responsavel", "name email profileImageUrl")
+      .populate("cliente", "name");
+
+    if (!acao) return res.status(404).json({ message: "Acao nao encontrada!" });
+
+    if (req.user.role === "member") {
+      const userEmpresaId = req.user.empresa
+        ? req.user.empresa.toString()
+        : null;
+      const acaoClienteId = acao.cliente
+        ? acao.cliente._id?.toString() || acao.cliente.toString()
+        : null;
+
+      if (!userEmpresaId || !acaoClienteId || userEmpresaId !== acaoClienteId) {
+        return res.status(403).json({ message: "Acesso negado!" });
+      }
+    }
+
+    res.json(acao);
+  } catch (error) {
+    res.status(500).json({ message: "Erro:", error: error.message });
+  }
+};
+
 const getDashboardData = async (req, res) => {
   try {
     const { classification, startDate, endDate, cliente } = req.query;
@@ -409,7 +383,6 @@ const getDashboardData = async (req, res) => {
             completionByIsoControlType: [],
             acoesByUser: [],
           },
-          recentAcoes: [],
         });
       }
       baseMatch.cliente = req.user.empresa;
@@ -453,14 +426,6 @@ const getDashboardData = async (req, res) => {
         acaoPrioridadeLevelsRaw.find((i) => i._id === prioridade)?.count || 0;
       return acc;
     }, {});
-
-    const recentAcoes = await Acao.find(baseMatch)
-      .sort({ createdAt: -1 })
-      .limit(10)
-      .select(
-        "title status prioridade classification dueDate createdAt responsavel"
-      )
-      .populate("responsavel", "name profileImageUrl");
 
     const frameworks = ["NIST CSF", "ISO 27001"];
     const statusByFrameworkRaw = await Acao.aggregate([
@@ -866,16 +831,12 @@ const getDashboardData = async (req, res) => {
         completionByIsoControlType,
         acoesByUser: acoesByUserAgg,
       },
-      recentAcoes,
     });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Erro: ", error: error.message });
   }
 };
 
-// @desc    Dashboard Data (User-specific)
-// @route   GET /api/acoes/user-dashboard-data
-// @access  Private
 const getDashboardClienteData = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -927,14 +888,6 @@ const getDashboardClienteData = async (req, res) => {
       return acc;
     }, {});
 
-    const recentAcoes = await Acao.find(baseMatch)
-      .sort({ createdAt: -1 })
-      .limit(10)
-      .select(
-        "title status prioridade classification dueDate createdAt responsavel"
-      )
-      .populate("responsavel", "name profileImageUrl");
-
     res.status(200).json({
       statistics: {
         totalAcoes,
@@ -946,7 +899,6 @@ const getDashboardClienteData = async (req, res) => {
         dadosAcoes,
         acaoPrioridadeLevels,
       },
-      recentAcoes,
     });
   } catch (error) {
     res.status(500).json({ message: "Erro:", error: error.message });
@@ -955,7 +907,7 @@ const getDashboardClienteData = async (req, res) => {
 
 module.exports = {
   getAcoes,
-  getAcaoById,
+  getAcaoUnique,
   criarAcao,
   updateAcao,
   deleteAcao,
