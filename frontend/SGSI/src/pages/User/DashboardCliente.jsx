@@ -5,7 +5,7 @@ import { UserContext } from "../../context/userContext";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
-import { API_PATHS } from "../../utils/apiUrl";
+import { URLS_API } from "../../utils/apiUrl";
 import { formatMilhar } from "../../utils/utils";
 import Info from "../../components/Cards/Info";
 import PizzaWc from "../../components/Graficos/PizzaWc";
@@ -49,7 +49,7 @@ const DashboardCliente = () => {
   const getDashboardData = async () => {
     try {
       const response = await axiosReq.get(
-        API_PATHS.ACOES.GET_USER_DASHBOARD_DATA
+        URLS_API.ACOES.GET_USER_DASHBOARD_DATA
       );
       if (response.data) {
         setDashboardData(response.data);

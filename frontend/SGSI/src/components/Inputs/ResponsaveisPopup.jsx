@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { API_PATHS } from "../../utils/apiUrl";
+import { URLS_API } from "../../utils/apiUrl";
 import axiosReq from "../../utils/axiosReq";
 import { LuUsers } from "react-icons/lu";
 import Popup from "../Popup";
@@ -20,7 +20,7 @@ const ResponsaveisPopup = ({ selectedUsers, setSelectedUsers }) => {
 
   const getUsuarios = async () => {
     try {
-      const response = await axiosReq.get(API_PATHS.USERS.GET_ALL_USERS);
+      const response = await axiosReq.get(URLS_API.USERS.GET_ALL_USERS);
       if (response.data?.length > 0) {
         setAllUsers(response.data);
       }

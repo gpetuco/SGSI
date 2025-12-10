@@ -1,4 +1,4 @@
-import { API_PATHS } from "./apiUrl";
+import { URLS_API } from "./apiUrl";
 import axiosReq from "./axiosReq";
 
 const uploadImage = async (imageFile) => {
@@ -7,7 +7,7 @@ const uploadImage = async (imageFile) => {
 
   try {
     const response = await axiosReq.post(
-      API_PATHS.IMAGE.UPLOAD_IMAGE,
+      URLS_API.IMAGE.UPLOAD_IMAGE,
       formData,
       {
         headers: {

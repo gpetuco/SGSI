@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import axiosReq from "../utils/axiosReq";
-import { API_PATHS } from "../utils/apiUrl";
+import { URLS_API } from "../utils/apiUrl";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const UserContext = createContext();
@@ -20,7 +20,7 @@ const UserProvider = ({ children }) => {
 
     const fetchUser = async () => {
       try {
-        const response = await axiosReq.get(API_PATHS.AUTH.GET_PROFILE);
+        const response = await axiosReq.get(URLS_API.AUTH.GET_PROFILE);
         setUser(response.data);
       } catch (error) {
         console.error("User not authenticated", error);

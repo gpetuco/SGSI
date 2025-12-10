@@ -1,6 +1,6 @@
 export const BASE_URL = "http://localhost:8000";
 
-export const API_PATHS = {
+export const URLS_API = {
   AUTH: {
     REGISTER: "/api/auth/register",
     LOGIN: "/api/auth/login",

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosReq from "../../utils/axiosReq";
-import { API_PATHS } from "../../utils/apiUrl";
+import { URLS_API } from "../../utils/apiUrl";
 import { LuChevronDown, LuSearch } from "react-icons/lu";
 
 const ListaClientes = ({
@@ -14,7 +14,7 @@ const ListaClientes = ({
 
   const fetchCompanies = async () => {
     try {
-      const res = await axiosReq.get(API_PATHS.COMPANIES.LIST);
+      const res = await axiosReq.get(URLS_API.COMPANIES.LIST);
       setCompanies(Array.isArray(res.data) ? res.data : []);
     } catch (e) {
       console.error("Falha ao carregar clientes", e);

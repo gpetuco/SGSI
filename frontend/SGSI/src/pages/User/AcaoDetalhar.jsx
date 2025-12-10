@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
-import { API_PATHS } from "../../utils/apiUrl";
+import { URLS_API } from "../../utils/apiUrl";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import Popup from "../../components/Popup";
 import FotosUsuarios from "../../components/FotosUsuarios";
@@ -28,7 +28,7 @@ const AcaoDetalhar = () => {
   // get Acao info by ID
   const getAcaoDetailsByID = async () => {
     try {
-      const response = await axiosReq.get(API_PATHS.ACOES.GET_ACAO_BY_ID(id));
+      const response = await axiosReq.get(URLS_API.ACOES.GET_ACAO_BY_ID(id));
 
       if (response.data) {
         const acaoInfo = response.data;
@@ -50,7 +50,7 @@ const AcaoDetalhar = () => {
 
       try {
         const response = await axiosReq.put(
-          API_PATHS.ACOES.UPDATE_TODO_CHECKLIST(acaoId),
+          URLS_API.ACOES.UPDATE_TODO_CHECKLIST(acaoId),
           { itens }
         );
         if (response.status === 200) {

@@ -2,7 +2,7 @@
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { PRIORIDADE_DATA, CLASSIFICATION_DATA } from "../../utils/menus";
 import axiosReq from "../../utils/axiosReq";
-import { API_PATHS } from "../../utils/apiUrl";
+import { URLS_API } from "../../utils/apiUrl";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
@@ -169,7 +169,7 @@ const CriarAcao = () => {
         concluido: false,
       }));
 
-      const response = await axiosReq.post(API_PATHS.ACOES.CREATE_ACAO, {
+      const response = await axiosReq.post(URLS_API.ACOES.CREATE_ACAO, {
         ...acaoData,
         previsao: new Date(acaoData.previsao).toISOString(),
         itens: todolist,
@@ -201,7 +201,7 @@ const CriarAcao = () => {
         };
       });
 
-      const response = await axiosReq.put(API_PATHS.ACOES.UPDATE_ACAO(acaoId), {
+      const response = await axiosReq.put(URLS_API.ACOES.UPDATE_ACAO(acaoId), {
         ...acaoData,
         previsao: new Date(acaoData.previsao).toISOString(),
         itens: todolist,
@@ -227,7 +227,7 @@ const CriarAcao = () => {
       next[index] = { ...next[index], concluido: !next[index].concluido };
 
       const response = await axiosReq.put(
-        API_PATHS.ACOES.UPDATE_TODO_CHECKLIST(acaoId),
+        URLS_API.ACOES.UPDATE_TODO_CHECKLIST(acaoId),
         { itens: next }
       );
       if (response.status === 200) {
@@ -289,7 +289,7 @@ const CriarAcao = () => {
     try {
       setLoadingAcao(true);
       const response = await axiosReq.get(
-        API_PATHS.ACOES.GET_ACAO_BY_ID(acaoId)
+        URLS_API.ACOES.GET_ACAO_BY_ID(acaoId)
       );
 
       if (response.data) {
@@ -371,7 +371,7 @@ const CriarAcao = () => {
         concluido: byText.has(txt) ? byText.get(txt) : !!old[idx]?.concluido,
       }));
       const res = await axiosReq.put(
-        API_PATHS.ACOES.UPDATE_TODO_CHECKLIST(acaoId),
+        URLS_API.ACOES.UPDATE_TODO_CHECKLIST(acaoId),
         { itens: updated }
       );
       if (res.status === 200) {
@@ -433,7 +433,7 @@ const CriarAcao = () => {
   // Delete Acao
   const deleteAcao = async () => {
     try {
-      await axiosReq.delete(API_PATHS.ACOES.DELETE_ACAO(acaoId));
+      await axiosReq.delete(URLS_API.ACOES.DELETE_ACAO(acaoId));
 
       setOpenExcluir(false);
       toast.success("Ação excluída com sucesso!");

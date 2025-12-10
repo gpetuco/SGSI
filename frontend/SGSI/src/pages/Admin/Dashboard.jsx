@@ -5,7 +5,7 @@ import { UserContext } from "../../context/userContext";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
-import { API_PATHS } from "../../utils/apiUrl";
+import { URLS_API } from "../../utils/apiUrl";
 import { formatMilhar } from "../../utils/utils";
 import Info from "../../components/Cards/Info";
 import PieWc from "../../components/Graficos/PizzaWc";
@@ -150,7 +150,7 @@ const Dashboard = () => {
       if (classificationFilter !== "All")
         params.classification = classificationFilter;
 
-      const response = await axiosReq.get(API_PATHS.ACOES.GET_DASHBOARD_DATA, {
+      const response = await axiosReq.get(URLS_API.ACOES.GET_DASHBOARD_DATA, {
         params,
       });
       if (response.data) {

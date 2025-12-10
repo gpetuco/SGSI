@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import axiosReq from "../../utils/axiosReq";
-import { API_PATHS } from "../../utils/apiUrl";
+import { URLS_API } from "../../utils/apiUrl";
 import Acao from "../../components/Cards/Acao";
 import { useNavigate } from "react-router-dom";
 import Lista from "../../components/Inputs/Lista";
@@ -54,7 +54,7 @@ const Kanban = () => {
 
   const getMyAcoes = async () => {
     try {
-      const response = await axiosReq.get(API_PATHS.ACOES.GET_ALL_ACOES);
+      const response = await axiosReq.get(URLS_API.ACOES.GET_ALL_ACOES);
       setAcoes(response.data?.acoes || []);
     } catch (error) {
       console.error("Error fetching acoes:", error);

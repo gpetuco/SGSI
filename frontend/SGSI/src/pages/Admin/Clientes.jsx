@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import axiosReq from "../../utils/axiosReq";
-import { API_PATHS } from "../../utils/apiUrl";
+import { URLS_API } from "../../utils/apiUrl";
 import toast from "react-hot-toast";
 import { LuCopy } from "react-icons/lu";
 
@@ -13,7 +13,7 @@ const Clientes = () => {
 
   const fetchCompanies = async () => {
     try {
-      const res = await axiosReq.get(API_PATHS.COMPANIES.LIST);
+      const res = await axiosReq.get(URLS_API.COMPANIES.LIST);
       setCompanies(res.data || []);
     } catch (err) {
       console.error("Falha ao buscar empresas", err);
@@ -29,7 +29,7 @@ const Clientes = () => {
     }
     setLoading(true);
     try {
-      const res = await axiosReq.post(API_PATHS.COMPANIES.CREATE, {
+      const res = await axiosReq.post(URLS_API.COMPANIES.CREATE, {
         name: name.trim(),
       });
       // prepend new company

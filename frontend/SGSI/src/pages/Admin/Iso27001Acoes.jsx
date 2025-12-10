@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
-import { API_PATHS } from "../../utils/apiUrl";
+import { URLS_API } from "../../utils/apiUrl";
 import Acao from "../../components/Cards/Acao";
 import Lista from "../../components/Inputs/Lista";
 import ListaSearch from "../../components/Inputs/ListaSearch";
@@ -50,7 +50,7 @@ const Iso27001Acoes = () => {
       };
       if (selectedUser !== "All") params.responsavel = selectedUser;
       if (selectedCompany !== "All") params.cliente = selectedCompany;
-      const response = await axiosReq.get(API_PATHS.ACOES.GET_ALL_ACOES, {
+      const response = await axiosReq.get(URLS_API.ACOES.GET_ALL_ACOES, {
         params,
       });
 
@@ -71,7 +71,7 @@ const Iso27001Acoes = () => {
   // fetch users for dropdown
   const fetchUsers = async () => {
     try {
-      const res = await axiosReq.get(API_PATHS.USERS.GET_ALL_USERS);
+      const res = await axiosReq.get(URLS_API.USERS.GET_ALL_USERS);
       const opts = [{ label: "Todos", value: "All" }].concat(
         (res.data || []).map((u) => ({
           label: u.name,
@@ -87,7 +87,7 @@ const Iso27001Acoes = () => {
 
   const fetchCompanies = async () => {
     try {
-      const res = await axiosReq.get(API_PATHS.COMPANIES.LIST);
+      const res = await axiosReq.get(URLS_API.COMPANIES.LIST);
       const opts = [{ label: "Todos", value: "All" }].concat(
         (res.data || []).map((c) => ({
           label: c.name,

@@ -5,7 +5,7 @@ import ImagemInput from "../../components/Inputs/ImagemInput";
 import Input from "../../components/Inputs/Input";
 import { Link, useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
-import { API_PATHS } from "../../utils/apiUrl";
+import { URLS_API } from "../../utils/apiUrl";
 import { UserContext } from "../../context/userContext";
 import uploadImage from "../../utils/uploadImage";
 
@@ -69,7 +69,7 @@ const SignUp = () => {
         }
         payload.empresaId = empresaId;
       }
-      const response = await axiosReq.post(API_PATHS.AUTH.REGISTER, payload);
+      const response = await axiosReq.post(URLS_API.AUTH.REGISTER, payload);
 
       const { token, role } = response.data;
 
