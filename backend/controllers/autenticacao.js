@@ -1,16 +1,42 @@
-const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// Generate JWT Token
-const generateToken = (userId) => {
+////////////////////////////////////////////
+const User = require("../models/User");
+
+const tokenUsuario = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
-// @desc    Register a new user
-// @route   POST /api/auth/register
-// @access  Public
-const registerUser = async (req, res) => {
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: "Email ou senha incorretos." });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Email ou senha incorretos." });
+    }
+
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      empresa: user.empresa,
+      profileImageUrl: user.profileImageUrl,
+      token: tokenUsuario(user._id),
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Erro: ", error: error.message });
+  }
+};
+
+const cadastroUsuario = async (req, res) => {
   try {
     const {
       name,
@@ -21,15 +47,11 @@ const registerUser = async (req, res) => {
       empresaId,
     } = req.body;
 
-    // Check if user already exists
     const userExists = await User.findOne({ email });
     if (userExists) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ message: "Usuário já existente." });
     }
 
-    // Determine registration type
-    // If empresaId is provided, validate company and set as member of that empresa.
-    // Otherwise, fall back to existing admin token flow.
     let role = "member";
     let empresa = null;
 
@@ -47,11 +69,9 @@ const registerUser = async (req, res) => {
       role = "admin";
     }
 
-    // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create new user
     const user = await User.create({
       name,
       email,
@@ -61,7 +81,6 @@ const registerUser = async (req, res) => {
       empresa,
     });
 
-    // Return user data with JWT
     res.status(201).json({
       _id: user._id,
       name: user.name,
@@ -69,70 +88,31 @@ const registerUser = async (req, res) => {
       role: user.role,
       empresa: user.empresa,
       profileImageUrl: user.profileImageUrl,
-      token: generateToken(user._id),
+      token: tokenUsuario(user._id),
     });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Erro: ", error: error.message });
   }
 };
 
-// @desc    Login user
-// @route   POST /api/auth/login
-// @access  Public
-const loginUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(401).json({ message: "Invalid email or password" });
-    }
-
-    // Compare password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: "Invalid email or password" });
-    }
-
-    // Return user data with JWT
-    res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      empresa: user.empresa,
-      profileImageUrl: user.profileImageUrl,
-      token: generateToken(user._id),
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
-  }
-};
-
-// @desc    Get user profile
-// @route   GET /api/auth/profile
-// @access  Private (Requires JWT)
-const getUserProfile = async (req, res) => {
+const getDadosUsuario = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "Usuário não encontrado." });
     }
     res.json(user);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Erro: ", error: error.message });
   }
 };
 
-// @desc    Update user profile
-// @route   PUT /api/auth/profile
-// @access  Private (Requires JWT)
-const updateUserProfile = async (req, res) => {
+const editarDadosUsuario = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "Usuário não encontrado." });
     }
 
     user.name = req.body.name || user.name;
@@ -143,18 +123,23 @@ const updateUserProfile = async (req, res) => {
       user.password = await bcrypt.hash(req.body.password, salt);
     }
 
-    const updatedUser = await user.save();
+    const atualizado = await user.save();
 
     res.json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      role: updatedUser.role,
-      token: generateToken(updatedUser._id),
+      _id: atualizado._id,
+      name: atualizado.name,
+      email: atualizado.email,
+      role: atualizado.role,
+      token: tokenUsuario(atualizado._id),
     });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ message: "Erro: ", error: error.message });
   }
 };
 
-module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile };
+module.exports = {
+  cadastroUsuario,
+  login,
+  getDadosUsuario,
+  editarDadosUsuario,
+};

@@ -1,11 +1,11 @@
 const express = require("express");
 const { protect, adminOnly } = require("../middlewares/authMiddleware");
-const { createCompany, getCompanies } = require("../controllers/cliente");
+const { criarCliente, getClientes } = require("../controllers/cliente");
 
 const router = express.Router();
 
 // Companies (Admin only)
-router.get("/", protect, adminOnly, getCompanies);
-router.post("/", protect, adminOnly, createCompany);
+router.get("/", protect, adminOnly, getClientes);
+router.post("/", protect, adminOnly, criarCliente);
 
 module.exports = router;
