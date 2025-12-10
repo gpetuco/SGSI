@@ -28,7 +28,7 @@ const AcaoDetalhar = () => {
   // get Acao info by ID
   const getAcaoDetailsByID = async () => {
     try {
-      const response = await axiosReq.get(API_PATHS.ACOES.GET_TASK_BY_ID(id));
+      const response = await axiosReq.get(API_PATHS.ACOES.GET_ACAO_BY_ID(id));
 
       if (response.data) {
         const acaoInfo = response.data;

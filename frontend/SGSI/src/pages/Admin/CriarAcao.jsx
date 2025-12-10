@@ -169,7 +169,7 @@ const CriarAcao = () => {
         concluido: false,
       }));
 
-      const response = await axiosReq.post(API_PATHS.ACOES.CREATE_TASK, {
+      const response = await axiosReq.post(API_PATHS.ACOES.CREATE_ACAO, {
         ...acaoData,
         dueDate: new Date(acaoData.dueDate).toISOString(),
         itens: todolist,
@@ -201,7 +201,7 @@ const CriarAcao = () => {
         };
       });
 
-      const response = await axiosReq.put(API_PATHS.ACOES.UPDATE_TASK(acaoId), {
+      const response = await axiosReq.put(API_PATHS.ACOES.UPDATE_ACAO(acaoId), {
         ...acaoData,
         dueDate: new Date(acaoData.dueDate).toISOString(),
         itens: todolist,
@@ -289,7 +289,7 @@ const CriarAcao = () => {
     try {
       setLoadingAcao(true);
       const response = await axiosReq.get(
-        API_PATHS.ACOES.GET_TASK_BY_ID(acaoId)
+        API_PATHS.ACOES.GET_ACAO_BY_ID(acaoId)
       );
 
       if (response.data) {
@@ -433,7 +433,7 @@ const CriarAcao = () => {
   // Delete Acao
   const deleteAcao = async () => {
     try {
-      await axiosReq.delete(API_PATHS.ACOES.DELETE_TASK(acaoId));
+      await axiosReq.delete(API_PATHS.ACOES.DELETE_ACAO(acaoId));
 
       setOpenExcluir(false);
       toast.success("Ação excluída com sucesso!");

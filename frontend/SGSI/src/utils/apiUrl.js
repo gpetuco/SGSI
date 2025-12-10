@@ -24,12 +24,12 @@ export const API_PATHS = {
     GET_DASHBOARD_DATA: "/api/acoes/dashboard-data",
     GET_USER_DASHBOARD_DATA: "/api/acoes/user-dashboard-data",
     GET_ALL_ACOES: "/api/acoes",
-    GET_TASK_BY_ID: (acaoId) => `/api/acoes/${acaoId}`,
-    CREATE_TASK: "/api/acoes",
-    UPDATE_TASK: (acaoId) => `/api/acoes/${acaoId}`,
-    DELETE_TASK: (acaoId) => `/api/acoes/${acaoId}`,
+    GET_ACAO_BY_ID: (acaoId) => `/api/acoes/${acaoId}`,
+    CREATE_ACAO: "/api/acoes",
+    UPDATE_ACAO: (acaoId) => `/api/acoes/${acaoId}`,
+    DELETE_ACAO: (acaoId) => `/api/acoes/${acaoId}`,
 
-    UPDATE_TASK_STATUS: (acaoId) => `/api/acoes/${acaoId}/status`,
+    UPDATE_ACAO_STATUS: (acaoId) => `/api/acoes/${acaoId}/status`,
     UPDATE_TODO_CHECKLIST: (acaoId) => `/api/acoes/${acaoId}/todo`,
   },
 
