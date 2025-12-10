@@ -28,16 +28,16 @@ const UserDashboard = () => {
 
   // Prepare Chart Data
   const prepareChartData = (data) => {
-    const taskDistribution = data?.taskDistribution || null;
+    const dadosAcoes = data?.dadosAcoes || null;
     const taskPrioridadeLevels = data?.taskPrioridadeLevels || null;
 
-    const taskDistributionData = [
-      { status: "Pendente", count: taskDistribution?.Pendente || 0 },
-      { status: "Em Andamento", count: taskDistribution?.EmAndamento || 0 },
-      { status: "Concluído", count: taskDistribution?.Concluído || 0 },
+    const dadosAcoesDetalhes = [
+      { status: "Pendente", count: dadosAcoes?.Pendente || 0 },
+      { status: "Em Andamento", count: dadosAcoes?.EmAndamento || 0 },
+      { status: "Concluído", count: dadosAcoes?.Concluído || 0 },
     ];
 
-    setPieChartData(taskDistributionData);
+    setPieChartData(dadosAcoesDetalhes);
 
     const PrioridadeLevelData = [
       { prioridade: "Low", count: taskPrioridadeLevels?.Low || 0 },
@@ -98,16 +98,14 @@ const UserDashboard = () => {
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-5">
           <Info
             label="Total Tasks"
-            value={formatMilhar(
-              dashboardData?.charts?.taskDistribution?.All || 0
-            )}
+            value={formatMilhar(dashboardData?.charts?.dadosAcoes?.All || 0)}
             color="bg-primary"
           />
 
           <Info
             label="Pendente Tasks"
             value={formatMilhar(
-              dashboardData?.charts?.taskDistribution?.Pendente || 0
+              dashboardData?.charts?.dadosAcoes?.Pendente || 0
             )}
             color="bg-violet-500"
           />
@@ -115,7 +113,7 @@ const UserDashboard = () => {
           <Info
             label="Em Andamento Tasks"
             value={formatMilhar(
-              dashboardData?.charts?.taskDistribution?.EmAndamento || 0
+              dashboardData?.charts?.dadosAcoes?.EmAndamento || 0
             )}
             color="bg-cyan-500"
           />
@@ -123,7 +121,7 @@ const UserDashboard = () => {
           <Info
             label="Ações Concluídas"
             value={formatMilhar(
-              dashboardData?.charts?.taskDistribution?.Concluído || 0
+              dashboardData?.charts?.dadosAcoes?.Concluído || 0
             )}
             color="bg-lime-500"
           />

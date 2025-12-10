@@ -392,7 +392,7 @@ const getDashboardData = async (req, res) => {
             onTimeRate: 0,
           },
           charts: {
-            taskDistribution: {
+            dadosAcoes: {
               All: 0,
               Pendente: 0,
               EmAndamento: 0,
@@ -431,17 +431,17 @@ const getDashboardData = async (req, res) => {
     });
 
     const taskStatuses = ["Pendente", "Em Andamento", "Concluído"];
-    const taskDistributionRaw = await Task.aggregate([
+    const dadosAcoesRaw = await Task.aggregate([
       { $match: baseMatch },
       { $group: { _id: "$status", count: { $sum: 1 } } },
     ]);
-    const taskDistribution = taskStatuses.reduce((acc, status) => {
+    const dadosAcoes = taskStatuses.reduce((acc, status) => {
       const formattedKey = status.replace(/\s+/g, "");
       acc[formattedKey] =
-        taskDistributionRaw.find((i) => i._id === status)?.count || 0;
+        dadosAcoesRaw.find((i) => i._id === status)?.count || 0;
       return acc;
     }, {});
-    taskDistribution["All"] = totalTasks;
+    dadosAcoes["All"] = totalTasks;
 
     const taskPriorities = ["Low", "Medium", "High"];
     const taskPrioridadeLevelsRaw = await Task.aggregate([
@@ -858,7 +858,7 @@ const getDashboardData = async (req, res) => {
         onTimeRate,
       },
       charts: {
-        taskDistribution,
+        dadosAcoes,
         taskPrioridadeLevels,
         statusByFramework,
         completionByFramework,
@@ -901,18 +901,18 @@ const getUserDashboardData = async (req, res) => {
     });
 
     const taskStatuses = ["Pendente", "Em Andamento", "Concluído"];
-    const taskDistributionRaw = await Task.aggregate([
+    const dadosAcoesRaw = await Task.aggregate([
       { $match: baseMatch },
       { $group: { _id: "$status", count: { $sum: 1 } } },
     ]);
 
-    const taskDistribution = taskStatuses.reduce((acc, status) => {
+    const dadosAcoes = taskStatuses.reduce((acc, status) => {
       const formattedKey = status.replace(/\s+/g, "");
       acc[formattedKey] =
-        taskDistributionRaw.find((item) => item._id === status)?.count || 0;
+        dadosAcoesRaw.find((item) => item._id === status)?.count || 0;
       return acc;
     }, {});
-    taskDistribution["All"] = totalTasks;
+    dadosAcoes["All"] = totalTasks;
 
     const taskPriorities = ["Low", "Medium", "High"];
     const taskPrioridadeLevelsRaw = await Task.aggregate([
@@ -943,7 +943,7 @@ const getUserDashboardData = async (req, res) => {
         overdueTasks,
       },
       charts: {
-        taskDistribution,
+        dadosAcoes,
         taskPrioridadeLevels,
       },
       recentTasks,
