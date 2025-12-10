@@ -205,7 +205,7 @@ const Acoes = () => {
               status={item.status}
               progress={item.progress}
               createdAt={item.createdAt}
-              dueDate={item.dueDate}
+              previsao={item.previsao}
               responsavel={item.responsavel?.map(
                 (member) => member.profileImageUrl
               )}

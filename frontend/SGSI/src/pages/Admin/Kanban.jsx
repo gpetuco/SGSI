@@ -32,7 +32,7 @@ const Column = ({ title, acoes, onOpen }) => {
                 status={item.status}
                 progress={item.progress}
                 createdAt={item.createdAt}
-                dueDate={item.dueDate}
+                previsao={item.previsao}
                 responsavel={item.responsavel?.map((p) => p.profileImageUrl)}
                 concluidoTodoCount={item.concluidoTodoCount || 0}
                 itens={item.itens || []}

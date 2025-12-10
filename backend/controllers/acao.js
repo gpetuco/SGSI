@@ -7,7 +7,7 @@ const criarAcao = async (req, res) => {
       descricao,
       prioridade,
       classification,
-      dueDate,
+      previsao,
       responsavel,
       itens,
       cliente,
@@ -36,7 +36,7 @@ const criarAcao = async (req, res) => {
       descricao,
       prioridade,
       classification,
-      dueDate,
+      previsao,
       responsavel,
       criadoPor: req.user._id,
       itens,
@@ -61,7 +61,7 @@ const updateAcao = async (req, res) => {
     acao.classification = req.body.classification || acao.classification;
     acao.prioridade = req.body.prioridade || acao.prioridade;
     acao.itens = req.body.itens || acao.itens;
-    acao.dueDate = req.body.dueDate || acao.dueDate;
+    acao.previsao = req.body.previsao || acao.previsao;
 
     if (Object.prototype.hasOwnProperty.call(req.body, "cliente")) {
       if (!req.body.cliente) {
@@ -400,7 +400,7 @@ const getDashboardData = async (req, res) => {
     const overdueAcoes = await Acao.countDocuments({
       ...baseMatch,
       status: { $ne: "Concluído" },
-      dueDate: { $lt: new Date() },
+      previsao: { $lt: new Date() },
     });
 
     const acaoStatuses = ["Pendente", "Em Andamento", "Concluído"];
@@ -752,9 +752,9 @@ const getDashboardData = async (req, res) => {
     const concluidoInScope = await Acao.find({
       ...baseMatch,
       status: "Concluído",
-    }).select("concluidoAt dueDate");
+    }).select("concluidoAt previsao");
     const onTime = concluidoInScope.filter(
-      (t) => t.concluidoAt && t.dueDate && t.concluidoAt <= t.dueDate
+      (t) => t.concluidoAt && t.previsao && t.concluidoAt <= t.previsao
     ).length;
     const onTimeRate =
       concluidoInScope.length > 0
@@ -858,7 +858,7 @@ const getDashboardClienteData = async (req, res) => {
     const overdueAcoes = await Acao.countDocuments({
       ...baseMatch,
       status: { $ne: "Concluído" },
-      dueDate: { $lt: new Date() },
+      previsao: { $lt: new Date() },
     });
 
     const acaoStatuses = ["Pendente", "Em Andamento", "Concluído"];

@@ -51,7 +51,7 @@ const CriarAcao = () => {
     descricao: "",
     classification: "NIST CSF",
     prioridade: "Baixa",
-    dueDate: null,
+    previsao: null,
     responsavel: [],
     cliente: "",
     itens: [],
@@ -152,7 +152,7 @@ const CriarAcao = () => {
       descricao: "",
       classification: "NIST CSF",
       prioridade: "Baixa",
-      dueDate: null,
+      previsao: null,
       responsavel: [],
       cliente: "",
       itens: [],
@@ -171,7 +171,7 @@ const CriarAcao = () => {
 
       const response = await axiosReq.post(API_PATHS.ACOES.CREATE_ACAO, {
         ...acaoData,
-        dueDate: new Date(acaoData.dueDate).toISOString(),
+        previsao: new Date(acaoData.previsao).toISOString(),
         itens: todolist,
       });
 
@@ -203,7 +203,7 @@ const CriarAcao = () => {
 
       const response = await axiosReq.put(API_PATHS.ACOES.UPDATE_ACAO(acaoId), {
         ...acaoData,
-        dueDate: new Date(acaoData.dueDate).toISOString(),
+        previsao: new Date(acaoData.previsao).toISOString(),
         itens: todolist,
       });
 
@@ -261,7 +261,7 @@ const CriarAcao = () => {
       setError("Selecione um cliente.");
       return;
     }
-    if (!acaoData.dueDate) {
+    if (!acaoData.previsao) {
       setError("Data Prevista é obrigatório.");
       return;
     }
@@ -301,8 +301,8 @@ const CriarAcao = () => {
           descricao: acaoInfo.descricao,
           classification: acaoInfo.classification || "NIST CSF",
           prioridade: acaoInfo.prioridade,
-          dueDate: acaoInfo.dueDate
-            ? moment(acaoInfo.dueDate).format("YYYY-MM-DD")
+          previsao: acaoInfo.previsao
+            ? moment(acaoInfo.previsao).format("YYYY-MM-DD")
             : null,
           responsavel: acaoInfo?.responsavel?.map((item) => item?._id) || [],
           cliente:
@@ -562,9 +562,9 @@ const CriarAcao = () => {
                 <input
                   placeholder="Create App UI"
                   className="form-input"
-                  value={acaoData.dueDate}
+                  value={acaoData.previsao}
                   onChange={({ target }) =>
-                    handleValueChange("dueDate", target.value)
+                    handleValueChange("previsao", target.value)
                   }
                   type="date"
                 />

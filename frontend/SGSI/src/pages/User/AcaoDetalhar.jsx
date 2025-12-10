@@ -112,8 +112,8 @@ const AcaoDetalhar = () => {
                   <InfoBox
                     label="Previsto"
                     value={
-                      acao?.dueDate
-                        ? moment(acao?.dueDate).format("Do MMM YYYY")
+                      acao?.previsao
+                        ? moment(acao?.previsao).format("Do MMM YYYY")
                         : "N/A"
                     }
                   />

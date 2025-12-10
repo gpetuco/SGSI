@@ -24,7 +24,7 @@ const acaoSchema = new mongoose.Schema(
       enum: ["Pendente", "Em Andamento", "Concluído"],
       default: "Pendente",
     },
-    dueDate: { type: Date, required: true },
+    previsao: { type: Date, required: true },
     responsavel: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     criadoPor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     cliente: {
@@ -41,17 +41,17 @@ const acaoSchema = new mongoose.Schema(
 
 acaoSchema.pre("save", function (next) {
   try {
-    const hasChecklist = Array.isArray(this.itens) && this.itens.length > 0;
-    if (hasChecklist) {
+    const temItens = Array.isArray(this.itens) && this.itens.length > 0;
+    if (temItens) {
       const total = this.itens.length;
-      const done = this.itens.filter((t) => !!t.concluido).length;
-      const pct = Math.round((done / total) * 100);
+      const concluidos = this.itens.filter((t) => !!t.concluido).length;
+      const pct = Math.round((concluidos / total) * 100);
       this.progress = pct;
 
-      if (done === 0) {
+      if (concluidos === 0) {
         if (this.status !== "Pendente") this.status = "Pendente";
         if (this.concluidoAt) this.concluidoAt = null;
-      } else if (done < total) {
+      } else if (concluidos < total) {
         if (this.status !== "Em Andamento") this.status = "Em Andamento";
         if (this.concluidoAt) this.concluidoAt = null;
       } else {

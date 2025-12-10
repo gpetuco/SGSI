@@ -12,7 +12,7 @@ const Acao = ({
   status,
   progress,
   createdAt,
-  dueDate,
+  previsao,
   responsavel,
   concluidoTodoCount,
   itens,
@@ -150,7 +150,7 @@ const Acao = ({
             <div>
               <label className="text-xs text-gray-500">Previsto</label>
               <p className="text-[13px] font-medium text-gray-900">
-                {moment(dueDate).format("DD/MM/YYYY")}
+                {moment(previsao).format("DD/MM/YYYY")}
               </p>
             </div>
           </div>

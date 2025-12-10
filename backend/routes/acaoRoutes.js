@@ -14,15 +14,14 @@ const {
 
 const router = express.Router();
 
-// Acao Management Routes
 router.get("/dashboard-data", protect, getDashboardData);
 router.get("/user-dashboard-data", protect, getDashboardClienteData);
-router.get("/", protect, getAcoes); // Get all acoes (Admin: all, User: assigned)
-router.get("/:id", protect, getAcaoUnique); // Get acao by ID
-router.post("/", protect, adminOnly, criarAcao); // Create a acao (Admin only)
-router.put("/:id", protect, updateAcao); // Update acao details
-router.delete("/:id", protect, adminOnly, deleteAcao); // Delete a acao (Admin only)
-router.put("/:id/status", protect, updateAcaoStatus); // Update acao status
-router.put("/:id/todo", protect, updateAcaoChecklist); // Update acao checklist
+router.get("/", protect, getAcoes);
+router.get("/:id", protect, getAcaoUnique);
+router.post("/", protect, adminOnly, criarAcao);
+router.put("/:id", protect, updateAcao);
+router.delete("/:id", protect, adminOnly, deleteAcao);
+router.put("/:id/status", protect, updateAcaoStatus);
+router.put("/:id/todo", protect, updateAcaoChecklist);
 
 module.exports = router;

@@ -206,7 +206,7 @@ const Iso27001Acoes = () => {
                 status={item.status}
                 progress={item.progress}
                 createdAt={item.createdAt}
-                dueDate={item.dueDate}
+                previsao={item.previsao}
                 responsavel={item.responsavel?.map((a) => a.profileImageUrl)}
                 concluidoTodoCount={item.concluidoTodoCount || 0}
                 itens={item.itens || []}

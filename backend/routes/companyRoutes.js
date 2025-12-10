@@ -4,7 +4,6 @@ const { criarCliente, getClientes } = require("../controllers/cliente");
 
 const router = express.Router();
 
-// Companies (Admin only)
 router.get("/", protect, adminOnly, getClientes);
 router.post("/", protect, adminOnly, criarCliente);
 
