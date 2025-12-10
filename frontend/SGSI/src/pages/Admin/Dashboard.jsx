@@ -6,19 +6,14 @@ import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
 import { API_PATHS } from "../../utils/apiUrl";
-// Use Intl for pt-BR date formatting
 import { addThousandsSeparator } from "../../utils/helper";
 import Info from "../../components/Cards/Info";
-import { LuArrowRight } from "react-icons/lu";
-import CustomPieChart from "../../components/Charts/CustomPieChart";
-import CustomBarChart from "../../components/Charts/CustomBarChart";
-import CustomAreaChart from "../../components/Charts/CustomAreaChart";
-import CustomLineChart from "../../components/Charts/CustomLineChart";
-import StackedStatusByFramework from "../../components/Charts/StackedStatusByFramework";
-import PercentBarByFramework from "../../components/Charts/PercentBarByFramework";
-import StackedStatusByUser from "../../components/Charts/StackedStatusByUser";
-import SelectDropdown from "../../components/Inputs/SelectDropdown";
-import { CLASSIFICATION_DATA } from "../../utils/menus";
+import PieWc from "../../components/Graficos/PizzaWc";
+import AreaWc from "../../components/Graficos/AreaWc";
+import LineWc from "../../components/Graficos/LineWc";
+import StackedStatusByFramework from "../../components/Graficos/StackedStatusByFramework";
+import PercentBarByFramework from "../../components/Graficos/PercentBarByFramework";
+import StackedStatusByUser from "../../components/Graficos/StackedStatusByUser";
 import {
   PieChart as RePieChart,
   Pie as RePie,
@@ -66,7 +61,6 @@ const Dashboard = () => {
   const [classificationFilter, setClassificationFilter] = useState("All");
   const [loading, setLoading] = useState(true);
 
-  // Prepare Chart Data
   const prepareChartData = (data) => {
     const taskDistribution = data?.taskDistribution || null;
     const taskPriorityLevels = data?.taskPriorityLevels || null;
@@ -87,7 +81,6 @@ const Dashboard = () => {
 
     setBarChartData(PriorityLevelData);
 
-    // Stacked status by framework
     const statusByFramework = data?.statusByFramework || {};
     const stacked = ["ISO 27001", "NIST CSF"].map((fw) => ({
       framework: fw,
@@ -97,8 +90,7 @@ const Dashboard = () => {
     }));
     setStackedStatusData(stacked);
 
-    // Line chart data by status with one line per framework
-    const frameworks = ["NIST CSF", "ISO 27001"]; // requested order
+    const frameworks = ["NIST CSF", "ISO 27001"];
     const line = [
       {
         name: "Pendente",
@@ -118,14 +110,12 @@ const Dashboard = () => {
     ];
     setFrameworkLineData(line);
 
-    // Completion % bar by framework
     const completion = (data?.completionByFramework || []).map((i) => ({
       framework: i.framework,
       percent: i.percent,
     }));
     setCompletionPercentData(completion);
 
-    // Completion by NIST CSF function
     const nistCompletionRaw = data?.completionByNistFunction || [];
     const nistCompletion = nistCompletionRaw.map((i) => ({
       function: i.function,
@@ -134,7 +124,6 @@ const Dashboard = () => {
     }));
     setNistFunctionCompletionData(nistCompletion);
 
-    // Tasks by user (Top 5)
     const tbu = (data?.tasksByUser || []).map((i) => ({
       user: i.user,
       userId: i.userId,
@@ -143,7 +132,6 @@ const Dashboard = () => {
       Completed: i.Completed || 0,
       total: i.total || 0,
     }));
-    // Completion by ISO 27001 control type
     const isoCompletionRaw = data?.completionByIsoControlType || [];
     const isoCompletion = isoCompletionRaw.map((i) => ({
       type: i.type,
@@ -328,7 +316,6 @@ const Dashboard = () => {
         })}
       </div>
 
-      {/* NIST CSF by Function */}
       {nistFunctionCompletionData?.length > 0 && (
         <div className="card my-5">
           <div className="flex items-center justify-between mb-3">
@@ -347,7 +334,6 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* NIST CSF by Function - mini charts */}
       {nistFunctionCompletionData?.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 md:gap-4 my-4">
           {nistFunctionCompletionData.map((fn) => {
@@ -396,7 +382,6 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* ISO 27001 by Control Type */}
       {isoControlCompletionData?.length > 0 && (
         <div className="card my-5">
           <div className="flex items-center justify-between mb-3">
@@ -415,7 +400,6 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* ISO 27001 by Control Type - mini charts */}
       {isoControlCompletionData?.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-3 md:gap-4 my-4">
           {isoControlCompletionData.map((ctrl) => {
@@ -464,7 +448,6 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* Framework zoom modal */}
       {fwModal.open && (
         <Modal
           isOpen={fwModal.open}
@@ -553,7 +536,7 @@ const Dashboard = () => {
               <h5 className="font-medium">Prioridade</h5>
             </div>
 
-            <CustomAreaChart
+            <AreaWc
               data={barChartData}
               xKey="priority"
               areas={[{ dataKey: "count", color: "#1368ec", name: "Ações" }]}
@@ -567,7 +550,7 @@ const Dashboard = () => {
               <h5 className="font-medium">Status</h5>
             </div>
 
-            <CustomPieChart data={pieChartData} colors={COLORS} />
+            <PieWc data={pieChartData} colors={COLORS} />
           </div>
         </div>
 
@@ -594,7 +577,7 @@ const Dashboard = () => {
             <div className="flex items-center justify-between">
               <h5 className="font-medium">Status por Framework</h5>
             </div>
-            <CustomLineChart
+            <LineWc
               data={frameworkLineData}
               xKey="name"
               lines={[

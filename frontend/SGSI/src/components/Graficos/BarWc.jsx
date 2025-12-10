@@ -13,8 +13,7 @@ import {
 import { LuZoomIn } from "react-icons/lu";
 import Modal from "../Modal";
 
-const CustomBarChart = ({ data }) => {
-  // Function to alternate colors
+const BarWc = ({ data }) => {
   const getBarColor = (entry) => {
     switch (entry?.priority) {
       case "Low":
@@ -31,14 +30,15 @@ const CustomBarChart = ({ data }) => {
     }
   };
 
-  const CustomTooltip = ({ active, payload }) => {
+  const TooltipWc = ({ active, payload }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white dark:bg-slate-700 shadow-md rounded-lg p-2 border border-gray-300 dark:border-slate-500">
           <p className="text-xs font-semibold text-purple-800 dark:text-purple-300 mb-1">
             {payload[0].payload.priority}
           </p>
-          <p className="text-sm text-gray-600 dark:text-slate-200">\n            Count:{" "}
+          <p className="text-sm text-gray-600 dark:text-slate-200">
+            \n Count:{" "}
             <span className="text-sm font-medium text-gray-900 dark:text-white">
               {payload[0].payload.count}
             </span>
@@ -52,33 +52,36 @@ const CustomBarChart = ({ data }) => {
   const [open, setOpen] = useState(false);
 
   const ChartBody = ({ height = 300 }) => (
-      <ResponsiveContainer width="100%" height={height}>
-        <BarChart data={data}>
-          <CartesianGrid stroke="none" />
+    <ResponsiveContainer width="100%" height={height}>
+      <BarChart data={data}>
+        <CartesianGrid stroke="none" />
 
-          <XAxis
-            dataKey="priority"
-            tick={{ fontSize: 12, fill: 'var(--sgsi-text-muted)' }}
-            stroke="none"
-          />
-          <YAxis tick={{ fontSize: 12, fill: 'var(--sgsi-text-muted)' }} stroke="none" />
+        <XAxis
+          dataKey="priority"
+          tick={{ fontSize: 12, fill: "var(--sgsi-text-muted)" }}
+          stroke="none"
+        />
+        <YAxis
+          tick={{ fontSize: 12, fill: "var(--sgsi-text-muted)" }}
+          stroke="none"
+        />
 
-          <Tooltip content={CustomTooltip} cursor={{ fill: "transparent" }} />
+        <Tooltip content={TooltipWc} cursor={{ fill: "transparent" }} />
 
-          <Bar
-            dataKey="count"
-            nameKey="priority"
-            fill="#FF8042"
-            radius={[10, 10, 0, 0]}
-            activeDot={{ r: 8, fill: "yellow" }}
-            activeStyle={{ fill: "green" }}
-          >
-            {data.map((entry, index) => (
-              <Cell key={index} fill={getBarColor(entry)} />
-            ))}
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
+        <Bar
+          dataKey="count"
+          nameKey="priority"
+          fill="#FF8042"
+          radius={[10, 10, 0, 0]}
+          activeDot={{ r: 8, fill: "yellow" }}
+          activeStyle={{ fill: "green" }}
+        >
+          {data.map((entry, index) => (
+            <Cell key={index} fill={getBarColor(entry)} />
+          ))}
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
   );
 
   return (
@@ -91,7 +94,12 @@ const CustomBarChart = ({ data }) => {
         <LuZoomIn className="text-lg" />
       </button>
       <ChartBody />
-      <Modal isOpen={open} onClose={() => setOpen(false)} title="Priority" variant="wide">
+      <Modal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        title="Priority"
+        variant="wide"
+      >
         <div style={{ height: "65vh" }}>
           <ChartBody height={"100%"} />
         </div>
@@ -100,5 +108,4 @@ const CustomBarChart = ({ data }) => {
   );
 };
 
-export default CustomBarChart;
-
+export default BarWc;

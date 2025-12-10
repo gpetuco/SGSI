@@ -10,8 +10,8 @@ import { API_PATHS } from "../../utils/apiUrl";
 import { addThousandsSeparator } from "../../utils/helper";
 import Info from "../../components/Cards/Info";
 import { LuArrowRight } from "react-icons/lu";
-import CustomPieChart from "../../components/Charts/CustomPieChart";
-import CustomBarChart from "../../components/Charts/CustomBarChart";
+import PizzaWc from "../../components/Graficos/PizzaWc";
+import BarWc from "../../components/Graficos/BarWc";
 
 const COLORS = ["#8D51FF", "#00B8DB", "#7BCE00"];
 
@@ -137,7 +137,7 @@ const UserDashboard = () => {
               <h5 className="font-medium">Task Distribution</h5>
             </div>
 
-            <CustomPieChart data={pieChartData} colors={COLORS} />
+            <PizzaWc data={pieChartData} colors={COLORS} />
           </div>
         </div>
 
@@ -147,7 +147,7 @@ const UserDashboard = () => {
               <h5 className="font-medium">Task Priority Levels</h5>
             </div>
 
-            <CustomBarChart data={barChartData} />
+            <BarWc data={barChartData} />
           </div>
         </div>
       </div>

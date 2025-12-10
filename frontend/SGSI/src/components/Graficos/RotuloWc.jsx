@@ -1,6 +1,6 @@
 import React from "react";
 
-const CustomLegend = ({ payload }) => {
+const RotuloWc = ({ payload }) => {
   return (
     <div className="flex flex-wrap justify-center gap-2 mt-4 space-x-6">
       {payload.map((entry, index) => (
@@ -18,4 +18,4 @@ const CustomLegend = ({ payload }) => {
   );
 };
 
-export default CustomLegend;
+export default RotuloWc;

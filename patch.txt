@@ -1,5 +1,5 @@
 *** Begin Patch
-*** Add File: frontend/SGSI/src/components/Charts/CustomLineChart.jsx
+*** Add File: frontend/SGSI/src/components/Graficos/LineWc.jsx
 +import React from "react";
 +import {
 +  ResponsiveContainer,
@@ -31,7 +31,7 @@
 +// - data: array of objects
 +// - lines: [{ dataKey, color, name }]
 +// - xKey: string (default: 'name')
-+const CustomLineChart = ({ data = [], lines = [{ dataKey: "value", color: "#1368ec", name: "Value" }], xKey = "name" }) => {
++const LineWc = ({ data = [], lines = [{ dataKey: "value", color: "#1368ec", name: "Value" }], xKey = "name" }) => {
 +  return (
 +    <ResponsiveContainer width="100%" height={325}>
 +      <LineChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
@@ -57,6 +57,6 @@
 +  );
 +};
 +
-+export default CustomLineChart;
++export default LineWc;
 +
 *** End Patch
