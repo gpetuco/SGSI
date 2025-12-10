@@ -15,9 +15,9 @@ const getUsers = async (req, res) => {
           responsavel: user._id,
           status: "Pendente",
         });
-        const inProgressTasks = await Task.countDocuments({
+        const acoesEmAndamento = await Task.countDocuments({
           responsavel: user._id,
-          status: "In Progress",
+          status: "Em Andamento",
         });
         const acoesConcluidas = await Task.countDocuments({
           responsavel: user._id,
@@ -27,7 +27,7 @@ const getUsers = async (req, res) => {
         return {
           ...user._doc,
           acoesPendentes,
-          inProgressTasks,
+          acoesEmAndamento,
           acoesConcluidas,
         };
       })

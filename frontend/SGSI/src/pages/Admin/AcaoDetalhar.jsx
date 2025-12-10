@@ -16,7 +16,7 @@ const AcaoDetalhar = () => {
 
   const getStatusTagColor = (status) => {
     switch (status) {
-      case "In Progress":
+      case "Em Andamento":
         return "text-cyan-500 bg-cyan-50 border border-cyan-500/10";
 
       case "Concluído":
@@ -29,7 +29,7 @@ const AcaoDetalhar = () => {
 
   const getStatusLabel = (status) => {
     switch (status) {
-      case "In Progress":
+      case "Em Andamento":
         return "Em Andamento";
       case "Concluído":
         return "Concluído";

@@ -77,7 +77,7 @@ const Membros = () => {
                     {user.acoesPendentes ?? 0}
                   </td>
                   <td className="py-3 px-4 text-[14px] text-gray-800 dark:text-white">
-                    {user.inProgressTasks ?? 0}
+                    {user.acoesEmAndamento ?? 0}
                   </td>
                   <td className="py-3 px-4 text-[14px] text-gray-800 dark:text-white">
                     {user.acoesConcluidas ?? 0}

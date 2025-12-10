@@ -21,7 +21,7 @@ const taskSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Pendente", "In Progress", "Concluído"],
+      enum: ["Pendente", "Em Andamento", "Concluído"],
       default: "Pendente",
     },
     dueDate: { type: Date, required: true },
@@ -52,7 +52,7 @@ taskSchema.pre("save", function (next) {
         if (this.status !== "Pendente") this.status = "Pendente";
         if (this.concluidoAt) this.concluidoAt = null;
       } else if (done < total) {
-        if (this.status !== "In Progress") this.status = "In Progress";
+        if (this.status !== "Em Andamento") this.status = "Em Andamento";
         if (this.concluidoAt) this.concluidoAt = null;
       } else {
         this.status = "Concluído";

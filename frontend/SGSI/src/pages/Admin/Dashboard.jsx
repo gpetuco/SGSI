@@ -67,7 +67,7 @@ const Dashboard = () => {
 
     const taskDistributionData = [
       { status: "Pendente", count: taskDistribution?.Pendente || 0 },
-      { status: "Em Andamento", count: taskDistribution?.InProgress || 0 },
+      { status: "Em Andamento", count: taskDistribution?.EmAndamento || 0 },
       { status: "Concluído", count: taskDistribution?.Concluído || 0 },
     ];
 
@@ -85,7 +85,7 @@ const Dashboard = () => {
     const stacked = ["ISO 27001", "NIST CSF"].map((fw) => ({
       framework: fw,
       Pendente: statusByFramework?.[fw]?.Pendente || 0,
-      InProgress: statusByFramework?.[fw]?.InProgress || 0,
+      EmAndamento: statusByFramework?.[fw]?.EmAndamento || 0,
       Concluído: statusByFramework?.[fw]?.Concluído || 0,
     }));
     setStackedStatusData(stacked);
@@ -99,8 +99,8 @@ const Dashboard = () => {
       },
       {
         name: "Em Andamento",
-        "NIST CSF": statusByFramework?.["NIST CSF"]?.InProgress || 0,
-        "ISO 27001": statusByFramework?.["ISO 27001"]?.InProgress || 0,
+        "NIST CSF": statusByFramework?.["NIST CSF"]?.EmAndamento || 0,
+        "ISO 27001": statusByFramework?.["ISO 27001"]?.EmAndamento || 0,
       },
       {
         name: "Concluído",
@@ -128,7 +128,7 @@ const Dashboard = () => {
       user: i.user,
       userId: i.userId,
       Pendente: i.Pendente || 0,
-      InProgress: i.InProgress || 0,
+      EmAndamento: i.EmAndamento || 0,
       Concluído: i.Concluído || 0,
       total: i.total || 0,
     }));
@@ -234,7 +234,7 @@ const Dashboard = () => {
           <Info
             label="Em Andamento"
             value={formatMilhar(
-              dashboardData?.charts?.taskDistribution?.InProgress || 0
+              dashboardData?.charts?.taskDistribution?.EmAndamento || 0
             )}
             color="bg-cyan-500"
           />
@@ -459,9 +459,9 @@ const Dashboard = () => {
             const entry =
               stackedStatusData.find((e) => e.framework === fwModal.fw) || {};
             const pendente = entry.Pendente || 0;
-            const inProgress = entry.InProgress || 0;
+            const emAndamento = entry.EmAndamento || 0;
             const concluido = entry.Concluído || 0;
-            const total = pendente + inProgress + concluido;
+            const total = pendente + emAndamento + concluido;
             return (
               <div>
                 <div className="flex items-center justify-center gap-10 md:gap-16 py-6">
@@ -513,7 +513,7 @@ const Dashboard = () => {
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white-important">
                     <span className="inline-block w-2.5 h-2.5 rounded-full bg-cyan-500"></span>
                     <span className="font-medium">
-                      {inProgress} Ações Em Andamento
+                      {emAndamento} Ações Em Andamento
                     </span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white-important">

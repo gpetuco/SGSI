@@ -32,7 +32,7 @@ const getTasks = async (req, res) => {
           statusSummary: {
             all: 0,
             acoesPendentes: 0,
-            inProgressTasks: 0,
+            acoesEmAndamento: 0,
             acoesConcluidas: 0,
           },
         });
@@ -86,9 +86,9 @@ const getTasks = async (req, res) => {
       status: "Pendente",
     });
 
-    const inProgressTasks = await Task.countDocuments({
+    const acoesEmAndamento = await Task.countDocuments({
       ...summaryBaseFilter,
-      status: "In Progress",
+      status: "Em Andamento",
     });
 
     const acoesConcluidas = await Task.countDocuments({
@@ -101,7 +101,7 @@ const getTasks = async (req, res) => {
       statusSummary: {
         all: allTasks,
         acoesPendentes,
-        inProgressTasks,
+        acoesEmAndamento,
         acoesConcluidas,
       },
     });
@@ -345,7 +345,7 @@ const updateTaskChecklist = async (req, res) => {
       task.status = "Concluído";
       if (!task.concluidoAt) task.concluidoAt = new Date();
     } else {
-      task.status = "In Progress";
+      task.status = "Em Andamento";
       if (task.concluidoAt) task.concluidoAt = undefined;
     }
 
@@ -395,7 +395,7 @@ const getDashboardData = async (req, res) => {
             taskDistribution: {
               All: 0,
               Pendente: 0,
-              InProgress: 0,
+              EmAndamento: 0,
               Concluído: 0,
             },
             taskPrioridadeLevels: {
@@ -430,7 +430,7 @@ const getDashboardData = async (req, res) => {
       dueDate: { $lt: new Date() },
     });
 
-    const taskStatuses = ["Pendente", "In Progress", "Concluído"];
+    const taskStatuses = ["Pendente", "Em Andamento", "Concluído"];
     const taskDistributionRaw = await Task.aggregate([
       { $match: baseMatch },
       { $group: { _id: "$status", count: { $sum: 1 } } },
@@ -473,13 +473,13 @@ const getDashboardData = async (req, res) => {
       },
     ]);
     const statusByFramework = frameworks.reduce((acc, fw) => {
-      const bucket = { Pendente: 0, InProgress: 0, Concluído: 0 };
+      const bucket = { Pendente: 0, EmAndamento: 0, Concluído: 0 };
       taskStatuses.forEach((st) => {
         const f = statusByFrameworkRaw.find(
           (r) => r._id.classification === fw && r._id.status === st
         );
         if (f) {
-          const key = st === "In Progress" ? "InProgress" : st;
+          const key = st === "Em Andamento" ? "EmAndamento" : st;
           bucket[key] = f.count;
         }
       });
@@ -805,8 +805,8 @@ const getDashboardData = async (req, res) => {
           Pendente: {
             $sum: { $cond: [{ $eq: ["$status", "Pendente"] }, 1, 0] },
           },
-          InProgress: {
-            $sum: { $cond: [{ $eq: ["$status", "In Progress"] }, 1, 0] },
+          EmAndamento: {
+            $sum: { $cond: [{ $eq: ["$status", "Em Andamento"] }, 1, 0] },
           },
           Concluído: {
             $sum: { $cond: [{ $eq: ["$status", "Concluído"] }, 1, 0] },
@@ -815,7 +815,7 @@ const getDashboardData = async (req, res) => {
       },
       {
         $addFields: {
-          total: { $add: ["$Pendente", "$InProgress", "$Concluído"] },
+          total: { $add: ["$Pendente", "$EmAndamento", "$Concluído"] },
         },
       },
       {
@@ -842,7 +842,7 @@ const getDashboardData = async (req, res) => {
           userId: "$_id",
           user: 1,
           Pendente: 1,
-          InProgress: 1,
+          EmAndamento: 1,
           Concluído: 1,
           total: 1,
         },
@@ -900,7 +900,7 @@ const getUserDashboardData = async (req, res) => {
       dueDate: { $lt: new Date() },
     });
 
-    const taskStatuses = ["Pendente", "In Progress", "Concluído"];
+    const taskStatuses = ["Pendente", "Em Andamento", "Concluído"];
     const taskDistributionRaw = await Task.aggregate([
       { $match: baseMatch },
       { $group: { _id: "$status", count: { $sum: 1 } } },

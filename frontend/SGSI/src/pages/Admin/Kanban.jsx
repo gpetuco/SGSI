@@ -175,7 +175,7 @@ const Kanban = () => {
                 options={[
                   { label: "Todos", value: "All" },
                   { label: "Pendente", value: "Pendente" },
-                  { label: "Em Andamento", value: "In Progress" },
+                  { label: "Em Andamento", value: "Em Andamento" },
                   { label: "Concluído", value: "Concluído" },
                 ]}
                 value={filterStatus}

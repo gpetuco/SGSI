@@ -23,7 +23,7 @@ const Acao = ({
   const { user } = React.useContext(UserContext);
   const getStatusTagColor = () => {
     switch (status) {
-      case "In Progress":
+      case "Em Andamento":
         return "border-cyan-500/10 bg-cyan-50 text-cyan-500 border dark:text-cyan-300 dark:bg-cyan-900/30 dark:border-cyan-400/20";
 
       case "Concluído":
@@ -36,7 +36,7 @@ const Acao = ({
 
   const getStatusLabel = () => {
     switch (status) {
-      case "In Progress":
+      case "Em Andamento":
         return "Em Andamento";
       case "Concluído":
         return "Concluído";

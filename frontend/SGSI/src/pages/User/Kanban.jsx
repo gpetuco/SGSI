@@ -71,7 +71,7 @@ const Kanban = () => {
       selectedPrioridade === "All"
         ? tasks
         : tasks.filter((t) => t.prioridade === selectedPrioridade);
-    const by = { Pendente: [], "In Progress": [], Concluído: [] };
+    const by = { Pendente: [], "Em Andamento": [], Concluído: [] };
     for (const t of source) {
       if (by[t.status]) by[t.status].push(t);
     }
@@ -112,8 +112,8 @@ const Kanban = () => {
             onOpen={handleOpen}
           />
           <Column
-            title="In Progress"
-            tasks={grouped["In Progress"]}
+            title="Em Andamento"
+            tasks={grouped["Em Andamento"]}
             onOpen={handleOpen}
           />
           <Column

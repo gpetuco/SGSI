@@ -25,9 +25,9 @@ const Usuario = ({ userInfo }) => {
           status="Pendente"
         />
         <StatCard
-          label="In Progress"
-          count={userInfo?.inProgressTasks || 0}
-          status="In Progress"
+          label="Em Andamento"
+          count={userInfo?.acoesEmAndamento || 0}
+          status="Em Andamento"
         />
         <StatCard
           label="Concluído"
@@ -44,7 +44,7 @@ export default Usuario;
 const StatCard = ({ label, count, status }) => {
   const getStatusTagColor = () => {
     switch (status) {
-      case "In Progress":
+      case "Em Andamento":
         return "text-cyan-500 bg-gray-50";
 
       case "Concluído":

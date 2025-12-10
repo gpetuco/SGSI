@@ -19,7 +19,7 @@ import Modal from "../../components/Modal";
 
 const getStatusTagColor = (status) => {
   switch (status) {
-    case "In Progress":
+    case "Em Andamento":
       return "text-cyan-500 bg-cyan-50 border border-cyan-500/10";
     case "Concluído":
       return "text-lime-500 bg-lime-50 border border-lime-500/20";
@@ -30,7 +30,7 @@ const getStatusTagColor = (status) => {
 
 const getStatusLabel = (status) => {
   switch (status) {
-    case "In Progress":
+    case "Em Andamento":
       return "Em Andamento";
     case "Concluído":
       return "Concluído";

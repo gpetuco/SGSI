@@ -33,7 +33,7 @@ const UserDashboard = () => {
 
     const taskDistributionData = [
       { status: "Pendente", count: taskDistribution?.Pendente || 0 },
-      { status: "In Progress", count: taskDistribution?.InProgress || 0 },
+      { status: "Em Andamento", count: taskDistribution?.EmAndamento || 0 },
       { status: "Concluído", count: taskDistribution?.Concluído || 0 },
     ];
 
@@ -113,9 +113,9 @@ const UserDashboard = () => {
           />
 
           <Info
-            label="In Progress Tasks"
+            label="Em Andamento Tasks"
             value={formatMilhar(
-              dashboardData?.charts?.taskDistribution?.InProgress || 0
+              dashboardData?.charts?.taskDistribution?.EmAndamento || 0
             )}
             color="bg-cyan-500"
           />

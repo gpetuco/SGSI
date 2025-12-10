@@ -39,7 +39,7 @@ const StackedStatusByFramework = ({ data, title = "Status by Framework" }) => {
           radius={[6, 6, 0, 0]}
         />
         <Bar
-          dataKey="InProgress"
+          dataKey="EmAndamento"
           name="Em Andamento"
           fill="#FACC15"
           radius={[6, 6, 0, 0]}
