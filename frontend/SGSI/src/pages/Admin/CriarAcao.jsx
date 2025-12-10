@@ -466,7 +466,7 @@ const CriarAcao = () => {
     return (
       <DashboardLayout activeMenu="Create Acao">
         <Modal
-          isOpen={openFormModal}
+          aberto={openFormModal}
           onClose={closeAndGoBack}
           title={"A��o"}
           variant="wide"
@@ -489,7 +489,7 @@ const CriarAcao = () => {
   return (
     <DashboardLayout activeMenu="Create Acao">
       <Modal
-        isOpen={openFormModal}
+        aberto={openFormModal}
         onClose={closeAndGoBack}
         title={"Ação"}
         variant="wide"
@@ -834,7 +834,7 @@ const CriarAcao = () => {
       </Modal>
 
       <Modal
-        isOpen={openExcluir}
+        aberto={openExcluir}
         onClose={() => setOpenExcluir(false)}
         title="Apagar ação"
       >

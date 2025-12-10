@@ -79,7 +79,7 @@ const AcaoDetalhar = () => {
   return (
     <DashboardLayout activeMenu="My Acoes">
       <Modal
-        isOpen={openModal}
+        aberto={openModal}
         onClose={closeAndGoBack}
         title={acao?.title || "Acao Details"}
         variant="wide"

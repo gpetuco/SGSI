@@ -65,7 +65,7 @@ const StackedStatusByFramework = ({ data, title = "Status by Framework" }) => {
       </button>
       <ChartBody />
       <Modal
-        isOpen={open}
+        aberto={open}
         onClose={() => setOpen(false)}
         title={title}
         variant="wide"

@@ -1,23 +1,23 @@
 import React from "react";
 
 const Progress = ({ progress, status }) => {
-  const getColor = () => {
+  const getProgressoCor = () => {
     switch (status) {
       case "Em Andamento":
-        return "text-yellow-500 bg-yellow-500 border border-yellow-500/10";
+        return "border-yellow-500/10 text-yellow-500 bg-yellow-500 border";
 
       case "Concluído":
-        return "text-lime-500 bg-lime-500 border border-lime-500/10";
+        return "border border-lime-500/10 bg-lime-500 text-lime-500";
 
       default:
-        return "text-violet-500 bg-violet-500 border border-violet-500/10";
+        return "border-violet-500/10 bg-violet-500 border text-violet-500";
     }
   };
 
   return (
-    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+    <div className="rounded-full dark:bg-gray-700 w-full h-1.5 bg-gray-200">
       <div
-        className={`${getColor()} h-1.5 rounded-full text-center text-xs font-medium`}
+        className={`${getProgressoCor()} rounded-full text-center font-medium h-1.5 text-xs`}
         style={{ width: `${progress}%` }}
       ></div>
     </div>

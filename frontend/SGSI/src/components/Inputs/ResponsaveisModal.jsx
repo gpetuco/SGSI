@@ -74,7 +74,7 @@ const ResponsaveisModal = ({ selectedUsers, setSelectedUsers }) => {
       )}
 
       <Modal
-        isOpen={isModalOpen}
+        aberto={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title="Atribuir responsáveis"
       >

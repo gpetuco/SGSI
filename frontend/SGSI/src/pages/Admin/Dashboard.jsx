@@ -448,7 +448,7 @@ const Dashboard = () => {
 
       {fwModal.open && (
         <Modal
-          isOpen={fwModal.open}
+          aberto={fwModal.open}
           onClose={() => setFwModal({ open: false, fw: null, percent: 0 })}
           title={`${fwModal.fw}`}
           variant="wide"

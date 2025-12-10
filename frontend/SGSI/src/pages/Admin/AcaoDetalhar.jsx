@@ -108,7 +108,7 @@ const AcaoDetalhar = () => {
   return (
     <DashboardLayout activeMenu="My Acoes">
       <Modal
-        isOpen={openModal}
+        aberto={openModal}
         onClose={closeAndGoBack}
         title={"Ação"}
         variant="wide"

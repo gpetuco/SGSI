@@ -2,24 +2,24 @@ import React, { useState } from "react";
 import { LuChevronDown } from "react-icons/lu";
 
 const Lista = ({ options, value, onChange, placeholder }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [aberto, setAberto] = useState(false);
 
   const handleSelect = (option) => {
     onChange(option);
-    setIsOpen(false);
+    setAberto(false);
   };
 
   return (
     <div className="relative w-full">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => setAberto(!aberto)}
         className="w-full text-sm text-black dark:text-slate-100 outline-none bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-500 px-2.5 py-3 rounded-md mt-2 flex justify-between items-center"
       >
         {value
           ? options.find((opt) => opt.value === value)?.label
           : placeholder}
         <span className="ml-2">
-          {isOpen ? (
+          {aberto ? (
             <LuChevronDown classNarotate-180me="" />
           ) : (
             <LuChevronDown />
@@ -27,7 +27,7 @@ const Lista = ({ options, value, onChange, placeholder }) => {
         </span>
       </button>
 
-      {isOpen && (
+      {aberto && (
         <div className="absolute w-full bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-500 rounded-md mt-1 shadow-md z-10 max-h-60 overflow-y-auto">
           {options.map((option) => (
             <div

@@ -49,7 +49,7 @@ const PizzaWc = ({ data, colors, title = "Chart" }) => {
       </button>
       <ChartBody />
       <Modal
-        isOpen={open}
+        aberto={open}
         onClose={() => setOpen(false)}
         title={title}
         variant="wide"

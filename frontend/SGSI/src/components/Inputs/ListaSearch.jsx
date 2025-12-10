@@ -9,7 +9,7 @@ const ListaSearch = ({
   placeholder,
   showAvatar = false,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [aberto, setAberto] = useState(false);
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
@@ -24,14 +24,14 @@ const ListaSearch = ({
 
   const handleSelect = (val) => {
     onChange(val);
-    setIsOpen(false);
+    setAberto(false);
     setQuery("");
   };
 
   return (
     <div className="relative w-full">
       <button
-        onClick={() => setIsOpen((v) => !v)}
+        onClick={() => setAberto((v) => !v)}
         className="w-full text-sm text-black dark:text-slate-100 outline-none bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-500 px-2.5 py-3 rounded-md mt-2 flex justify-between items-center"
       >
         <span className="flex items-center gap-2 truncate">
@@ -46,12 +46,12 @@ const ListaSearch = ({
         </span>
         <span className="ml-2">
           <LuChevronDown
-            className={`${isOpen ? "rotate-180" : ""} transition-transform`}
+            className={`${aberto ? "rotate-180" : ""} transition-transform`}
           />
         </span>
       </button>
 
-      {isOpen && (
+      {aberto && (
         <div className="absolute w-full bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-500 rounded-md mt-1 shadow-md z-20">
           <div className="flex items-center gap-2 px-3 py-2 border-b border-slate-100 dark:border-slate-500">
             <LuSearch className="text-gray-500 dark:text-slate-300" />

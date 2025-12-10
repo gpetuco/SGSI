@@ -96,7 +96,7 @@ const LineWc = ({
       </button>
       <ChartBody />
       <Modal
-        isOpen={open}
+        aberto={open}
         onClose={() => setOpen(false)}
         title={title}
         variant="wide"

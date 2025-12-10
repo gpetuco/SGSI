@@ -8,7 +8,7 @@ const ListaClientes = ({
   onChange,
   placeholder = "Selecione o cliente",
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [aberto, setAberto] = useState(false);
   const [companies, setCompanies] = useState([]);
   const [query, setQuery] = useState("");
 
@@ -36,21 +36,21 @@ const ListaClientes = ({
 
   const handleSelect = (id) => {
     onChange(id);
-    setIsOpen(false);
+    setAberto(false);
   };
 
   return (
     <div className="relative w-full">
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => setAberto(!aberto)}
         className="w-full text-sm text-black dark:text-slate-100 outline-none bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-500 px-2.5 py-3 rounded-md mt-2 flex justify-between items-center"
       >
         <span className="truncate text-left">{selectedLabel()}</span>
         <LuChevronDown />
       </button>
 
-      {isOpen && (
+      {aberto && (
         <div className="absolute w-full bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-500 rounded-md mt-1 shadow-md z-10">
           <div className="flex items-center gap-2 p-2 border-b border-gray-200 dark:border-slate-600">
             <LuSearch className="text-gray-500" />

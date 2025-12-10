@@ -95,7 +95,7 @@ const BarWc = ({ data }) => {
       </button>
       <ChartBody />
       <Modal
-        isOpen={open}
+        aberto={open}
         onClose={() => setOpen(false)}
         title="Prioridade"
         variant="wide"
