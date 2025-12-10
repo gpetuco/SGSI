@@ -62,7 +62,7 @@ const ResponsaveisModal = ({ selectedUsers, setSelectedUsers }) => {
   return (
     <div className="space-y-4 mt-2">
       {selectedImagemUsuarios.length === 0 && (
-        <button className="card-btn" onClick={openModal}>
+        <button className="content-box-btn" onClick={openModal}>
           <LuUsers className="text-sm" /> Atribuir Responsáveis
         </button>
       )}
@@ -107,10 +107,13 @@ const ResponsaveisModal = ({ selectedUsers, setSelectedUsers }) => {
         </div>
 
         <div className="flex justify-end gap-4 pt-4">
-          <button className="card-btn" onClick={() => setIsModalOpen(false)}>
+          <button
+            className="content-box-btn"
+            onClick={() => setIsModalOpen(false)}
+          >
             Cancelar
           </button>
-          <button className="card-btn-fill" onClick={handleAssign}>
+          <button className="content-box-button" onClick={handleAssign}>
             Atribuir
           </button>
         </div>

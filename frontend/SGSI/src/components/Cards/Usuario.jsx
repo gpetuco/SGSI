@@ -2,7 +2,7 @@ import React from "react";
 
 const Usuario = ({ userInfo }) => {
   return (
-    <div className="user-card p-2">
+    <div className="user-content-box p-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <img

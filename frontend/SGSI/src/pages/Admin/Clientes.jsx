@@ -89,7 +89,7 @@ const Clientes = () => {
           <div className="md:col-span-2 flex">
             <button
               type="submit"
-              className="btn-primary w-full"
+              className="button-principal w-full"
               disabled={loading}
             >
               {loading ? "Criando..." : "Cadastrar"}
@@ -123,7 +123,7 @@ const Clientes = () => {
                         <button
                           type="button"
                           onClick={() => handleInvite(c._id)}
-                          className="card-btn inline-flex items-center gap-2"
+                          className="content-box-btn inline-flex items-center gap-2"
                           title="Copiar ID da empresa para convite"
                         >
                           <LuCopy className="text-base" /> Convidar cliente

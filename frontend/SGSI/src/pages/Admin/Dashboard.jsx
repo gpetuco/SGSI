@@ -191,7 +191,7 @@ const Dashboard = () => {
   if (loading && !dashboardData) {
     return (
       <DashboardLayout activeMenu="Dashboard">
-        <div className="card my-5">
+        <div className="content-box my-5">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
             <div>
               <h2 className="text-xl md:text-2xl">Dashboard</h2>
@@ -207,7 +207,7 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout activeMenu="Dashboard">
-      <div className="card my-5">
+      <div className="content-box my-5">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
           <div>
             <h2 className="text-xl md:text-2xl">Dashboard</h2>
@@ -264,7 +264,7 @@ const Dashboard = () => {
           return (
             <div
               key={fw.label}
-              className="card relative group flex items-center justify-between p-3 md:p-4 min-h-[96px]"
+              className="content-box relative group flex items-center justify-between p-3 md:p-4 min-h-[96px]"
             >
               <button
                 aria-label="Zoom"
@@ -315,7 +315,7 @@ const Dashboard = () => {
       </div>
 
       {nistFunctionCompletionData?.length > 0 && (
-        <div className="card my-5">
+        <div className="content-box my-5">
           <div className="flex items-center justify-between mb-3">
             <h5 className="font-medium">NIST CSF - Funções</h5>
           </div>
@@ -345,7 +345,7 @@ const Dashboard = () => {
             return (
               <div
                 key={fn.function}
-                className="card flex flex-col items-center justify-between px-3 py-3"
+                className="content-box flex flex-col items-center justify-between px-3 py-3"
               >
                 <div className="text-xs md:text-sm font-semibold text-center text-gray-700 dark:text-slate-200">
                   {fn.function}
@@ -381,7 +381,7 @@ const Dashboard = () => {
       )}
 
       {isoControlCompletionData?.length > 0 && (
-        <div className="card my-5">
+        <div className="content-box my-5">
           <div className="flex items-center justify-between mb-3">
             <h5 className="font-medium">ISO 27001 - Controles</h5>
           </div>
@@ -411,7 +411,7 @@ const Dashboard = () => {
             return (
               <div
                 key={ctrl.type}
-                className="card flex flex-col items-center justify-between px-3 py-3"
+                className="content-box flex flex-col items-center justify-between px-3 py-3"
               >
                 <div className="text-xs md:text-sm font-semibold text-center text-gray-700 dark:text-slate-200">
                   {ctrl.type}
@@ -529,7 +529,7 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-4 md:my-6">
         <div>
-          <div className="card">
+          <div className="content-box">
             <div className="flex items-center justify-between">
               <h5 className="font-medium">Prioridade</h5>
             </div>
@@ -543,7 +543,7 @@ const Dashboard = () => {
         </div>
 
         <div>
-          <div className="card">
+          <div className="content-box">
             <div className="flex items-center justify-between">
               <h5 className="font-medium">Status</h5>
             </div>
@@ -553,7 +553,7 @@ const Dashboard = () => {
         </div>
 
         <div>
-          <div className="card">
+          <div className="content-box">
             <div className="flex items-center justify-between">
               <h5 className="font-medium">Status por Framework</h5>
             </div>
@@ -562,7 +562,7 @@ const Dashboard = () => {
         </div>
 
         <div>
-          <div className="card">
+          <div className="content-box">
             <div className="flex items-center justify-between">
               <h5 className="font-medium">Progresso (%)</h5>
             </div>
@@ -571,7 +571,7 @@ const Dashboard = () => {
         </div>
 
         <div className="md:col-span-2">
-          <div className="card">
+          <div className="content-box">
             <div className="flex items-center justify-between">
               <h5 className="font-medium">Status por Framework</h5>
             </div>
@@ -587,7 +587,7 @@ const Dashboard = () => {
         </div>
         {user?.role === "admin" && (
           <div className="md:col-span-2">
-            <div className="card">
+            <div className="content-box">
               <div className="flex items-center justify-between">
                 <h5 className="font-medium">Top 5 (Membros)</h5>
               </div>

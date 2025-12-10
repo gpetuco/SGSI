@@ -50,7 +50,7 @@ const ItensInput = ({ todoList, setTodoList }) => {
         />
 
         <button
-          className="card-btn text-nowrap dark:!text-white"
+          className="content-box-btn text-nowrap dark:!text-white"
           onClick={handleAddOption}
         >
           <HiMiniPlus className="text-lg" /> Add

@@ -16,8 +16,7 @@ const Input = ({
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
-  const effectiveLabelClass =
-    labelClassName || "text-[13px] text-slate-800";
+  const effectiveLabelClass = labelClassName || "text-[13px] text-slate-800";
   const effectiveInputClass =
     inputClassName || "w-full bg-transparent outline-none";
 
@@ -25,7 +24,7 @@ const Input = ({
     <div hidden={hidden}>
       <label className={effectiveLabelClass}>{label}</label>
 
-      <div className="input-box">
+      <div className="input-campo">
         <input
           type={
             type == "password" ? (showPassword ? "text" : "password") : type

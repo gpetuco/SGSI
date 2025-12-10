@@ -7,7 +7,6 @@
   --color-primary: #1368ec;
 }
 
-/* Theme tokens (light default, dark overrides set on .dark at html) */
 :root {
   --sgsi-bg: #fcfbfc;
   --sgsi-surface: #ffffff;
@@ -18,13 +17,12 @@
 }
 
 html.dark {
-  /* Dark colors inspired by provided mockup */
-  --sgsi-bg: #232a36; /* app background */
-  --sgsi-surface: #2d3543; /* cards, navbar */
-  --sgsi-surface-2: #263041; /* subtle surfaces, buttons */
-  --sgsi-border: #4b5a70; /* borders */
-  --sgsi-text: #eef2f8; /* main text */
-  --sgsi-text-muted: #b8c4d6; /* secondary text */
+  --sgsi-bg: #232a36;
+  --sgsi-surface: #2d3543;
+  --sgsi-surface-2: #263041;
+  --sgsi-border: #4b5a70;
+  --sgsi-text: #eef2f8;
+  --sgsi-text-muted: #b8c4d6;
 }
 
 @layer base {
@@ -38,64 +36,14 @@ html.dark {
   }
 }
 
-/* Dark: make native date picker icon light */
 html.dark input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1) brightness(1.4);
 }
 
-/* Dark: placeholders readable */
 html.dark ::placeholder {
   color: #e5e7eb !important;
 }
 
-.input-box {
-  @apply w-full flex justify-between gap-3 text-sm text-black bg-slate-100/50 rounded px-4 py-3 mb-4 mt-3 border border-slate-200 outline-none;
-}
-
-.btn-primary {
-  @apply w-full text-sm font-medium text-white bg-primary shadow-lg shadow-purple-600/5 p-[10px] rounded-md my-1 hover:bg-blue-600/15 hover:text-blue-600 cursor-pointer;
-}
-
-.card {
-  @apply bg-white p-6 rounded-2xl shadow-md shadow-gray-100 border border-gray-200/50;
-}
-
-.card-btn {
-  @apply flex items-center gap-3 text-[12px] font-medium text-gray-700 hover:text-primary bg-gray-50 hover:bg-blue-50 px-4 py-1.5 rounded-lg border border-gray-200/50 cursor-pointer;
-}
-
-.card-btn-fill {
-  @apply flex items-center gap-3 text-[12px] font-medium text-white hover:text-primary bg-primary hover:bg-blue-50 px-4 py-1.5 rounded-lg border border-primary cursor-pointer;
-}
-
-.form-card {
-  @apply bg-white p-6 rounded-lg shadow-md shadow-gray-100 border border-gray-200/50;
-}
-
-.form-input {
-  @apply w-full text-sm text-black outline-none bg-white border border-slate-100 px-2.5 py-3 rounded-md mt-2 placeholder:text-gray-500;
-}
-
-.add-btn {
-  @apply w-full flex items-center justify-center gap-1.5 text-xs md:text-sm font-medium text-primary whitespace-nowrap bg-blue-50 border border-blue-100 rounded-lg px-4 py-2 cursor-pointer;
-}
-
-.download-btn {
-  @apply items-center gap-3 text-xs md:text-[13px] text-lime-900 bg-lime-100 px-2 md:px-3 py-2 rounded border border-lime-200 hover:border-lime-400 cursor-pointer whitespace-nowrap;
-}
-
-.user-card {
-  @apply bg-white p-4 rounded-xl shadow-md shadow-gray-100 border border-gray-200/50;
-}
-
-/* --- Dark mode overrides (colors only) --- */
-@layer base {
-  html.dark body {
-    color: var(--sgsi-text);
-  }
-}
-
-/* Generic utility overrides often used in components */
 .dark .bg-white {
   background-color: var(--sgsi-surface) !important;
 }
@@ -119,18 +67,15 @@ html.dark ::placeholder {
   border-color: var(--sgsi-border) !important;
 }
 
-/* Component-level classes defined in this file */
-.dark .card,
-.dark .form-card,
-.dark .user-card {
+.dark .content-box,
+.dark .form-content-box,
+.dark .user-content-box {
   background-color: var(--sgsi-surface);
   border-color: var(--sgsi-border);
   color: var(--sgsi-text);
-  /* replace bright white shadow with subtle dark elevation */
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35) !important;
 }
 
-/* Tone down generic light shadow utilities when in dark */
 .dark .shadow-gray-100 {
   --tw-shadow-color: rgba(0, 0, 0, 0.45) !important;
 }
@@ -138,7 +83,7 @@ html.dark ::placeholder {
   box-shadow: 0 6px 18px var(--tw-shadow-color) !important;
 }
 
-.dark .input-box {
+.dark .input-campo {
   background-color: var(--sgsi-surface-2);
   color: var(--sgsi-text);
   border-color: var(--sgsi-border);
@@ -150,45 +95,35 @@ html.dark ::placeholder {
   border-color: var(--sgsi-border);
 }
 
-/* Improve label/readability inside forms (modals) */
-.dark .form-card label,
+.dark .form-content-box label,
 .dark label.text-slate-600,
 .dark .text-slate-600 {
-  color: #d6e0ee !important; /* lighter muted text */
+  color: #d6e0ee !important;
 }
 
-/* Headings inside form cards */
-.dark .form-card h2,
-.dark .form-card h5 {
+.dark .form-content-box h2,
+.dark .form-content-box h5 {
   color: var(--sgsi-text) !important;
 }
 
-.dark .card-btn {
+.dark .content-box-btn {
   background-color: var(--sgsi-surface-2);
   color: var(--sgsi-text-muted);
   border-color: var(--sgsi-border);
 }
 
-.dark .card-btn-fill {
+.dark .content-box-button {
   color: white;
   background-color: var(--color-primary);
   border-color: var(--color-primary);
 }
 
-.dark .add-btn {
+.dark .adicionar-button {
   color: #a8c4ff;
   background-color: color-mix(in srgb, var(--color-primary) 15%, transparent);
   border-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
 }
 
-.dark .download-btn {
-  /* keep semantic green but tuned for dark bg */
-  background-color: #234a2e;
-  color: #dcfce7;
-  border-color: #2f6a3f;
-}
-
-/* Improve text contrast for common gray utilities in dark */
 .dark .text-gray-900,
 .dark .text-gray-800 {
   color: var(--sgsi-text) !important;
@@ -200,7 +135,6 @@ html.dark ::placeholder {
   color: #9fb0c8 !important;
 }
 
-/* Dark equivalents for light tag backgrounds used on Acao */
 .dark .bg-blue-50 {
   background-color: rgba(37, 99, 235, 0.16) !important;
 }
@@ -223,7 +157,6 @@ html.dark ::placeholder {
   background-color: rgba(244, 63, 94, 0.16) !important;
 }
 
-/* Subtle scrollbars for dark */
 html.dark ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -236,13 +169,11 @@ html.dark ::-webkit-scrollbar-track {
   background: #1f2631;
 }
 
-/* Fix light hover utility in dark (readability for dropdowns) */
 .dark .hover\:bg-gray-100:hover {
-  background-color: #3b475a !important; /* slightly lighter than surface */
+  background-color: #3b475a !important;
   color: var(--sgsi-text) !important;
 }
 
-/* Subtle row hover for tables (light/dark) */
 .row-hover {
   transition: background-color 150ms ease;
 }
@@ -253,18 +184,58 @@ html.dark .row-hover:hover {
   background-color: #364152 !important;
 }
 
-/* Zoom button style for charts */
+.input-campo {
+  @apply border-slate-200 outline-none text-black bg-slate-100/50 rounded w-full flex justify-between gap-3 text-sm px-4 py-3 mb-4 mt-3 border;
+}
+
+.button-principal {
+  @apply bg-primary hover:text-blue-600 cursor-pointer shadow-lg shadow-purple-600/5 p-[10px] rounded-md my-1  w-full text-sm font-medium text-white hover:bg-blue-600/15;
+}
+
+.content-box {
+  @apply border-gray-200/50 shadow-md p-6 bg-white shadow-gray-100 rounded-2xl border;
+}
+
+.user-content-box {
+  @apply rounded-xl shadow-md bg-white border-gray-200/50 p-4 shadow-gray-100 border;
+}
+
+.content-box-button {
+  @apply border-primary hover:text-primary text-white rounded-lg flex items-center px-4 bg-primary cursor-pointer py-1.5 gap-3 text-[12px] hover:bg-blue-50 border font-medium;
+}
+
+.content-box-btn {
+  @apply font-medium hover:bg-blue-50 text-gray-700 border-gray-200/50 px-4 bg-gray-50 rounded-lg hover:text-primary gap-3 flex cursor-pointer items-center text-[12px] py-1.5 border;
+}
+
+.form-input {
+  @apply mt-2 rounded-md border-slate-100 outline-none px-2.5 py-3 placeholder:text-gray-500 bg-white border text-black w-full text-sm;
+}
+
+.form-content-box {
+  @apply rounded-lg shadow-md bg-white border p-6 shadow-gray-100 border-gray-200/50;
+}
+
+.adicionar-button {
+  @apply whitespace-nowrap md:text-sm px-4 gap-1.5 rounded-lg cursor-pointer bg-blue-50 flex text-primary py-2 w-full border-blue-100 text-xs items-center justify-center border font-medium;
+}
+
+@layer base {
+  html.dark body {
+    color: var(--sgsi-text);
+  }
+}
+
 .chart-zoom-btn {
   @apply absolute right-2 top-2 z-10 p-1.5 rounded-full border shadow-sm transition-opacity;
   @apply border-gray-200/50 bg-white/80 text-gray-700 hover:bg-white;
 }
 html.dark .chart-zoom-btn {
-  background-color: rgba(30, 41, 59, 0.82); /* slate-800/80 */
-  color: #e2e8f0; /* slate-200 text */
-  border-color: #475569; /* slate-600 */
+  background-color: rgba(30, 41, 59, 0.82);
+  color: #e2e8f0;
+  border-color: #475569;
 }
 
-/* Force white text in dark mode when readability is required */
 html.dark .text-white-important {
   color: #ffffff !important;
 }

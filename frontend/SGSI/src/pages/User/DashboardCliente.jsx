@@ -83,7 +83,7 @@ const DashboardCliente = () => {
 
   return (
     <DashboardLayout activeMenu="Dashboard">
-      <div className="card my-5">
+      <div className="content-box my-5">
         <div>
           <div className="col-span-3">
             <h2 className="text-xl md:text-2xl">Bem vindo {user?.name}!</h2>
@@ -128,7 +128,7 @@ const DashboardCliente = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-4 md:my-6">
         <div>
-          <div className="card">
+          <div className="content-box">
             <div className="flex items-center justify-between">
               <h5 className="font-medium">Acao Distribution</h5>
             </div>
@@ -138,7 +138,7 @@ const DashboardCliente = () => {
         </div>
 
         <div>
-          <div className="card">
+          <div className="content-box">
             <div className="flex items-center justify-between">
               <h5 className="font-medium">Acao Prioridade Levels</h5>
             </div>

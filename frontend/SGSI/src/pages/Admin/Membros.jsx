@@ -31,7 +31,7 @@ const Membros = () => {
           <h2 className="text-xl md:text-xl font-medium">Membros</h2>
         </div>
 
-        <div className="card mt-4 overflow-x-auto">
+        <div className="content-box mt-4 overflow-x-auto">
           <table className="min-w-full">
             <thead>
               <tr className="text-left">

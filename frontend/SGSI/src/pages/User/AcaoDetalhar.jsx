@@ -86,7 +86,7 @@ const AcaoDetalhar = () => {
       >
         {acao && (
           <div className="grid grid-cols-1 mt-1">
-            <div className="form-card">
+            <div className="form-content-box">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm md:text-xl font-medium">
                   {acao?.title}

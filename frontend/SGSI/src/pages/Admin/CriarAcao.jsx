@@ -472,7 +472,7 @@ const CriarAcao = () => {
           variant="wide"
         >
           <div className="grid grid-cols-1 mt-1">
-            <div className="form-card">
+            <div className="form-content-box">
               <h2 className="text-sm md:text-xl font-medium mb-2">
                 Carregando dados da a��o...
               </h2>
@@ -496,7 +496,7 @@ const CriarAcao = () => {
         footer={
           <div className="flex justify-end">
             <button
-              className="add-btn w-auto px-6"
+              className="adicionar-button w-auto px-6"
               onClick={handleSubmit}
               disabled={loading}
             >
@@ -506,7 +506,7 @@ const CriarAcao = () => {
         }
       >
         <div className="grid grid-cols-1 mt-1">
-          <div className="form-card">
+          <div className="form-content-box">
             <div className="flex items-center justify-between">
               {acaoId && (
                 <div
@@ -709,7 +709,7 @@ const CriarAcao = () => {
                         </div>
                       </div>
                       <button
-                        className="card-btn text-nowrap dark:!text-white"
+                        className="content-box-btn text-nowrap dark:!text-white"
                         onClick={handleAddItem}
                         disabled={!newTodoText}
                       >
@@ -726,7 +726,7 @@ const CriarAcao = () => {
                         className="form-input flex-1 mt-0"
                       />
                       <button
-                        className="card-btn text-nowrap dark:!text-white"
+                        className="content-box-btn text-nowrap dark:!text-white"
                         onClick={handleAddItem}
                       >
                         <HiMiniPlus className="text-lg" /> Adicionar
@@ -786,7 +786,7 @@ const CriarAcao = () => {
                           </div>
                         </div>
                         <button
-                          className="card-btn text-nowrap dark:!text-white"
+                          className="content-box-btn text-nowrap dark:!text-white"
                           onClick={handleAddItem}
                           disabled={!newTodoText}
                         >
