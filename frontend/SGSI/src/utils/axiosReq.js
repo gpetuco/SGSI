@@ -1,5 +1,5 @@
-import axios from "axios";
 import { URL_SGSI } from "./apiUrl";
+import axios from "axios";
 
 const axiosReq = axios.create({
   baseURL: URL_SGSI,
@@ -10,19 +10,6 @@ const axiosReq = axios.create({
   },
 });
 
-axiosReq.interceptors.request.use(
-  (config) => {
-    const accessToken = localStorage.getItem("token");
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
 axiosReq.interceptors.response.use(
   (response) => {
     return response;
@@ -32,11 +19,24 @@ axiosReq.interceptors.response.use(
       if (error.response.status === 401) {
         window.location.href = "/login";
       } else if (error.response.status === 500) {
-        console.error("Server error. Please try again later.");
+        console.error("Erro.");
       }
     } else if (error.code === "ECONNABORTED") {
-      console.error("Request timeout. Please try again.");
+      console.error("Erro.");
     }
+    return Promise.reject(error);
+  }
+);
+
+axiosReq.interceptors.request.use(
+  (config) => {
+    const accessToken = localStorage.getItem("token");
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  (error) => {
     return Promise.reject(error);
   }
 );

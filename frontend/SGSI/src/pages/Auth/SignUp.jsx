@@ -1,22 +1,22 @@
-import React, { useContext, useState } from "react";
-import AppEntry from "../../components/layouts/AppEntry";
-import { emailVerificacao } from "../../utils/utils";
-import ImagemInput from "../../components/Inputs/ImagemInput";
-import Input from "../../components/Inputs/Input";
-import { Link, useNavigate } from "react-router-dom";
+import abrirArquivo from "../../utils/abrirArquivo";
 import axiosReq from "../../utils/axiosReq";
 import { URLS_API } from "../../utils/apiUrl";
+import Input from "../../components/Inputs/Input";
+import ImagemInput from "../../components/Inputs/ImagemInput";
+import { emailVerificacao } from "../../utils/utils";
+import AppEntry from "../../components/layouts/AppEntry";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/sessaoUsuarioContext";
-import abrirArquivo from "../../utils/abrirArquivo";
+import React, { useContext, useState } from "react";
 
 const SignUp = () => {
-  const [profilePic, setProfilePic] = useState(null);
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [adminInviteToken, setAdminInviteToken] = useState("");
   const [empresaId, setEmpresaId] = useState("");
+  const [fullName, setFullName] = useState("");
   const [userType, setUserType] = useState("security");
+  const [imagemPerfil, setImagemPerfil] = useState(null);
+  const [email, setEmail] = useState("");
+  const [adminInviteToken, setAdminInviteToken] = useState("");
+  const [password, setPassword] = useState("");
 
   const [error, setError] = useState(null);
 
@@ -28,26 +28,26 @@ const SignUp = () => {
 
     let profileImageUrl = "";
 
-    if (!fullName) {
-      setError("Please enter full name.");
+    if (!emailVerificacao(email)) {
+      setError("Digite um email válido.");
       return;
     }
 
-    if (!emailVerificacao(email)) {
-      setError("Please enter a valid email address.");
+    if (!fullName) {
+      setError("Insira o nome.");
       return;
     }
 
     if (!password) {
-      setError("Please enter the password");
+      setError("Digite a senha.");
       return;
     }
 
     setError("");
 
     try {
-      if (profilePic) {
-        const imgUploadRes = await abrirArquivo(profilePic);
+      if (imagemPerfil) {
+        const imgUploadRes = await abrirArquivo(imagemPerfil);
         profileImageUrl = imgUploadRes.imageUrl || "";
       }
 
@@ -84,16 +84,16 @@ const SignUp = () => {
       if (error.response && error.response.data.message) {
         setError(error.response.data.message);
       } else {
-        setError("Something went wrong. Please try again.");
+        setError("Erro.");
       }
     }
   };
 
   return (
     <AppEntry>
-      <div className="lg:w-[100%] h-auto md:h-full mt-10 md:mt-0 flex flex-col justify-center">
-        <h3 className="text-xl font-semibold text-black">Criar nova conta</h3>
-        <p className="text-[14px] text-white mt-[5px] mb-6">
+      <div className="flex-col justify-center mt-10 md:h-full lg:w-[100%] h-auto md:mt-0 flex">
+        <h3 className="font-semibold text-black text-xl">Criar nova conta</h3>
+        <p className="text-white mt-[5px] text-[14px] mb-6">
           Cadastre-se inserindo suas informações.
         </p>
 
@@ -124,9 +124,9 @@ const SignUp = () => {
               </label>
             </div>
           </div>
-          <ImagemInput image={profilePic} setImage={setProfilePic} />
+          <ImagemInput image={imagemPerfil} setImage={setImagemPerfil} />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="md:grid-cols-2 gap-4 grid grid-cols-1">
             <Input
               value={fullName}
               onChange={({ target }) => setFullName(target.value)}

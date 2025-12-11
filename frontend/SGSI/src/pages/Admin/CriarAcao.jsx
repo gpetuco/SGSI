@@ -301,7 +301,7 @@ const CriarAcao = () => {
         }));
       }
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error("Erro:", error);
     } finally {
       setLoadingAcao(false);
     }

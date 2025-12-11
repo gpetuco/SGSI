@@ -60,7 +60,7 @@ const NistCsfAcoes = () => {
 
       setAllAcoes(response.data?.acoes?.length > 0 ? response.data.acoes : []);
     } catch (error) {
-      console.error("Error fetching acoes:", error);
+      console.error("Erro:", error);
     }
   };
 
@@ -76,7 +76,7 @@ const NistCsfAcoes = () => {
       );
       setUserOptions(opts);
     } catch (e) {
-      console.error("Error fetching users:", e);
+      console.error("Erro:", e);
     }
   };
 
@@ -91,7 +91,7 @@ const NistCsfAcoes = () => {
       );
       setCompanyOptions(opts);
     } catch (e) {
-      console.error("Error fetching companies:", e);
+      console.error("Erro:", e);
     }
   };
 

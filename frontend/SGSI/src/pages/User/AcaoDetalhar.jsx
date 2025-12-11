@@ -34,7 +34,7 @@ const AcaoDetalhar = () => {
         setAcao(acaoInfo);
       }
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error("Erro:", error);
     }
   };
 
@@ -83,10 +83,10 @@ const AcaoDetalhar = () => {
         variant="wide"
       >
         {acao && (
-          <div className="grid grid-cols-1 mt-1">
+          <div className="mt-1 grid-cols-1 grid">
             <div className="form-content-box">
-              <div className="flex items-center justify-between">
-                <h2 className="text-sm md:text-xl font-medium">
+              <div className="items-center justify-between flex">
+                <h2 className="font-medium md:text-xl text-sm">
                   {acao?.title}
                 </h2>
                 <div
@@ -158,7 +158,7 @@ const InfoBox = ({ label, value }) => {
     <>
       <label className="text-xs font-medium text-slate-500">{label}</label>
 
-      <p className="text-[12px] md:text-[13px] font-medium text-gray-700 mt-0.5">
+      <p className="font-medium text-gray-700 md:text-[13px] mt-0.5 text-[12px]">
         {value}
       </p>
     </>
@@ -169,10 +169,10 @@ const Itens = ({ text, isChecked, onChange }) => {
   return (
     <div className="flex items-center gap-3 p-3">
       <input
+        className="text-primary border-gray-300 rounded-sm cursor-pointer bg-gray-100 outline-none w-4 h-4"
         type="checkbox"
         checked={isChecked}
         onChange={onChange}
-        className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none cursor-pointer"
       />
 
       <p className="text-[13px] text-gray-800">{text}</p>

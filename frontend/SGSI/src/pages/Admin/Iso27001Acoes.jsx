@@ -56,7 +56,7 @@ const Iso27001Acoes = () => {
 
       setAllAcoes(response.data?.acoes?.length > 0 ? response.data.acoes : []);
     } catch (error) {
-      console.error("Error fetching acoes:", error);
+      console.error("Erro:", error);
     }
   };
 
@@ -81,7 +81,7 @@ const Iso27001Acoes = () => {
       );
       setUserOptions(opts);
     } catch (e) {
-      console.error("Error fetching users:", e);
+      console.error("Erro:", e);
     }
   };
 
@@ -96,7 +96,7 @@ const Iso27001Acoes = () => {
       );
       setCompanyOptions(opts);
     } catch (e) {
-      console.error("Error fetching companies:", e);
+      console.error("Erro:", e);
     }
   };
 

@@ -76,7 +76,7 @@ const Kanban = () => {
       });
       setAcoes(response.data?.acoes || []);
     } catch (error) {
-      console.error("Error fetching acoes:", error);
+      console.error("Erro:", error);
     }
   };
 
@@ -92,7 +92,7 @@ const Kanban = () => {
       );
       setUserOptions(opts);
     } catch (e) {
-      console.error("Error fetching users:", e);
+      console.error("Erro:", e);
     }
   };
 
@@ -107,7 +107,7 @@ const Kanban = () => {
       );
       setCompanyOptions(opts);
     } catch (e) {
-      console.error("Error fetching companies:", e);
+      console.error("Erro:", e);
     }
   };
 

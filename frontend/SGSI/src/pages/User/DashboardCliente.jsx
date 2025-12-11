@@ -55,7 +55,7 @@ const DashboardCliente = () => {
         prepareChartData(response.data?.charts || null);
       }
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error("Erro:", error);
     }
   };
 
