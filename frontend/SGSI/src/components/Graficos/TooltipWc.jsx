@@ -1,15 +1,15 @@
 import React from "react";
 
-const TooltipWc = ({ active, payload }) => {
+const TooltipWc = ({ payload, active }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white shadow-md rounded-lg p-2 border border-gray-300">
-        <p className="text-xs font-semibold text-purple-800 mb-1">
+      <div className="rounded-lg border-gray-300 shadow-md bg-white border p-2">
+        <p className="text-purple-800 mb-1 font-semibold text-xs">
           {payload[0].name}
         </p>
-        <p className="text-sm text-gray-600">
+        <p className="text-gray-600 text-sm">
           Count:{" "}
-          <span className="text-sm font-medium text-gray-900">
+          <span className="font-medium text-gray-900 text-sm">
             {payload[0].value}
           </span>
         </p>

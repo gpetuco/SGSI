@@ -10,7 +10,6 @@ const axiosReq = axios.create({
   },
 });
 
-// Request Interceptor
 axiosReq.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("token");
@@ -24,16 +23,13 @@ axiosReq.interceptors.request.use(
   }
 );
 
-// Response Interceptor
 axiosReq.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
-    // Handle common errors globally
     if (error.response) {
       if (error.response.status === 401) {
-        // Redirect to login page
         window.location.href = "/login";
       } else if (error.response.status === 500) {
         console.error("Server error. Please try again later.");

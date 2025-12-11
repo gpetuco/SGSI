@@ -1,11 +1,8 @@
 import {
   LuLayoutDashboard,
   LuUsers,
-  LuClipboardCheck,
-  LuSquarePlus,
   LuLogOut,
   LuListTodo,
-  LuShieldCheck,
   LuBadgeCheck,
   LuNetwork,
   LuColumns3,
@@ -102,16 +99,16 @@ export const SIDE_MENU_USER_DATA = [
   },
 ];
 
-export const PRIORIDADE_DATA = [
-  { label: "Baixa", value: "Baixa" },
-  { label: "Média", value: "Media" },
-  { label: "Alta", value: "Alta" },
-];
-
 export const STATUS_DATA = [
   { label: "Pendente", value: "Pendente" },
   { label: "Em Andamento", value: "Em Andamento" },
   { label: "Concluído", value: "Concluído" },
+];
+
+export const PRIORIDADE_DATA = [
+  { label: "Baixa", value: "Baixa" },
+  { label: "Média", value: "Media" },
+  { label: "Alta", value: "Alta" },
 ];
 
 export const CLASSIFICATION_DATA = [

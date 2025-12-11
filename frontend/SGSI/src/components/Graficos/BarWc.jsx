@@ -33,12 +33,12 @@ const BarWc = ({ data }) => {
   const TooltipWc = ({ active, payload }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white dark:bg-slate-700 shadow-md rounded-lg p-2 border border-gray-300 dark:border-slate-500">
-          <p className="text-xs font-semibold text-purple-800 dark:text-purple-300 mb-1">
+        <div className="border shadow-md rounded-lg bg-white dark:bg-slate-700 dark:border-slate-500 p-2 border-gray-300">
+          <p className="text-purple-800 dark:text-purple-300 mb-1 font-semibold text-xs">
             {payload[0].payload.prioridade}
           </p>
           <p className="text-sm text-gray-600 dark:text-slate-200">
-            \n Count:{" "}
+            \n Quantidade:{" "}
             <span className="text-sm font-medium text-gray-900 dark:text-white">
               {payload[0].payload.count}
             </span>

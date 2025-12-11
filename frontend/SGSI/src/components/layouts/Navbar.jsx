@@ -4,7 +4,6 @@ import SideMenu from "./SideMenu";
 
 const Navbar = ({ activeMenu }) => {
   const [openSideMenu, setOpenSideMenu] = useState(false);
-  // Ensure dark mode is applied (single theme only)
   useEffect(() => {
     const root = document.documentElement;
     if (!root.classList.contains("dark")) root.classList.add("dark");
@@ -34,8 +33,6 @@ const Navbar = ({ activeMenu }) => {
           Acao Manager
         </h2>
       </div>
-
-      {/* Theme toggle removed to keep only dark mode */}
 
       {openSideMenu && (
         <div className="fixed top-[61px] -ml-4 bg-white">

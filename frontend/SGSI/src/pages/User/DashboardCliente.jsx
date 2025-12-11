@@ -24,7 +24,6 @@ const DashboardCliente = () => {
   const [pieChartData, setPieChartData] = useState([]);
   const [barChartData, setBarChartData] = useState([]);
 
-  // Prepare Chart Data
   const prepareChartData = (data) => {
     const dadosAcoes = data?.dadosAcoes || null;
     const acaoPrioridadeLevels = data?.acaoPrioridadeLevels || null;

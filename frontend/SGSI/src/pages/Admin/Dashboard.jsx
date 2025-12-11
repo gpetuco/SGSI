@@ -247,7 +247,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Completion by framework mini-cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
         {[
           { label: "NIST CSF", color: "#00B8DB" },

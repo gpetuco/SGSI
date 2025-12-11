@@ -2,13 +2,13 @@ import { URLS_API } from "./apiUrl";
 import axiosReq from "./axiosReq";
 
 const uploadImage = async (imageFile) => {
-  const formData = new FormData();
-  formData.append("image", imageFile);
+  const dadosForm = new FormData();
+  dadosForm.append("image", imageFile);
 
   try {
     const response = await axiosReq.post(
       URLS_API.IMAGE.UPLOAD_IMAGE,
-      formData,
+      dadosForm,
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -17,7 +17,7 @@ const uploadImage = async (imageFile) => {
     );
     return response.data;
   } catch (error) {
-    console.error("Error uploading the image:", error);
+    console.error("Erro:", error);
     throw error;
   }
 };

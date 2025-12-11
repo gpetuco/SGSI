@@ -25,7 +25,6 @@ const AcaoDetalhar = () => {
     }
   };
 
-  // get Acao info by ID
   const getAcaoDetailsByID = async () => {
     try {
       const response = await axiosReq.get(URLS_API.ACOES.GET_ACAO_BY_ID(id));
@@ -39,7 +38,6 @@ const AcaoDetalhar = () => {
     }
   };
 
-  // handle todo check
   const updateItens = async (index) => {
     // eslint-disable-next-line no-unsafe-optional-chaining
     const itens = [...acao?.itens];

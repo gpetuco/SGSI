@@ -23,7 +23,6 @@ const SignUp = () => {
   const { updateUser } = useContext(UserContext);
   const navigate = useNavigate();
 
-  // Handle SignUp Form Submit
   const handleSignUp = async (e) => {
     e.preventDefault();
 
@@ -46,9 +45,7 @@ const SignUp = () => {
 
     setError("");
 
-    //SignUp API Call
     try {
-      // Upload image if present
       if (profilePic) {
         const imgUploadRes = await uploadImage(profilePic);
         profileImageUrl = imgUploadRes.imageUrl || "";
@@ -77,7 +74,6 @@ const SignUp = () => {
         localStorage.setItem("token", token);
         updateUser(response.data);
 
-        //Redirect based on role
         if (role === "admin") {
           navigate("/admin/dashboard");
         } else {
@@ -102,7 +98,6 @@ const SignUp = () => {
         </p>
 
         <form onSubmit={handleSignUp}>
-          {/* Tipo de cadastro */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div className="flex items-center gap-3">
               <input

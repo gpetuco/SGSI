@@ -80,9 +80,6 @@ const Kanban = () => {
     }
   };
 
-  // initial acoes fetch happens via dependency effect below
-
-  // fetch users for dropdown
   const fetchUsers = async () => {
     try {
       const res = await axiosReq.get(URLS_API.USERS.GET_ALL_USERS);
@@ -151,7 +148,6 @@ const Kanban = () => {
     <DashboardLayout activeMenu="Kanban">
       <div className="my-5">
         <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-          {/* Filters */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-2 w-full lg:w-[880px]">
             {user?.role === "admin" && (
               <div className="w-full md:w-[210px]">

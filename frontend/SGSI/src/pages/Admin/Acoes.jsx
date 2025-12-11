@@ -106,7 +106,6 @@ const Acoes = () => {
         <h2 className="text-xl md:text-xl font-medium">Ações</h2>
 
         <div className="mt-3 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-3 w-full">
-          {/* Filtros */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 w-full">
             {user?.role === "admin" && (
               <div className="w-full md:w-[190px]">
@@ -178,7 +177,6 @@ const Acoes = () => {
             )}
           </div>
 
-          {/* Botão Criar alinhado à direita, mesmo tamanho dos selects */}
           {user?.role === "admin" && (
             <div className="w-full md:w-[190px]">
               <button

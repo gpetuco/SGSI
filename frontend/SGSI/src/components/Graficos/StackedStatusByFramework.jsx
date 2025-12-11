@@ -31,7 +31,6 @@ const StackedStatusByFramework = ({ data, title = "Status by Framework" }) => {
         />
         <Tooltip />
         <Legend />
-        {/* Side-by-side bars for each status */}
         <Bar
           dataKey="Concluído"
           name="Concluído"

@@ -15,23 +15,21 @@ const Login = () => {
   const { updateUser } = useContext(UserContext);
   const navigate = useNavigate();
 
-  // Handle Login Form Submit
   const handleLogin = async (e) => {
     e.preventDefault();
 
     if (!emailVerificacao(email)) {
-      setError("Please enter a valid email address.");
+      setError("Digite um email válido.");
       return;
     }
 
     if (!password) {
-      setError("Please enter the password");
+      setError("Preencha a senha");
       return;
     }
 
     setError("");
 
-    //Login API Call
     try {
       const response = await axiosReq.post(URLS_API.AUTH.LOGIN, {
         email,
@@ -44,7 +42,6 @@ const Login = () => {
         localStorage.setItem("token", token);
         updateUser(response.data);
 
-        //Redirect based on role
         if (role === "admin") {
           navigate("/admin/dashboard");
         } else {

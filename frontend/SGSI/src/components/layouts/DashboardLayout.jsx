@@ -6,24 +6,24 @@ import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 const DashboardLayout = ({ children, activeMenu }) => {
   const { user } = useContext(UserContext);
   const [openSideMenu, setOpenSideMenu] = useState(false);
-  
-  // Force dark mode globally (no header/theme toggle)
+
   useEffect(() => {
     const root = document.documentElement;
     if (!root.classList.contains("dark")) root.classList.add("dark");
-    try { localStorage.setItem("theme", "dark"); } catch (_) {}
+    try {
+      localStorage.setItem("theme", "dark");
+      // eslint-disable-next-line no-empty
+    } catch (_) {}
   }, []);
 
   return (
     <div className="">
       {user && (
         <div className="flex">
-          {/* Desktop sidebar */}
           <div className="max-[1080px]:hidden">
             <SideMenu activeMenu={activeMenu} />
           </div>
 
-          {/* Mobile menu toggle */}
           <button
             aria-label="Open menu"
             className="fixed top-3 left-3 z-40 min-[1081px]:hidden inline-flex items-center justify-center w-10 h-10 rounded-md border border-gray-200/30 bg-slate-800/60 text-white"
@@ -32,13 +32,14 @@ const DashboardLayout = ({ children, activeMenu }) => {
             <HiOutlineMenu className="text-2xl" />
           </button>
 
-          {/* Content */}
           <div className="grow mx-5">{children}</div>
 
-          {/* Mobile sidebar overlay */}
           {openSideMenu && (
             <div className="fixed inset-0 z-50 min-[1081px]:hidden">
-              <div className="absolute inset-0 bg-black/40" onClick={() => setOpenSideMenu(false)} />
+              <div
+                className="absolute inset-0 bg-black/40"
+                onClick={() => setOpenSideMenu(false)}
+              />
               <div className="absolute top-0 left-0">
                 <SideMenu activeMenu={activeMenu} />
               </div>

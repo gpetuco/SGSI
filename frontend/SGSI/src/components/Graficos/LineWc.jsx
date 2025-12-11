@@ -35,10 +35,6 @@ const DefaultTooltip = ({ active, payload, label }) => {
   );
 };
 
-// props:
-// - data: array of objects
-// - lines: [{ dataKey, color, name }]
-// - xKey: string (default: 'name')
 const LineWc = ({
   data = [],
   lines = [{ dataKey: "value", color: "#1368ec", name: "Value" }],

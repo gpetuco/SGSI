@@ -66,12 +66,11 @@ const CriarAcao = () => {
   const [newTodoText, setNewTodoText] = useState("");
 
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // salvar (criar/atualizar)
-  const [loadingAcao, setLoadingAcao] = useState(!!acaoId); // carregar dados iniciais em modo edição
+  const [loading, setLoading] = useState(false);
+  const [loadingAcao, setLoadingAcao] = useState(!!acaoId);
 
   const [openExcluir, setOpenExcluir] = useState(false);
 
-  // Helpers for NIST CSF / ISO 27001 cascata
   const isCascadeFramework =
     acaoData.classification === "NIST CSF" ||
     acaoData.classification === "ISO 27001";
@@ -116,7 +115,6 @@ const CriarAcao = () => {
   };
 
   const handleClassificationChange = (value) => {
-    // reset cascade when classification changes
     setAcaoData((prev) => ({
       ...prev,
       classification: value,
@@ -127,7 +125,6 @@ const CriarAcao = () => {
   };
 
   const handleNistTitleChange = (value) => {
-    // when function changes, clear dependent fields
     setAcaoData((prev) => ({
       ...prev,
       title: value,
@@ -137,7 +134,6 @@ const CriarAcao = () => {
   };
 
   const handleNistDescricaoChange = (value) => {
-    // when category changes, clear checklist selections
     setAcaoData((prev) => ({
       ...prev,
       descricao: value,
@@ -146,7 +142,6 @@ const CriarAcao = () => {
   };
 
   const clearData = () => {
-    //reset form
     setAcaoData({
       title: "",
       descricao: "",
@@ -159,7 +154,6 @@ const CriarAcao = () => {
     });
   };
 
-  // Create Acao
   const createAcao = async () => {
     setLoading(true);
 
@@ -186,7 +180,6 @@ const CriarAcao = () => {
     }
   };
 
-  // Update Acao
   const updateAcao = async () => {
     setLoading(true);
 
@@ -216,7 +209,6 @@ const CriarAcao = () => {
     }
   };
 
-  // Toggle a checklist item concluido state (update status accordingly)
   const toggleChecklistItem = async (index) => {
     if (!acaoId) return;
     try {
@@ -248,7 +240,6 @@ const CriarAcao = () => {
   const handleSubmit = async () => {
     setError(null);
 
-    // Input validation
     if (!acaoData.title.trim()) {
       setError("Título é obrigatório.");
       return;
@@ -284,7 +275,6 @@ const CriarAcao = () => {
     createAcao();
   };
 
-  // get Acao info by ID
   const getAcaoDetailsByID = async () => {
     try {
       setLoadingAcao(true);
@@ -319,7 +309,6 @@ const CriarAcao = () => {
     }
   };
 
-  // Commit checklist edits when clicking outside of edit block
   useEffect(() => {
     if (!checklistEditMode) return;
     const handleClickOutside = (e) => {
@@ -339,14 +328,12 @@ const CriarAcao = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checklistEditMode, suppressOutsideOnce]);
 
-  // After entering edit mode, focus the targeted input
   useEffect(() => {
     if (checklistEditMode && editFocusIndex !== null) {
       const focus = () => {
         const el = editInputsRef.current?.[editFocusIndex];
         if (el && typeof el.focus === "function") {
           el.focus();
-          // place caret at end
           const val = el.value;
           try {
             el.setSelectionRange(val.length, val.length);
@@ -394,22 +381,9 @@ const CriarAcao = () => {
     });
   };
 
-  const enterEditAtIndex = (index) => {
-    setAcaoData((prev) => ({
-      ...prev,
-      itens: Array.isArray(currentAcao?.itens)
-        ? currentAcao.itens.map((i) => i.text)
-        : prev.itens,
-    }));
-    setSuppressOutsideOnce(true);
-    setEditFocusIndex(index);
-    setChecklistEditMode(true);
-  };
-
   const handleDeleteItem = (index) => {
     setAcaoData((prev) => {
       const next = (prev.itens || []).filter((_, i) => i !== index);
-      // Persist immediately in update mode to keep indices aligned
       commitChecklistChanges(next);
       return { ...prev, itens: next };
     });
@@ -421,16 +395,12 @@ const CriarAcao = () => {
     setAcaoData((prev) => {
       const exists = (prev.itens || []).some((t) => t === v);
       const next = exists ? prev.itens : [...(prev.itens || []), v];
-      // Persist immediately in update mode
       commitChecklistChanges(next);
       return { ...prev, itens: next };
     });
     setNewTodoText("");
   };
 
-  // no-op helpers from previous revert
-
-  // Delete Acao
   const deleteAcao = async () => {
     try {
       await axiosReq.delete(URLS_API.ACOES.DELETE_ACAO(acaoId));
@@ -474,10 +444,10 @@ const CriarAcao = () => {
           <div className="grid grid-cols-1 mt-1">
             <div className="form-content-box">
               <h2 className="text-sm md:text-xl font-medium mb-2">
-                Carregando dados da a��o...
+                Carregando dados da ação...
               </h2>
               <p className="text-xs md:text-[13px] text-slate-500">
-                Aguarde enquanto buscamos as informa����es da a��o selecionada.
+                Aguarde enquanto buscamos as informações da ação selecionada.
               </p>
             </div>
           </div>
@@ -683,7 +653,6 @@ const CriarAcao = () => {
                     </div>
                   ))}
 
-                  {/* Add row */}
                   {isCascadeFramework ? (
                     <div className="grid grid-cols-[1fr_auto] items-center gap-x-3 mt-2 pr-3">
                       <div className="relative">

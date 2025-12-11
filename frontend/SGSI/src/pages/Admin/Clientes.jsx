@@ -32,7 +32,6 @@ const Clientes = () => {
       const res = await axiosReq.post(URLS_API.COMPANIES.CREATE, {
         name: name.trim(),
       });
-      // prepend new company
       setCompanies((prev) => [res.data, ...prev]);
       setName("");
     } catch (err) {

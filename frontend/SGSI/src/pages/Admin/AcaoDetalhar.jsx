@@ -50,7 +50,6 @@ const AcaoDetalhar = () => {
     }
   };
 
-  // get Acao info by ID
   const getAcaoDetailsByID = async () => {
     try {
       const response = await axiosReq.get(URLS_API.ACOES.GET_ACAO_BY_ID(id));

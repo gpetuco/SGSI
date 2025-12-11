@@ -34,7 +34,6 @@ const StackedStatusByUser = ({
         />
         <Tooltip />
         <Legend />
-        {/* Side-by-side grouped bars for each status */}
         <Bar
           dataKey="Concluído"
           name="Concluído"
