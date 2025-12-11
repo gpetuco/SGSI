@@ -13,56 +13,6 @@ const AcaoDetalhar = () => {
   const [openPopup, setOpenPopup] = useState(true);
   const { user } = React.useContext(UserContext);
 
-  const getCorStatus = (status) => {
-    switch (status) {
-      case "Em Andamento":
-        return "text-cyan-500 bg-cyan-50 border border-cyan-500/10";
-
-      case "Concluído":
-        return "text-lime-500 bg-lime-50 border border-lime-500/20";
-
-      default:
-        return "text-violet-500 bg-violet-50 border border-violet-500/10";
-    }
-  };
-
-  const getStatusLabel = (status) => {
-    switch (status) {
-      case "Em Andamento":
-        return "Em Andamento";
-      case "Concluído":
-        return "Concluído";
-      case "Pendente":
-      default:
-        return "Pendente";
-    }
-  };
-
-  const getPrioridadeLabel = (prioridade) => {
-    switch (prioridade) {
-      case "Baixa":
-        return "Baixa";
-      case "Media":
-        return "Média";
-      case "Alta":
-      default:
-        return "Alta";
-    }
-  };
-
-  const getAcaoDetailsByID = async () => {
-    try {
-      const response = await axiosReq.get(URLS_API.ACOES.ACAO_DETALHE(id));
-
-      if (response.data) {
-        const acaoInfo = response.data;
-        setAcao(acaoInfo);
-      }
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
-  };
-
   const updateItens = async (index) => {
     if (user?.role === "member") {
       return;
@@ -88,6 +38,56 @@ const AcaoDetalhar = () => {
       } catch (error) {
         itens[index].concluido = !itens[index].concluido;
       }
+    }
+  };
+
+  const getPrioridadeLabel = (prioridade) => {
+    switch (prioridade) {
+      case "Baixa":
+        return "Baixa";
+      case "Media":
+        return "Média";
+      case "Alta":
+      default:
+        return "Alta";
+    }
+  };
+
+  const getStatusLabel = (status) => {
+    switch (status) {
+      case "Em Andamento":
+        return "Em Andamento";
+      case "Concluído":
+        return "Concluído";
+      case "Pendente":
+      default:
+        return "Pendente";
+    }
+  };
+
+  const getCorStatus = (status) => {
+    switch (status) {
+      case "Em Andamento":
+        return "bg-cyan-50 border-cyan-500/10 text-cyan-500 border";
+
+      case "Concluído":
+        return "bg-lime-50 text-lime-500 border-lime-500/20 border";
+
+      default:
+        return "bg-violet-50 border text-violet-500 border-violet-500/10";
+    }
+  };
+
+  const getAcaoDetailsByID = async () => {
+    try {
+      const response = await axiosReq.get(URLS_API.ACOES.ACAO_DETALHE(id));
+
+      if (response.data) {
+        const acaoInfo = response.data;
+        setAcao(acaoInfo);
+      }
+    } catch (error) {
+      console.error("Erro:", error);
     }
   };
 

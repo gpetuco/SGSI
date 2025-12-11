@@ -7,7 +7,9 @@ import {
 } from "react-router-dom";
 import React, { useContext } from "react";
 import AdminAcaoDetalhar from "./pages/Admin/AcaoDetalhar";
-import UserProvider, { UserContext } from "./context/sessaoUsuarioContext";
+import UsuarioPermissaoRole, {
+  UserContext,
+} from "./context/sessaoUsuarioContext";
 import Iso27001Acoes from "./pages/Admin/Iso27001Acoes";
 import Login from "./pages/Auth/Login";
 import Dashboard from "./pages/Admin/Dashboard";
@@ -23,7 +25,7 @@ import SignUp from "./pages/Auth/SignUp";
 
 const App = () => {
   return (
-    <UserProvider>
+    <UsuarioPermissaoRole>
       <div>
         <Router>
           <Routes>
@@ -73,7 +75,7 @@ const App = () => {
           },
         }}
       />
-    </UserProvider>
+    </UsuarioPermissaoRole>
   );
 };
 

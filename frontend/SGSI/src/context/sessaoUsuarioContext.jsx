@@ -5,20 +5,20 @@ import axiosReq from "../utils/axiosReq";
 // eslint-disable-next-line react-refresh/only-export-components
 export const UserContext = createContext();
 
-const UserProvider = ({ children }) => {
+const UsuarioPermissaoRole = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user) return;
 
-    const accessToken = localStorage.getItem("token");
-    if (!accessToken) {
+    const tokenUsuario = localStorage.getItem("token");
+    if (!tokenUsuario) {
       setLoading(false);
       return;
     }
 
-    const fetchUser = async () => {
+    const validarUsuarioAcesso = async () => {
       try {
         const response = await axiosReq.get(URLS_API.AUTH.DADOS_PERFIL);
         setUser(response.data);
@@ -30,7 +30,7 @@ const UserProvider = ({ children }) => {
       }
     };
 
-    fetchUser();
+    validarUsuarioAcesso();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -54,4 +54,4 @@ const UserProvider = ({ children }) => {
   );
 };
 
-export default UserProvider;
+export default UsuarioPermissaoRole;

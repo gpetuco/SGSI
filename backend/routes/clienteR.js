@@ -1,10 +1,10 @@
 const express = require("express");
-const { protect, privateEmpresaSec } = require("../guards/autenticacaoGuard");
 const { criarCliente, getClientes } = require("../controllers/cliente");
+const { protect, privateEmpresaSec } = require("../guards/autenticacaoGuard");
 
 const router = express.Router();
 
-router.get("/", protect, privateEmpresaSec, getClientes);
 router.post("/", protect, privateEmpresaSec, criarCliente);
+router.get("/", protect, privateEmpresaSec, getClientes);
 
 module.exports = router;
