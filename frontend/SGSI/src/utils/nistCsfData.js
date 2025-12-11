@@ -446,7 +446,7 @@ export const NIST_CSF_DATA = {
           name: "Incident Recovery Communication (RC.CO): Restoration activities are coordinated with internal and external parties",
           subcategories: [
             {
-              name: "RC.CO-03: Recovery activities and progress in restoring operational capabilities are communicated to designated internal and external stakeholders",
+              name: "RC.CO-03: Recovery activities and progresso in restoring operational capabilities are communicated to designated internal and external stakeholders",
             },
             {
               name: "RC.CO-04: Public updates on incident recovery are shared using approved methods and messaging",

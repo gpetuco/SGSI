@@ -33,7 +33,7 @@ const acaoSchema = new mongoose.Schema(
       default: null,
     },
     itens: [item],
-    progress: { type: Number, default: 0 },
+    progresso: { type: Number, default: 0 },
     concluidoAt: { type: Date },
   },
   { timestamps: true }
@@ -46,7 +46,7 @@ acaoSchema.pre("save", function (next) {
       const total = this.itens.length;
       const concluidos = this.itens.filter((t) => !!t.concluido).length;
       const pct = Math.round((concluidos / total) * 100);
-      this.progress = pct;
+      this.progresso = pct;
 
       if (concluidos === 0) {
         if (this.status !== "Pendente") this.status = "Pendente";
@@ -60,10 +60,10 @@ acaoSchema.pre("save", function (next) {
       }
     } else {
       if (this.isModified("status") && this.status === "Concluído") {
-        this.progress = 100;
+        this.progresso = 100;
         if (!this.concluidoAt) this.concluidoAt = new Date();
       } else {
-        this.progress = this.progress || 0;
+        this.progresso = this.progresso || 0;
       }
     }
   } catch (_) {

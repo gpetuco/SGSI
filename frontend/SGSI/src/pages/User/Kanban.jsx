@@ -29,7 +29,7 @@ const Column = ({ title, acoes, onOpen }) => {
                 prioridade={item.prioridade}
                 classification={item.classification}
                 status={item.status}
-                progress={item.progress}
+                progresso={item.progresso}
                 createdAt={item.createdAt}
                 previsao={item.previsao}
                 responsavel={item.responsavel?.map((p) => p.profileImageUrl)}

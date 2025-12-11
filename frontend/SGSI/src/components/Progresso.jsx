@@ -1,6 +1,6 @@
 import React from "react";
 
-const Progress = ({ progress, status }) => {
+const Progresso = ({ progresso, status }) => {
   const getProgressoCor = () => {
     switch (status) {
       case "Em Andamento":
@@ -18,10 +18,10 @@ const Progress = ({ progress, status }) => {
     <div className="rounded-full dark:bg-gray-700 w-full h-1.5 bg-gray-200">
       <div
         className={`${getProgressoCor()} rounded-full text-center font-medium h-1.5 text-xs`}
-        style={{ width: `${progress}%` }}
+        style={{ width: `${progresso}%` }}
       ></div>
     </div>
   );
 };
 
-export default Progress;
+export default Progresso;

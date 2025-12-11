@@ -167,14 +167,14 @@ const getAcoes = async (req, res) => {
         const concluidoCount = Array.isArray(acao.itens)
           ? acao.itens.filter((item) => item.concluido).length
           : 0;
-        const progressPct =
+        const progressoPct =
           total > 0
             ? Math.round((concluidoCount / total) * 100)
-            : acao.progress || 0;
+            : acao.progresso || 0;
         return {
           ...acao._doc,
           concluidoTodoCount: concluidoCount,
-          progress: progressPct,
+          progresso: progressoPct,
         };
       })
     );
@@ -245,7 +245,7 @@ const updateAcaoStatus = async (req, res) => {
 
     if (acao.status === "Concluído") {
       acao.itens.forEach((item) => (item.concluido = true));
-      acao.progress = 100;
+      acao.progresso = 100;
       if (!acao.concluidoAt) acao.concluidoAt = new Date();
     } else {
       if (prevStatus === "Concluído") acao.concluidoAt = undefined;
@@ -284,7 +284,7 @@ const updateAcaoChecklist = async (req, res) => {
 
     const concluidoCount = acao.itens.filter((item) => item.concluido).length;
     const totalItems = acao.itens.length;
-    acao.progress =
+    acao.progresso =
       totalItems > 0 ? Math.round((concluidoCount / totalItems) * 100) : 0;
 
     if (totalItems === 0) {
@@ -471,7 +471,7 @@ const getDashboardData = async (req, res) => {
       {
         $project: {
           classification: 1,
-          progress: {
+          progresso: {
             $cond: [
               { $gt: ["$totalTodos", 0] },
               { $multiply: [{ $divide: ["$doneTodos", "$totalTodos"] }, 100] },
@@ -479,7 +479,7 @@ const getDashboardData = async (req, res) => {
                 $cond: [
                   { $eq: ["$status", "Concluído"] },
                   100,
-                  { $ifNull: ["$progress", 0] },
+                  { $ifNull: ["$progresso", 0] },
                 ],
               },
             ],
@@ -489,7 +489,7 @@ const getDashboardData = async (req, res) => {
       {
         $group: {
           _id: "$classification",
-          avgProgress: { $avg: "$progress" },
+          avgProgresso: { $avg: "$progresso" },
           total: { $sum: 1 },
         },
       },
@@ -497,7 +497,7 @@ const getDashboardData = async (req, res) => {
         $project: {
           _id: 0,
           framework: "$_id",
-          percent: { $round: ["$avgProgress", 0] },
+          percent: { $round: ["$avgProgresso", 0] },
           total: 1,
         },
       },
@@ -588,7 +588,7 @@ const getDashboardData = async (req, res) => {
       {
         $project: {
           nistFunction: 1,
-          progress: {
+          progresso: {
             $cond: [
               { $gt: ["$totalTodos", 0] },
               { $multiply: [{ $divide: ["$doneTodos", "$totalTodos"] }, 100] },
@@ -596,7 +596,7 @@ const getDashboardData = async (req, res) => {
                 $cond: [
                   { $eq: ["$status", "Concluído"] },
                   100,
-                  { $ifNull: ["$progress", 0] },
+                  { $ifNull: ["$progresso", 0] },
                 ],
               },
             ],
@@ -606,7 +606,7 @@ const getDashboardData = async (req, res) => {
       {
         $group: {
           _id: "$nistFunction",
-          avgProgress: { $avg: "$progress" },
+          avgProgresso: { $avg: "$progresso" },
           total: { $sum: 1 },
         },
       },
@@ -614,7 +614,7 @@ const getDashboardData = async (req, res) => {
         $project: {
           _id: 0,
           func: "$_id",
-          percent: { $round: ["$avgProgress", 0] },
+          percent: { $round: ["$avgProgresso", 0] },
           total: 1,
         },
       },
@@ -701,7 +701,7 @@ const getDashboardData = async (req, res) => {
       {
         $project: {
           isoType: 1,
-          progress: {
+          progresso: {
             $cond: [
               { $gt: ["$totalTodos", 0] },
               { $multiply: [{ $divide: ["$doneTodos", "$totalTodos"] }, 100] },
@@ -709,7 +709,7 @@ const getDashboardData = async (req, res) => {
                 $cond: [
                   { $eq: ["$status", "Concluído"] },
                   100,
-                  { $ifNull: ["$progress", 0] },
+                  { $ifNull: ["$progresso", 0] },
                 ],
               },
             ],
@@ -719,7 +719,7 @@ const getDashboardData = async (req, res) => {
       {
         $group: {
           _id: "$isoType",
-          avgProgress: { $avg: "$progress" },
+          avgProgresso: { $avg: "$progresso" },
           total: { $sum: 1 },
         },
       },
@@ -727,7 +727,7 @@ const getDashboardData = async (req, res) => {
         $project: {
           _id: 0,
           type: "$_id",
-          percent: { $round: ["$avgProgress", 0] },
+          percent: { $round: ["$avgProgresso", 0] },
           total: 1,
         },
       },

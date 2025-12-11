@@ -1,5 +1,5 @@
 import React from "react";
-import Progress from "../Progress";
+import Progresso from "../Progresso";
 import FotosUsuarios from "../FotosUsuarios";
 import moment from "moment";
 import { UserContext } from "../../context/userContext";
@@ -10,7 +10,7 @@ const Acao = ({
   prioridade,
   classification,
   status,
-  progress,
+  progresso,
   createdAt,
   previsao,
   responsavel,
@@ -130,13 +130,13 @@ const Acao = ({
         <p className="font-medium mt-3 mb-2 leading-[18px] text-[13px] md:text-[14px]">
           <span className="text-white">Progresso:</span>{" "}
           <span className="dark:text-white font-semibold text-gray-700">
-            {`${progress}% (`}
+            {`${progresso}% (`}
             {concluidoTodoCount} / {itens.length || 0}
             {")"}
           </span>
         </p>
 
-        <Progress progress={progress} status={status} />
+        <Progresso progresso={progresso} status={status} />
       </div>
 
       <div className="px-4">
