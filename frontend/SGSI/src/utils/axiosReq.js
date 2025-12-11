@@ -1,8 +1,8 @@
 import axios from "axios";
-import { BASE_URL } from "./apiUrl";
+import { URL_SGSI } from "./apiUrl";
 
 const axiosReq = axios.create({
-  baseURL: BASE_URL,
+  baseURL: URL_SGSI,
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",

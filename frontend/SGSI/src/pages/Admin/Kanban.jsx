@@ -71,7 +71,7 @@ const Kanban = () => {
       if (selectedUser !== "All") params.responsavel = selectedUser;
       if (selectedCompany !== "All") params.cliente = selectedCompany;
 
-      const response = await axiosReq.get(URLS_API.ACOES.GET_ALL_ACOES, {
+      const response = await axiosReq.get(URLS_API.ACOES.DADOS_ACOES, {
         params,
       });
       setAcoes(response.data?.acoes || []);
@@ -82,7 +82,7 @@ const Kanban = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axiosReq.get(URLS_API.USERS.GET_ALL_USERS);
+      const res = await axiosReq.get(URLS_API.USUARIOS.GET_ALL_USUARIOS);
       const opts = [{ label: "Todos", value: "All" }].concat(
         (res.data || []).map((u) => ({
           label: u.name,
@@ -98,7 +98,7 @@ const Kanban = () => {
 
   const fetchCompanies = async () => {
     try {
-      const res = await axiosReq.get(URLS_API.COMPANIES.LIST);
+      const res = await axiosReq.get(URLS_API.CLIENTES.DADOS_CLIENTES);
       const opts = [{ label: "Todos", value: "All" }].concat(
         (res.data || []).map((c) => ({
           label: c.name,

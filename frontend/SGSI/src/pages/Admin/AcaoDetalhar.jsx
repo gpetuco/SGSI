@@ -52,7 +52,7 @@ const AcaoDetalhar = () => {
 
   const getAcaoDetailsByID = async () => {
     try {
-      const response = await axiosReq.get(URLS_API.ACOES.GET_ACAO_BY_ID(id));
+      const response = await axiosReq.get(URLS_API.ACOES.ACAO_DETALHE(id));
 
       if (response.data) {
         const acaoInfo = response.data;
@@ -77,7 +77,7 @@ const AcaoDetalhar = () => {
 
       try {
         const response = await axiosReq.put(
-          URLS_API.ACOES.UPDATE_TODO_CHECKLIST(acaoId),
+          URLS_API.ACOES.ATUALIZAR_ITENS_FEITOS(acaoId),
           { itens }
         );
         if (response.status === 200) {

@@ -14,7 +14,7 @@ const ListaClientes = ({
 
   const fetchCompanies = async () => {
     try {
-      const res = await axiosReq.get(URLS_API.COMPANIES.LIST);
+      const res = await axiosReq.get(URLS_API.CLIENTES.DADOS_CLIENTES);
       setCompanies(Array.isArray(res.data) ? res.data : []);
     } catch (e) {
       console.error("Falha ao carregar clientes", e);

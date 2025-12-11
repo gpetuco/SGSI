@@ -13,7 +13,7 @@ const Clientes = () => {
 
   const fetchCompanies = async () => {
     try {
-      const res = await axiosReq.get(URLS_API.COMPANIES.LIST);
+      const res = await axiosReq.get(URLS_API.CLIENTES.DADOS_CLIENTES);
       setCompanies(res.data || []);
     } catch (err) {
       console.error("Falha ao buscar empresas", err);
@@ -29,7 +29,7 @@ const Clientes = () => {
     }
     setLoading(true);
     try {
-      const res = await axiosReq.post(URLS_API.COMPANIES.CREATE, {
+      const res = await axiosReq.post(URLS_API.CLIENTES.CREATE, {
         name: name.trim(),
       });
       setCompanies((prev) => [res.data, ...prev]);

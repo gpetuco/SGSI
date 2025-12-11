@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
 import { URLS_API } from "../../utils/apiUrl";
 import { UserContext } from "../../context/userContext";
-import uploadImage from "../../utils/uploadImage";
+import abrirArquivo from "../../utils/abrirArquivo";
 
 const SignUp = () => {
   const [profilePic, setProfilePic] = useState(null);
@@ -47,7 +47,7 @@ const SignUp = () => {
 
     try {
       if (profilePic) {
-        const imgUploadRes = await uploadImage(profilePic);
+        const imgUploadRes = await abrirArquivo(profilePic);
         profileImageUrl = imgUploadRes.imageUrl || "";
       }
 
@@ -66,7 +66,7 @@ const SignUp = () => {
         }
         payload.empresaId = empresaId;
       }
-      const response = await axiosReq.post(URLS_API.AUTH.REGISTER, payload);
+      const response = await axiosReq.post(URLS_API.AUTH.CADASTRO, payload);
 
       const { token, role } = response.data;
 

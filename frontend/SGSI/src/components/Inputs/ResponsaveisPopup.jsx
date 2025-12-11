@@ -20,7 +20,7 @@ const ResponsaveisPopup = ({ selectedUsers, setSelectedUsers }) => {
 
   const getUsuarios = async () => {
     try {
-      const response = await axiosReq.get(URLS_API.USERS.GET_ALL_USERS);
+      const response = await axiosReq.get(URLS_API.USUARIOS.GET_ALL_USUARIOS);
       if (response.data?.length > 0) {
         setAllUsers(response.data);
       }

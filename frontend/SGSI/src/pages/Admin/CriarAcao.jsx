@@ -163,7 +163,7 @@ const CriarAcao = () => {
         concluido: false,
       }));
 
-      const response = await axiosReq.post(URLS_API.ACOES.CREATE_ACAO, {
+      const response = await axiosReq.post(URLS_API.ACOES.CRIAR_ACAO, {
         ...acaoData,
         previsao: new Date(acaoData.previsao).toISOString(),
         itens: todolist,
@@ -194,7 +194,7 @@ const CriarAcao = () => {
         };
       });
 
-      const response = await axiosReq.put(URLS_API.ACOES.UPDATE_ACAO(acaoId), {
+      const response = await axiosReq.put(URLS_API.ACOES.EDITAR_ACAO(acaoId), {
         ...acaoData,
         previsao: new Date(acaoData.previsao).toISOString(),
         itens: todolist,
@@ -219,7 +219,7 @@ const CriarAcao = () => {
       next[index] = { ...next[index], concluido: !next[index].concluido };
 
       const response = await axiosReq.put(
-        URLS_API.ACOES.UPDATE_TODO_CHECKLIST(acaoId),
+        URLS_API.ACOES.ATUALIZAR_ITENS_FEITOS(acaoId),
         { itens: next }
       );
       if (response.status === 200) {
@@ -278,9 +278,7 @@ const CriarAcao = () => {
   const getAcaoDetailsByID = async () => {
     try {
       setLoadingAcao(true);
-      const response = await axiosReq.get(
-        URLS_API.ACOES.GET_ACAO_BY_ID(acaoId)
-      );
+      const response = await axiosReq.get(URLS_API.ACOES.ACAO_DETALHE(acaoId));
 
       if (response.data) {
         const acaoInfo = response.data;
@@ -358,7 +356,7 @@ const CriarAcao = () => {
         concluido: byText.has(txt) ? byText.get(txt) : !!old[idx]?.concluido,
       }));
       const res = await axiosReq.put(
-        URLS_API.ACOES.UPDATE_TODO_CHECKLIST(acaoId),
+        URLS_API.ACOES.ATUALIZAR_ITENS_FEITOS(acaoId),
         { itens: updated }
       );
       if (res.status === 200) {
@@ -403,7 +401,7 @@ const CriarAcao = () => {
 
   const deleteAcao = async () => {
     try {
-      await axiosReq.delete(URLS_API.ACOES.DELETE_ACAO(acaoId));
+      await axiosReq.delete(URLS_API.ACOES.APAGAR_ACAO(acaoId));
 
       setOpenExcluir(false);
       toast.success("Ação excluída com sucesso!");

@@ -1,13 +1,13 @@
 import { URLS_API } from "./apiUrl";
 import axiosReq from "./axiosReq";
 
-const uploadImage = async (imageFile) => {
+const abrirArquivo = async (imageFile) => {
   const dadosForm = new FormData();
   dadosForm.append("image", imageFile);
 
   try {
     const response = await axiosReq.post(
-      URLS_API.IMAGE.UPLOAD_IMAGE,
+      URLS_API.FOTO_PERFIL.ABRIR_ARQUIVO,
       dadosForm,
       {
         headers: {
@@ -22,4 +22,4 @@ const uploadImage = async (imageFile) => {
   }
 };
 
-export default uploadImage;
+export default abrirArquivo;

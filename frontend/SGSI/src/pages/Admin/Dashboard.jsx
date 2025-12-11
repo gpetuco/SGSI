@@ -150,7 +150,7 @@ const Dashboard = () => {
       if (classificationFilter !== "All")
         params.classification = classificationFilter;
 
-      const response = await axiosReq.get(URLS_API.ACOES.GET_DASHBOARD_DATA, {
+      const response = await axiosReq.get(URLS_API.ACOES.DADOS_DASHBOARD, {
         params,
       });
       if (response.data) {

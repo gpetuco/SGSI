@@ -54,7 +54,7 @@ const Kanban = () => {
 
   const getMyAcoes = async () => {
     try {
-      const response = await axiosReq.get(URLS_API.ACOES.GET_ALL_ACOES);
+      const response = await axiosReq.get(URLS_API.ACOES.DADOS_ACOES);
       setAcoes(response.data?.acoes || []);
     } catch (error) {
       console.error("Error fetching acoes:", error);

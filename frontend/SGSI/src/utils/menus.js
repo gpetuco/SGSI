@@ -9,7 +9,7 @@ import {
   LuBuilding2,
 } from "react-icons/lu";
 
-export const SIDE_MENU_DATA = [
+export const MENU_ADMIN = [
   {
     id: "01",
     label: "Dashboard",
@@ -60,7 +60,7 @@ export const SIDE_MENU_DATA = [
   },
 ];
 
-export const SIDE_MENU_USER_DATA = [
+export const MENU_CLIENTE = [
   {
     id: "01",
     label: "Dashboard",

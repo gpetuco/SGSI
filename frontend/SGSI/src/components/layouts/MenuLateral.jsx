@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
 import ImagemUsuario from "../ImagemUsuario";
 import { UserContext } from "../../context/userContext";
-import { SIDE_MENU_DATA, SIDE_MENU_USER_DATA } from "../../utils/menus";
+import { MENU_ADMIN, MENU_CLIENTE } from "../../utils/menus";
 
 const MenuLateral = ({ activeMenu }) => {
   const { user, clearUser } = useContext(UserContext);
@@ -27,9 +27,7 @@ const MenuLateral = ({ activeMenu }) => {
 
   useEffect(() => {
     if (user) {
-      setMenuLateralData(
-        user?.role === "admin" ? SIDE_MENU_DATA : SIDE_MENU_USER_DATA
-      );
+      setMenuLateralData(user?.role === "admin" ? MENU_ADMIN : MENU_CLIENTE);
     }
     return () => {};
   }, [user]);
@@ -53,10 +51,6 @@ const MenuLateral = ({ activeMenu }) => {
         <h5 className="text-gray-950 dark:text-white font-medium leading-6 mt-3">
           {user?.name || ""}
         </h5>
-
-        <p className="text-[12px] text-gray-500 dark:text-slate-300">
-          {user?.email || ""}
-        </p>
       </div>
 
       {menuLateralData.map((item, index) => (

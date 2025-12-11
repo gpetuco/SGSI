@@ -48,7 +48,7 @@ const DashboardCliente = () => {
   const getDashboardData = async () => {
     try {
       const response = await axiosReq.get(
-        URLS_API.ACOES.GET_USER_DASHBOARD_DATA
+        URLS_API.ACOES.DADOS_DASHBOARD_CLIENTE
       );
       if (response.data) {
         setDashboardData(response.data);
