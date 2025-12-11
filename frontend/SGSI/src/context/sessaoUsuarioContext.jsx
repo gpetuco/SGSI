@@ -24,7 +24,7 @@ const UsuarioPermissaoRole = ({ children }) => {
         setUser(response.data);
       } catch (error) {
         console.error("Sem permissao", error);
-        limpar();
+        clearUser();
       } finally {
         setLoading(false);
       }
@@ -34,12 +34,12 @@ const UsuarioPermissaoRole = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const limpar = () => {
+  const clearUser = () => {
     setUser(null);
     localStorage.removeItem("token");
   };
 
-  const editarSessaoUsuario = (userData) => {
+  const updateUser = (userData) => {
     setUser(userData);
     localStorage.setItem("token", userData.token);
     setLoading(false);
@@ -47,7 +47,7 @@ const UsuarioPermissaoRole = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ user, loading, editarSessaoUsuario, limpar }}
+      value={{ user, loading, updateUser, clearUser }}
     >
       {children}
     </UserContext.Provider>

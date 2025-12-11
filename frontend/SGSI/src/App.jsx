@@ -82,15 +82,15 @@ const App = () => {
 export default App;
 
 const Root = () => {
-  const { usuario, loading } = useContext(UserContext);
+  const { user, loading } = useContext(UserContext);
 
   if (loading) return <Outlet />;
 
-  if (!usuario) {
+  if (!user) {
     return <Navigate to="/login" />;
   }
 
-  return usuario.role === "admin" ? (
+  return user.role === "admin" ? (
     <Navigate to="/admin/dashboard" />
   ) : (
     <Navigate to="/user/dashboard" />
