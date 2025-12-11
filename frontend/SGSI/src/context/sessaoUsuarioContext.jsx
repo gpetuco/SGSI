@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
-import axiosReq from "../utils/axiosReq";
 import { URLS_API } from "../utils/apiUrl";
+import axiosReq from "../utils/axiosReq";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const UserContext = createContext();
@@ -23,8 +23,8 @@ const UserProvider = ({ children }) => {
         const response = await axiosReq.get(URLS_API.AUTH.DADOS_PERFIL);
         setUser(response.data);
       } catch (error) {
-        console.error("User not authenticated", error);
-        clearUser();
+        console.error("Sem permissao", error);
+        limpar();
       } finally {
         setLoading(false);
       }
@@ -34,19 +34,21 @@ const UserProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const updateUser = (userData) => {
+  const limpar = () => {
+    setUser(null);
+    localStorage.removeItem("token");
+  };
+
+  const editarSessaoUsuario = (userData) => {
     setUser(userData);
     localStorage.setItem("token", userData.token);
     setLoading(false);
   };
 
-  const clearUser = () => {
-    setUser(null);
-    localStorage.removeItem("token");
-  };
-
   return (
-    <UserContext.Provider value={{ user, loading, updateUser, clearUser }}>
+    <UserContext.Provider
+      value={{ user, loading, editarSessaoUsuario, limpar }}
+    >
       {children}
     </UserContext.Provider>
   );

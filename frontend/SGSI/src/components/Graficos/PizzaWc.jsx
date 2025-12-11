@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import { LuZoomIn } from "react-icons/lu";
+import Popup from "../Popup";
+import TooltipWc from "./TooltipWc";
+import RotuloWc from "./RotuloWc";
 import {
   PieChart,
   Pie,
@@ -7,10 +10,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import TooltipWc from "./TooltipWc";
-import RotuloWc from "./RotuloWc";
-import { LuZoomIn } from "react-icons/lu";
-import Popup from "../Popup";
+import React, { useState } from "react";
 
 const PizzaWc = ({ data, colors, title = "Chart" }) => {
   const [open, setOpen] = useState(false);

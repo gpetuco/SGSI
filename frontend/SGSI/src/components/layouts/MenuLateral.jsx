@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
 import ImagemUsuario from "../ImagemUsuario";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/sessaoUsuarioContext";
 import { MENU_ADMIN, MENU_CLIENTE } from "../../utils/menus";
 
 const MenuLateral = ({ activeMenu }) => {

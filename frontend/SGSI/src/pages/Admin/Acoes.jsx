@@ -7,7 +7,7 @@ import Acao from "../../components/Panels/Acao";
 import Lista from "../../components/Inputs/Lista";
 import ListaSearch from "../../components/Inputs/ListaSearch";
 import { CLASSIFICATION_DATA, PRIORIDADE_DATA } from "../../utils/menus";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/sessaoUsuarioContext";
 
 const Acoes = () => {
   const [allAcoes, setAllAcoes] = useState([]);

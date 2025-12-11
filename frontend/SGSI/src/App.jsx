@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import React, { useContext } from "react";
 import AdminAcaoDetalhar from "./pages/Admin/AcaoDetalhar";
-import UserProvider, { UserContext } from "./context/userContext";
+import UserProvider, { UserContext } from "./context/sessaoUsuarioContext";
 import Iso27001Acoes from "./pages/Admin/Iso27001Acoes";
 import Login from "./pages/Auth/Login";
 import Dashboard from "./pages/Admin/Dashboard";

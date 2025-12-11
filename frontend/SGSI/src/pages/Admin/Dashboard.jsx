@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from "react";
 import { hookUsuarioPermission } from "../../hooks/hookUsuarioPermission";
 import { useContext } from "react";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/sessaoUsuarioContext";
 import Home from "../../components/layouts/Home";
 import { useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";

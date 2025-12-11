@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Lista from "../../components/Inputs/Lista";
 import ListaSearch from "../../components/Inputs/ListaSearch";
 import { PRIORIDADE_DATA } from "../../utils/menus";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/sessaoUsuarioContext";
 
 const Column = ({ title, acoes, onOpen }) => {
   return (

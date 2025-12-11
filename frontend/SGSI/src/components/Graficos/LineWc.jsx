@@ -15,8 +15,8 @@ import Popup from "../Popup";
 const DefaultTooltip = ({ active, payload, label }) => {
   if (!active || !payload || payload.length === 0) return null;
   return (
-    <div className="bg-white dark:bg-slate-700 shadow-md rounded-lg p-2 border border-gray-300 dark:border-slate-500">
-      <p className="text-xs font-semibold text-gray-700 dark:text-white mb-1">
+    <div className="rounded-lg border-gray-300 dark:border-slate-500 bg-white shadow-md p-2 border dark:bg-slate-700">
+      <p className="text-xs mb-1 dark:text-white font-semibold text-gray-700">
         {label}
       </p>
       {payload.map((p, idx) => (

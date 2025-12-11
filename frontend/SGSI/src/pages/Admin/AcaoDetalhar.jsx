@@ -5,7 +5,7 @@ import { URLS_API } from "../../utils/apiUrl";
 import Home from "../../components/layouts/Home";
 import Popup from "../../components/Popup";
 import moment from "moment";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/sessaoUsuarioContext";
 
 const AcaoDetalhar = () => {
   const { id } = useParams();

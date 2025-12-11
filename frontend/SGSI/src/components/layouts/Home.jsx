@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/sessaoUsuarioContext";
 import MenuLateral from "./MenuLateral";
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 

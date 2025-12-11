@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../context/userContext";
+import { UserContext } from "../context/sessaoUsuarioContext";
 
 export const hookUsuarioPermission = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks

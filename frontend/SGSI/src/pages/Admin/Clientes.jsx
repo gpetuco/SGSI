@@ -20,7 +20,7 @@ const Clientes = () => {
     }
   };
 
-  const handleCreate = async (e) => {
+  const criar = async (e) => {
     e.preventDefault();
     setError("");
     if (!name.trim()) {
@@ -43,7 +43,7 @@ const Clientes = () => {
     }
   };
 
-  const handleInvite = async (companyId) => {
+  const convite = async (companyId) => {
     try {
       if (navigator?.clipboard?.writeText) {
         await navigator.clipboard.writeText(companyId);
@@ -71,7 +71,7 @@ const Clientes = () => {
         <h2 className="text-xl md:text-xl font-medium">Clientes</h2>
 
         <form
-          onSubmit={handleCreate}
+          onSubmit={criar}
           className="mt-5 grid grid-cols-1 md:grid-cols-10 gap-3 items-end"
         >
           <div className="md:col-span-8 flex flex-col">
@@ -99,9 +99,9 @@ const Clientes = () => {
         {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
 
         <div className="mt-8">
-          <div className="overflow-x-auto border border-gray-200/50 rounded-md">
-            <table className="min-w-full text-left text-sm">
-              <thead className="bg-slate-800 text-white">
+          <div className="rounded-md overflow-x-auto border-gray-200/50 border">
+            <table className="text-sm min-w-full text-left">
+              <thead className="text-white bg-slate-800">
                 <tr>
                   <th className="px-4 py-2">Nome</th>
                   <th className="px-4 py-2">Data de vínculo</th>
@@ -121,7 +121,7 @@ const Clientes = () => {
                       <div class="flex justify-end items-center">
                         <button
                           type="button"
-                          onClick={() => handleInvite(c._id)}
+                          onClick={() => convite(c._id)}
                           className="content-box-btn inline-flex items-center gap-2"
                           title="Copiar ID da empresa para convite"
                         >

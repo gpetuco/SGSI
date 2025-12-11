@@ -6,7 +6,7 @@ import Input from "../../components/Inputs/Input";
 import { Link, useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
 import { URLS_API } from "../../utils/apiUrl";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/sessaoUsuarioContext";
 import abrirArquivo from "../../utils/abrirArquivo";
 
 const SignUp = () => {

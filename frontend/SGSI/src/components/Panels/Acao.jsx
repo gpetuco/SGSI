@@ -2,7 +2,7 @@ import React from "react";
 import Progresso from "../Progresso";
 import FotosUsuarios from "../FotosUsuarios";
 import moment from "moment";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/sessaoUsuarioContext";
 
 const Acao = ({
   title,

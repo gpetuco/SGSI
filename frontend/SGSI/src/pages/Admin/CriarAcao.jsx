@@ -110,7 +110,7 @@ const CriarAcao = () => {
       }))
     : [];
 
-  const handleValueChange = (key, value) => {
+  const alterarVal = (key, value) => {
     setAcaoData((prevData) => ({ ...prevData, [key]: value }));
   };
 
@@ -517,7 +517,7 @@ const CriarAcao = () => {
                 <Lista
                   options={PRIORIDADE_DATA}
                   value={acaoData.prioridade}
-                  onChange={(value) => handleValueChange("prioridade", value)}
+                  onChange={(value) => alterarVal("prioridade", value)}
                   placeholder="Selecione a prioridade"
                 />
               </div>
@@ -532,7 +532,7 @@ const CriarAcao = () => {
                   className="form-input"
                   value={acaoData.previsao}
                   onChange={({ target }) =>
-                    handleValueChange("previsao", target.value)
+                    alterarVal("previsao", target.value)
                   }
                   type="date"
                 />
@@ -558,9 +558,7 @@ const CriarAcao = () => {
                   placeholder="Create App UI"
                   className="form-input"
                   value={acaoData.title}
-                  onChange={({ target }) =>
-                    handleValueChange("title", target.value)
-                  }
+                  onChange={({ target }) => alterarVal("title", target.value)}
                 />
               )}
             </div>
@@ -594,7 +592,7 @@ const CriarAcao = () => {
                   rows={4}
                   value={acaoData.descricao}
                   onChange={({ target }) =>
-                    handleValueChange("descricao", target.value)
+                    alterarVal("descricao", target.value)
                   }
                 />
               )}
@@ -764,7 +762,7 @@ const CriarAcao = () => {
                   ) : (
                     <ItensInput
                       todoList={acaoData?.itens}
-                      setTodoList={(value) => handleValueChange("itens", value)}
+                      setTodoList={(value) => alterarVal("itens", value)}
                     />
                   )}
                 </div>
@@ -776,7 +774,7 @@ const CriarAcao = () => {
               </label>
               <ListaClientes
                 value={acaoData.cliente}
-                onChange={(value) => handleValueChange("cliente", value)}
+                onChange={(value) => alterarVal("cliente", value)}
               />
             </div>
 
@@ -788,7 +786,7 @@ const CriarAcao = () => {
               <ResponsaveisPopup
                 selectedUsers={acaoData.responsavel}
                 setSelectedUsers={(value) => {
-                  handleValueChange("responsavel", value);
+                  alterarVal("responsavel", value);
                 }}
               />
             </div>
