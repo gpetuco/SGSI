@@ -206,10 +206,10 @@ const NistCsfAcoes = () => {
                 classification={item.classification}
                 status={item.status}
                 progresso={item.progresso}
-                createdAt={item.createdAt}
+                dataCriacao={item.dataCriacao}
                 previsao={item.previsao}
                 responsavel={item.responsavel?.map((a) => a.profileImageUrl)}
-                concluidoTodoCount={item.concluidoTodoCount || 0}
+                itensConcluidos={item.itensConcluidos || 0}
                 itens={item.itens || []}
                 clienteName={item.cliente?.name}
                 onClick={() => handleClick(item)}

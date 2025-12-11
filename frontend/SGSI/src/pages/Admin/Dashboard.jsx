@@ -496,25 +496,28 @@ const Dashboard = () => {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap items-center justify-center gap-8 pb-2">
-                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white-important">
-                    <span className="inline-block w-2.5 h-2.5 rounded-full bg-primary"></span>
+                <div className="gap-8 pb-2 flex flex-wrap items-center justify-center">
+                  <div className="flex text-sm gap-2 items-center text-gray-600 dark:text-white-important">
+                    <span className="rounded-full inline-block w-2.5 h-2.5 bg-primary"></span>
                     <span className="font-medium">{total} Total</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white-important">
-                    <span className="inline-block w-2.5 h-2.5 rounded-full bg-violet-500"></span>
+
+                  <div className="flex text-sm gap-2 items-center text-gray-600 dark:text-white-important">
+                    <span className="rounded-full inline-block w-2.5 h-2.5 bg-violet-500"></span>
                     <span className="font-medium">
                       {pendente} Ações Pendentes
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white-important">
-                    <span className="inline-block w-2.5 h-2.5 rounded-full bg-cyan-500"></span>
+
+                  <div className="flex text-sm gap-2 items-center text-gray-600 dark:text-white-important">
+                    <span className="rounded-full inline-block w-2.5 h-2.5 bg-cyan-500"></span>
                     <span className="font-medium">
                       {emAndamento} Ações Em Andamento
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white-important">
-                    <span className="inline-block w-2.5 h-2.5 rounded-full bg-lime-500"></span>
+
+                  <div className="flex text-sm gap-2 items-center text-gray-600 dark:text-white-important">
+                    <span className="rounded-full inline-block w-2.5 h-2.5 bg-lime-500"></span>
                     <span className="font-medium">
                       {concluido} Ações Concluídas
                     </span>

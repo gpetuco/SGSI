@@ -32,8 +32,8 @@ const MenuLateral = ({ activeMenu }) => {
     return () => {};
   }, [user]);
   return (
-    <div className="w-64 h-screen overflow-y-auto bg-white border-r border-gray-200/50 sticky top-0 z-20">
-      <div className="flex flex-col items-center justify-center mb-7 pt-5">
+    <div className="sticky w-64 top-0 h-screen border-gray-200/50 overflow-y-auto bg-white border-r z-20">
+      <div className="justify-center flex-col pt-5 items-center mb-7 flex">
         <div className="relative">
           <ImagemUsuario
             src={user?.profileImageUrl}
@@ -55,13 +55,13 @@ const MenuLateral = ({ activeMenu }) => {
 
       {menuLateralData.map((item, index) => (
         <button
-          key={`menu_${index}`}
-          className={`w-full flex items-center gap-4 text-[15px] border-l-4 ${
-            activeMenu == item.label
-              ? "border-primary text-primary dark:text-white bg-transparent"
-              : "border-transparent text-gray-700 dark:text-white/80 hover:text-primary"
-          } py-3 px-6 mb-1 cursor-pointer transition-colors`}
           onClick={() => detectar(item.path)}
+          key={`menu_${index}`}
+          className={`gap-4 px-6 w-full py-3 flex items-center text-[15px] border-l-4 ${
+            activeMenu == item.label
+              ? "bg-transparent text-primary dark:text-white border-primary"
+              : "hover:text-primary text-gray-700 dark:text-white/80 border-transparent"
+          } mb-1 cursor-pointer transition-colors`}
         >
           <item.icon className="text-xl" />
           {item.label}

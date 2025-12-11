@@ -4,7 +4,7 @@ import { LuChevronDown } from "react-icons/lu";
 const Lista = ({ options, value, onChange, placeholder }) => {
   const [aberto, setAberto] = useState(false);
 
-  const handleSelect = (option) => {
+  const selecionarOpcao = (option) => {
     onChange(option);
     setAberto(false);
   };
@@ -12,8 +12,8 @@ const Lista = ({ options, value, onChange, placeholder }) => {
   return (
     <div className="relative w-full">
       <button
+        className="border-slate-100 dark:border-slate-500 outline-none rounded-md w-full bg-white dark:bg-slate-700 flex justify-between items-center mt-2 px-2.5 py-3 text-black dark:text-slate-100 text-sm border"
         onClick={() => setAberto(!aberto)}
-        className="w-full text-sm text-black dark:text-slate-100 outline-none bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-500 px-2.5 py-3 rounded-md mt-2 flex justify-between items-center"
       >
         {value
           ? options.find((opt) => opt.value === value)?.label
@@ -32,8 +32,8 @@ const Lista = ({ options, value, onChange, placeholder }) => {
           {options.map((option) => (
             <div
               key={option.value}
-              onClick={() => handleSelect(option.value)}
-              className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600 text-black dark:text-slate-100"
+              onClick={() => selecionarOpcao(option.value)}
+              className="text-black dark:text-slate-100 px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600"
             >
               {option.label}
             </div>

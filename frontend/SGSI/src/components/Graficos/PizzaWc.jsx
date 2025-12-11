@@ -20,13 +20,13 @@ const PizzaWc = ({ data, colors, title = "Chart" }) => {
       <PieChart>
         <Pie
           data={data}
-          dataKey="count"
-          nameKey="status"
           cx="50%"
           cy="50%"
           outerRadius={130}
           innerRadius={100}
           labelLine={false}
+          dataKey="count"
+          nameKey="status"
         >
           {data.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
@@ -49,8 +49,8 @@ const PizzaWc = ({ data, colors, title = "Chart" }) => {
       </button>
       <ChartBody />
       <Popup
-        aberto={open}
         onClose={() => setOpen(false)}
+        aberto={open}
         title={title}
         variant="wide"
       >

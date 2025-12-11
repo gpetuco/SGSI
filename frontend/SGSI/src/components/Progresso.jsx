@@ -3,12 +3,10 @@ import React from "react";
 const Progresso = ({ progresso, status }) => {
   const getProgressoCor = () => {
     switch (status) {
-      case "Em Andamento":
-        return "border-yellow-500/10 text-yellow-500 bg-yellow-500 border";
-
       case "Concluído":
         return "border border-lime-500/10 bg-lime-500 text-lime-500";
-
+      case "Em Andamento":
+        return "border-yellow-500/10 text-yellow-500 bg-yellow-500 border";
       default:
         return "border-violet-500/10 bg-violet-500 border text-violet-500";
     }

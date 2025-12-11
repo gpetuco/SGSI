@@ -88,7 +88,7 @@ const BarWc = ({ data }) => {
     <div className="relative bg-white mt-6 group">
       <button
         aria-label="Zoom"
-        className="chart-zoom-btn opacity-0 group-hover:opacity-100"
+        className="opacity-0 group-hover:opacity-100 chart-zoom-btn"
         onClick={() => setOpen(true)}
       >
         <LuZoomIn className="text-lg" />

@@ -2,45 +2,45 @@ import React, { useRef, useState } from "react";
 import { LuUser, LuUpload, LuTrash } from "react-icons/lu";
 
 const ImagemInput = ({ image, setImage }) => {
-  const inputRef = useRef(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
+  const assoc = useRef(null);
+  const [preVisualizacao, setPreVisualizacao] = useState(null);
 
-  const handleImageChange = (event) => {
+  const escolherArquivo = () => {
+    assoc.current.click();
+  };
+
+  const apagarImagem = () => {
+    setImage(null);
+    setPreVisualizacao(null);
+  };
+
+  const alterarImagem = (event) => {
     const file = event.target.files[0];
     if (file) {
       setImage(file);
 
       const preview = URL.createObjectURL(file);
-      setPreviewUrl(preview);
+      setPreVisualizacao(preview);
     }
-  };
-
-  const handleRemoveImage = () => {
-    setImage(null);
-    setPreviewUrl(null);
-  };
-
-  const onChooseFile = () => {
-    inputRef.current.click();
   };
   return (
     <div className="flex justify-center mb-6">
       <input
         type="file"
         accept="image/*"
-        ref={inputRef}
-        onChange={handleImageChange}
+        ref={assoc}
+        onChange={alterarImagem}
         className="hidden"
       />
 
       {!image ? (
-        <div className="w-20 h-20 flex items-center justify-center bg-blue-100/50 rounded-full relative cursor-pointer">
+        <div className="rounded-full w-20 bg-blue-100/50 justify-center cursor-pointer h-20 flex items-center relative">
           <LuUser className="text-4xl text-primary" />
 
           <button
+            className="absolute rounded-full cursor-pointer text-white flex items-center justify-center bg-primary w-8 h-8 -bottom-1 -right-1"
             type="button"
-            className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full absolute -bottom-1 -right-1 cursor-pointer"
-            onClick={onChooseFile}
+            onClick={escolherArquivo}
           >
             <LuUpload />
           </button>
@@ -48,14 +48,14 @@ const ImagemInput = ({ image, setImage }) => {
       ) : (
         <div className="relative">
           <img
-            src={previewUrl}
-            alt="profile photo"
-            className="w-20 h-20 rounded-full object-cover"
+            src={preVisualizacao}
+            alt="Foto"
+            className="object-cover w-20 h-20 rounded-full "
           />
           <button
+            className="absolute rounded-full bg-red-500 text-white flex items-center justify-center -bottom-1 -right-1 w-8 h-8"
             type="button"
-            className="w-8 h-8 flex items-center justify-center bg-red-500 text-white rounded-full absolute -bottom-1 -right-1"
-            onClick={handleRemoveImage}
+            onClick={apagarImagem}
           >
             <LuTrash />
           </button>

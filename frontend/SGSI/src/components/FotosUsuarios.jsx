@@ -5,10 +5,10 @@ const FotosUsuarios = ({ fotosPerfilUsuario, mostra = 3 }) => {
     <div className="items-center flex">
       {fotosPerfilUsuario.slice(0, mostra).map((imagemResponsavel, index) => (
         <img
+          className="h-9 rounded-full border-2 first:ml-0 w-9 -ml-3 border-white"
           key={index}
           src={imagemResponsavel}
           alt={`Usuario ${index}`}
-          className="h-9 rounded-full border-2 first:ml-0 w-9 -ml-3 border-white"
         />
       ))}
       {fotosPerfilUsuario.length > mostra && (

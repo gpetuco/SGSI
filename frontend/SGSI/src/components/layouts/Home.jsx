@@ -25,8 +25,8 @@ const Home = ({ children, activeMenu }) => {
           </div>
 
           <button
+            className="border-gray-200/30 inline-flex fixed min-[1081px]:hidden justify-center text-white bg-slate-800/60 items-center top-3 left-3 w-10 rounded-md h-10 border z-40"
             aria-label="Open menu"
-            className="fixed top-3 left-3 z-40 min-[1081px]:hidden inline-flex items-center justify-center w-10 h-10 rounded-md border border-gray-200/30 bg-slate-800/60 text-white"
             onClick={() => setMenuLateral(true)}
           >
             <HiOutlineMenu className="text-2xl" />
@@ -44,8 +44,8 @@ const Home = ({ children, activeMenu }) => {
                 <MenuLateral activeMenu={activeMenu} />
               </div>
               <button
+                className="border absolute justify-center bg-slate-800/80 text-white rounded-md w-10 h-10 inline-flex items-center top-3 left-3 border-gray-200/30"
                 aria-label="Close menu"
-                className="absolute top-3 left-3 inline-flex items-center justify-center w-10 h-10 rounded-md border border-gray-200/30 bg-slate-800/80 text-white"
                 onClick={() => setMenuLateral(false)}
               >
                 <HiOutlineX className="text-2xl" />

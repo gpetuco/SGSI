@@ -22,7 +22,7 @@ const ListaSearch = ({
     return options.find((o) => o.value === value);
   }, [options, value]);
 
-  const handleSelect = (val) => {
+  const selecionarOpcao = (val) => {
     onChange(val);
     setAberto(false);
     setQuery("");
@@ -52,9 +52,10 @@ const ListaSearch = ({
       </button>
 
       {aberto && (
-        <div className="absolute w-full bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-500 rounded-md mt-1 shadow-md z-20">
-          <div className="flex items-center gap-2 px-3 py-2 border-b border-slate-100 dark:border-slate-500">
-            <LuSearch className="text-gray-500 dark:text-slate-300" />
+        <div className="rounded-md z-20 border shadow-md dark:bg-slate-700 mt-1 w-full absolute border-slate-100 bg-white dark:border-slate-500">
+          <div className="flex gap-2 items-center border-b px-3 py-2 border-slate-100 dark:border-slate-500">
+            <LuSearch className="dark:text-slate-300 text-gray-500" />
+
             <input
               type="text"
               value={query}
@@ -68,7 +69,7 @@ const ListaSearch = ({
             {filtered.map((option) => (
               <div
                 key={option.value}
-                onClick={() => handleSelect(option.value)}
+                onClick={() => selecionarOpcao(option.value)}
                 className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600 flex items-center gap-2"
               >
                 {showResponsavel && (

@@ -34,7 +34,7 @@ const ListaClientes = ({
     c.name?.toLowerCase().includes(query.toLowerCase())
   );
 
-  const handleSelect = (id) => {
+  const selecionarOpcao = (id) => {
     onChange(id);
     setAberto(false);
   };
@@ -66,7 +66,7 @@ const ListaClientes = ({
             {filtered.map((c) => (
               <div
                 key={c._id}
-                onClick={() => handleSelect(c._id)}
+                onClick={() => selecionarOpcao(c._id)}
                 className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600 text-black dark:text-slate-100"
               >
                 <div className="font-medium">{c.name}</div>

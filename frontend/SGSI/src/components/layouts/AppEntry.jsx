@@ -1,5 +1,5 @@
 import React from "react";
-import UI_IMG from "../../assets/images/auth-img2.png";
+import IMAGEM from "../../assets/images/auth-img2.png";
 
 const AppEntry = ({ children }) => {
   return (
@@ -8,8 +8,8 @@ const AppEntry = ({ children }) => {
         {children}
       </div>
 
-      <div className="hidden md:flex w-[40vw] h-screen items-center justify-center bg-blue-50 bg-cover bg-no-repeat bg-center overflow-hidden p-8">
-        <img src={UI_IMG} className="w-64 lg:w-[90%]" />
+      <div className="bg-no-repeat md:flex justify-center w-[40vw] hidden items-center h-screen bg-center bg-blue-50 overflow-hidden bg-cover p-8">
+        <img src={IMAGEM} className="w-64 lg:w-[90%]" />
       </div>
     </div>
   );

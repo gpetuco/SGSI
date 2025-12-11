@@ -1,13 +1,13 @@
 ﻿import React, { useEffect, useState } from "react";
 import Home from "../../components/layouts/Home";
 import { useNavigate } from "react-router-dom";
+import ListaSearch from "../../components/Inputs/ListaSearch";
+import { CLASSIFICATION_DATA, PRIORIDADE_DATA } from "../../utils/menus";
+import { UserContext } from "../../context/sessaoUsuarioContext";
 import axiosReq from "../../utils/axiosReq";
 import { URLS_API } from "../../utils/apiUrl";
 import Acao from "../../components/Panels/Acao";
 import Lista from "../../components/Inputs/Lista";
-import ListaSearch from "../../components/Inputs/ListaSearch";
-import { CLASSIFICATION_DATA, PRIORIDADE_DATA } from "../../utils/menus";
-import { UserContext } from "../../context/sessaoUsuarioContext";
 
 const Acoes = () => {
   const [allAcoes, setAllAcoes] = useState([]);
@@ -55,7 +55,6 @@ const Acoes = () => {
     }
   };
 
-  // fetch users for dropdown
   const fetchUsers = async () => {
     try {
       const res = await axiosReq.get(URLS_API.USUARIOS.GET_ALL_USUARIOS);
@@ -180,7 +179,7 @@ const Acoes = () => {
           {user?.role === "admin" && (
             <div className="w-full md:w-[190px]">
               <button
-                className="w-full text-sm font-medium text-white bg-primary px-2.5 py-3 rounded-md mt-2 hover:bg-primary/90 transition-colors"
+                className="rounded-md mt-2 hover:bg-primary/90 transition-colors w-full text-sm font-medium text-white bg-primary px-2.5 py-3 "
                 onClick={() => navigate("/admin/acao-popup")}
               >
                 + Criar
@@ -202,12 +201,12 @@ const Acoes = () => {
               classification={item.classification}
               status={item.status}
               progresso={item.progresso}
-              createdAt={item.createdAt}
+              dataCriacao={item.dataCriacao}
               previsao={item.previsao}
               responsavel={item.responsavel?.map(
                 (member) => member.profileImageUrl
               )}
-              concluidoTodoCount={item.concluidoTodoCount || 0}
+              itensConcluidos={item.itensConcluidos || 0}
               itens={item.itens || []}
               clienteName={item.cliente?.name}
               onClick={() => handleClick(item)}

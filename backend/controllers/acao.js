@@ -173,7 +173,7 @@ const getAcoes = async (req, res) => {
             : acao.progresso || 0;
         return {
           ...acao._doc,
-          concluidoTodoCount: concluidoCount,
+          itensConcluidos: concluidoCount,
           progresso: progressoPct,
         };
       })
@@ -346,9 +346,9 @@ const getDashboardData = async (req, res) => {
     const baseMatch = {};
     if (classification) baseMatch.classification = classification;
     if (startDate || endDate) {
-      baseMatch.createdAt = {};
-      if (startDate) baseMatch.createdAt.$gte = new Date(startDate);
-      if (endDate) baseMatch.createdAt.$lte = new Date(endDate);
+      baseMatch.dataCriacao = {};
+      if (startDate) baseMatch.dataCriacao.$gte = new Date(startDate);
+      if (endDate) baseMatch.dataCriacao.$lte = new Date(endDate);
     }
 
     if (isAdmin) {

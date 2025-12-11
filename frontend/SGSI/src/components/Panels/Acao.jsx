@@ -11,10 +11,10 @@ const Acao = ({
   classification,
   status,
   progresso,
-  createdAt,
+  dataCriacao,
   previsao,
   responsavel,
-  concluidoTodoCount,
+  itensConcluidos,
   itens,
   onClick,
   className,
@@ -131,7 +131,7 @@ const Acao = ({
           <span className="text-white">Progresso:</span>{" "}
           <span className="dark:text-white font-semibold text-gray-700">
             {`${progresso}% (`}
-            {concluidoTodoCount} / {itens.length || 0}
+            {itensConcluidos} / {itens.length || 0}
             {")"}
           </span>
         </p>

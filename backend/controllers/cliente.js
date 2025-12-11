@@ -17,7 +17,7 @@ const criarCliente = async (req, res) => {
 
 const getClientes = async (_req, res) => {
   try {
-    const clientes = await Company.find({}).sort({ createdAt: -1 });
+    const clientes = await Company.find({}).sort({ dataCriacao: -1 });
     return res.json(clientes);
   } catch (error) {
     return res.status(500).json({ message: "Erro: ", error: error.message });

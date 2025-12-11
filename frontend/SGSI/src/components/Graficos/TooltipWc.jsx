@@ -8,7 +8,7 @@ const TooltipWc = ({ payload, active }) => {
           {payload[0].name}
         </p>
         <p className="text-gray-600 text-sm">
-          Count:{" "}
+          Quantidade:{" "}
           <span className="font-medium text-gray-900 text-sm">
             {payload[0].value}
           </span>

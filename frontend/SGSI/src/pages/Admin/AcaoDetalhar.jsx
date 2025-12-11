@@ -112,10 +112,10 @@ const AcaoDetalhar = () => {
         variant="wide"
       >
         {acao && (
-          <div className="grid grid-cols-1 mt-1">
+          <div className="grid-cols-1 grid mt-1">
             <div className="form-content-box">
-              <div className="flex items-center justify-between">
-                <h2 className="text-sm md:text-xl font-medium">
+              <div className="items-center justify-between flex">
+                <h2 className="font-medium md:text-xl text-sm">
                   {acao?.title}
                 </h2>
                 <div
@@ -177,9 +177,9 @@ export default AcaoDetalhar;
 const InfoBox = ({ label, value }) => {
   return (
     <>
-      <label className="text-xs font-medium text-slate-500">{label}</label>
+      <label className="font-medium text-slate-500 text-xs">{label}</label>
 
-      <p className="text-[12px] md:text-[13px] font-medium text-gray-700 mt-0.5">
+      <p className="md:text-[13px] mt-0.5 font-medium text-gray-700 text-[12px]">
         {value}
       </p>
     </>
@@ -194,7 +194,7 @@ const Itens = ({ text, isChecked, onChange, readOnly }) => {
         checked={isChecked}
         onChange={readOnly ? undefined : onChange}
         disabled={readOnly}
-        className={`w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded-sm outline-none ${
+        className={` bg-gray-100 border-gray-300 w-4 h-4 text-primary rounded-sm outline-none ${
           readOnly ? "cursor-default" : "cursor-pointer"
         }`}
       />
