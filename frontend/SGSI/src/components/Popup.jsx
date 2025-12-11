@@ -20,8 +20,8 @@ const Popup = ({
                 {title}
               </h3>
               <button
+                className="w-8 hover:text-gray-900 rounded-lg text-sm bg-transparent inline-flex items-center justify-center dark:hover:bg-gray-600 h-8 text-gray-400 dark:hover:text-white hover:bg-gray-200 cursor-pointer"
                 type="button"
-                className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
                 onClick={onClose}
               >
                 <svg
@@ -45,7 +45,7 @@ const Popup = ({
               {children}
             </div>
             {footer && (
-              <div className="p-4 md:p-5 border-t border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700">
+              <div className="border-gray-200 dark:border-gray-600 md:p-5 bg-white dark:bg-gray-700 border-t p-4">
                 {footer}
               </div>
             )}
@@ -64,8 +64,8 @@ const Popup = ({
               {title}
             </h3>
             <button
+              className="inline-flex hover:bg-gray-200 cursor-pointer text-gray-400 justify-center items-center bg-transparent dark:hover:text-white text-sm h-8 w-8 rounded-lg hover:text-gray-900 dark:hover:bg-gray-600"
               type="button"
-              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
               onClick={onClose}
             >
               <svg
@@ -87,7 +87,7 @@ const Popup = ({
           </div>
           <div className="p-4 md:p-5 space-y-4">{children}</div>
           {footer && (
-            <div className="p-4 md:p-5 border-t border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700">
+            <div className="border-t p-4 bg-white md:p-5 dark:border-gray-600 border-gray-200 dark:bg-gray-700">
               {footer}
             </div>
           )}

@@ -1,21 +1,21 @@
 import React from "react";
 
-const sizeToClass = (size) => {
+const tamanho = (size) => {
   if (!size) return "w-8 h-8";
   if (typeof size === "number") return `w-[${size}px] h-[${size}px]`;
   return size;
 };
 
 const ImagemUsuario = ({ src, name = "", size, className = "" }) => {
-  const initial = (name || "").trim().charAt(0).toUpperCase();
-  const sizeCls = sizeToClass(size);
+  const ini = (name || "").trim().charAt(0).toUpperCase();
+  const tam = tamanho(size);
 
   if (src) {
     return (
       <img
-        src={src}
         alt={name || "user"}
-        className={`${sizeCls} rounded-full ${className}`}
+        className={`${tam} rounded-full ${className}`}
+        src={src}
         onError={(e) => {
           e.currentTarget.onerror = null;
           e.currentTarget.src = "";
@@ -26,9 +26,9 @@ const ImagemUsuario = ({ src, name = "", size, className = "" }) => {
 
   return (
     <div
-      className={`${sizeCls} rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold ${className}`}
+      className={`${tam} flex text-white justify-center font-semibold rounded-full bg-blue-600 items-center ${className}`}
     >
-      {initial || "?"}
+      {ini || "?"}
     </div>
   );
 };

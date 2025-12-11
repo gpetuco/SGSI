@@ -12,15 +12,15 @@ import {
 import { LuZoomIn } from "react-icons/lu";
 import Popup from "../Popup";
 
-const DefaultTooltip = ({ active, payload, label }) => {
+const TooltipPadrao = ({ active, payload, label }) => {
   if (!active || !payload || payload.length === 0) return null;
   return (
-    <div className="bg-white dark:bg-slate-700 shadow-md rounded-lg p-2 border border-gray-300 dark:border-slate-500">
-      <p className="text-xs font-semibold text-gray-700 dark:text-white mb-1">
+    <div className="border bg-white dark:bg-slate-700 shadow-md rounded-lg border-gray-300 dark:border-slate-500 p-2">
+      <p className="text-gray-700 dark:text-white mb-1 text-xs font-semibold">
         {label}
       </p>
       {payload.map((p, idx) => (
-        <div key={idx} className="text-xs text-gray-600 dark:text-slate-200">
+        <div key={idx} className="dark:text-slate-200 text-gray-600 text-xs">
           <span
             className="inline-block w-2 h-2 rounded-full mr-2"
             style={{ background: p.color }}
@@ -62,7 +62,7 @@ const AreaWc = ({
           allowDecimals
         />
         <Tooltip
-          content={<DefaultTooltip />}
+          content={<TooltipPadrao />}
           cursor={{ stroke: "#94a3b8", strokeDasharray: "3 3" }}
         />
         <Legend />

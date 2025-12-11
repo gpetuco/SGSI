@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
 import { URLS_API } from "../../utils/apiUrl";
 import { formatMilhar } from "../../utils/utils";
-import Info from "../../components/Cards/Info";
+import Info from "../../components/Panels/Info";
 import PieWc from "../../components/Graficos/PizzaWc";
 import AreaWc from "../../components/Graficos/AreaWc";
 import LineWc from "../../components/Graficos/LineWc";

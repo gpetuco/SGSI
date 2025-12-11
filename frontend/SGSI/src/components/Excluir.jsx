@@ -1,6 +1,6 @@
 import React from "react";
 
-const Excluir = ({ content, onDelete }) => {
+const Excluir = ({ onDelete, content }) => {
   return (
     <div>
       <p className="text-sm">{content}</p>
@@ -8,8 +8,8 @@ const Excluir = ({ content, onDelete }) => {
       <div className="flex justify-end mt-6">
         <button
           type="button"
-          className="flex items-center justify-center gap-1.5 text-xs md:text-sm font-medium text-rose-500 whitespace-nowrap bg-rose-50 border border-rose-100 rounded-lg px-4 py-2 cursor-pointer"
           onClick={onDelete}
+          className="cursor-pointer border text-xs md:text-sm justify-center whitespace-nowrap bg-rose-50 text-rose-500 rounded-lg font-medium gap-1.5 flex items-center border-rose-100 px-4 py-2"
         >
           Apagar
         </button>

@@ -7,7 +7,7 @@ const ListaSearch = ({
   value,
   onChange,
   placeholder,
-  showAvatar = false,
+  showResponsavel = false,
 }) => {
   const [aberto, setAberto] = useState(false);
   const [query, setQuery] = useState("");
@@ -35,9 +35,9 @@ const ListaSearch = ({
         className="w-full text-sm text-black dark:text-slate-100 outline-none bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-500 px-2.5 py-3 rounded-md mt-2 flex justify-between items-center"
       >
         <span className="flex items-center gap-2 truncate">
-          {showAvatar && (
+          {showResponsavel && (
             <ImagemUsuario
-              src={current?.avatar}
+              src={current?.imagemResponsavel}
               name={current?.label}
               size="w-5 h-5"
             />
@@ -71,9 +71,9 @@ const ListaSearch = ({
                 onClick={() => handleSelect(option.value)}
                 className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600 flex items-center gap-2"
               >
-                {showAvatar && (
+                {showResponsavel && (
                   <ImagemUsuario
-                    src={option.avatar}
+                    src={option.imagemResponsavel}
                     name={option.label}
                     size="w-6 h-6"
                   />

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
 import { URLS_API } from "../../utils/apiUrl";
 import { formatMilhar } from "../../utils/utils";
-import Info from "../../components/Cards/Info";
+import Info from "../../components/Panels/Info";
 import PizzaWc from "../../components/Graficos/PizzaWc";
 import BarWc from "../../components/Graficos/BarWc";
 

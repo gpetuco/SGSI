@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import axiosReq from "../../utils/axiosReq";
 import { URLS_API } from "../../utils/apiUrl";
-import Acao from "../../components/Cards/Acao";
+import Acao from "../../components/Panels/Acao";
 import { useNavigate } from "react-router-dom";
 import Lista from "../../components/Inputs/Lista";
 import { PRIORIDADE_DATA } from "../../utils/menus";

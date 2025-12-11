@@ -3,7 +3,7 @@ import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
 import { URLS_API } from "../../utils/apiUrl";
-import Acao from "../../components/Cards/Acao";
+import Acao from "../../components/Panels/Acao";
 import Lista from "../../components/Inputs/Lista";
 import ListaSearch from "../../components/Inputs/ListaSearch";
 import { PRIORIDADE_DATA } from "../../utils/menus";
@@ -72,7 +72,7 @@ const NistCsfAcoes = () => {
         (res.data || []).map((u) => ({
           label: u.name,
           value: u._id,
-          avatar: u.profileImageUrl,
+          imagemResponsavel: u.profileImageUrl,
         }))
       );
       setUserOptions(opts);
@@ -136,7 +136,7 @@ const NistCsfAcoes = () => {
                 value={selectedUser}
                 onChange={setSelectedUser}
                 placeholder="All Users"
-                showAvatar
+                showResponsavel
               />
             </div>
           )}
