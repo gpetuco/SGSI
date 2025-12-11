@@ -14,14 +14,14 @@ const {
 
 const router = express.Router();
 
-router.put("/:id/status", protect, updateAcaoStatus);
-router.get("/:id", protect, getAcaoUnique);
-router.post("/", protect, adminOnly, criarAcao);
 router.get("/user-dashboard-data", protect, getDashboardClienteData);
-router.delete("/:id", protect, adminOnly, deleteAcao);
-router.put("/:id/todo", protect, updateAcaoChecklist);
-router.get("/", protect, getAcoes);
 router.get("/dashboard-data", protect, getDashboardData);
+router.get("/", protect, getAcoes);
+router.post("/", protect, adminOnly, criarAcao);
+router.get("/:id", protect, getAcaoUnique);
+router.put("/:id/status", protect, updateAcaoStatus);
+router.put("/:id/todo", protect, updateAcaoChecklist);
 router.put("/:id", protect, updateAcao);
+router.delete("/:id", protect, adminOnly, deleteAcao);
 
 module.exports = router;
