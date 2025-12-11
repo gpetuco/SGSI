@@ -1,25 +1,25 @@
-import React, { useContext, useEffect, useState } from "react";
-import { SIDE_MENU_DATA, SIDE_MENU_USER_DATA } from "../../utils/menus";
-import { UserContext } from "../../context/userContext";
 import { useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
 import ImagemUsuario from "../ImagemUsuario";
+import { UserContext } from "../../context/userContext";
+import { SIDE_MENU_DATA, SIDE_MENU_USER_DATA } from "../../utils/menus";
 
-const SideMenu = ({ activeMenu }) => {
+const MenuLateral = ({ activeMenu }) => {
   const { user, clearUser } = useContext(UserContext);
-  const [sideMenuData, setSideMenuData] = useState([]);
+  const [menuLateralData, setMenuLateralData] = useState([]);
 
   const navigate = useNavigate();
 
-  const handleClick = (route) => {
+  const detectar = (route) => {
     if (route === "logout") {
-      handelLogout();
+      sair();
       return;
     }
 
     navigate(route);
   };
 
-  const handelLogout = () => {
+  const sair = () => {
     localStorage.clear();
     clearUser();
     navigate("/login");
@@ -27,7 +27,7 @@ const SideMenu = ({ activeMenu }) => {
 
   useEffect(() => {
     if (user) {
-      setSideMenuData(
+      setMenuLateralData(
         user?.role === "admin" ? SIDE_MENU_DATA : SIDE_MENU_USER_DATA
       );
     }
@@ -59,7 +59,7 @@ const SideMenu = ({ activeMenu }) => {
         </p>
       </div>
 
-      {sideMenuData.map((item, index) => (
+      {menuLateralData.map((item, index) => (
         <button
           key={`menu_${index}`}
           className={`w-full flex items-center gap-4 text-[15px] border-l-4 ${
@@ -67,7 +67,7 @@ const SideMenu = ({ activeMenu }) => {
               ? "border-primary text-primary dark:text-white bg-transparent"
               : "border-transparent text-gray-700 dark:text-white/80 hover:text-primary"
           } py-3 px-6 mb-1 cursor-pointer transition-colors`}
-          onClick={() => handleClick(item.path)}
+          onClick={() => detectar(item.path)}
         >
           <item.icon className="text-xl" />
           {item.label}
@@ -77,4 +77,4 @@ const SideMenu = ({ activeMenu }) => {
   );
 };
 
-export default SideMenu;
+export default MenuLateral;

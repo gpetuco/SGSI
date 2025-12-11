@@ -6,10 +6,8 @@ export const emailVerificacao = (email) => {
 export const formatMilhar = (num) => {
   if (num == null || isNaN(num)) return "";
 
-  const [integerPart, fractionalPart] = num.toString().split(".");
-  const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const [int, decimos] = num.toString().split(".");
+  const formattedInteger = int.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-  return fractionalPart
-    ? `${formattedInteger}.${fractionalPart}`
-    : formattedInteger;
+  return decimos ? `${formattedInteger}.${decimos}` : formattedInteger;
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import UI_IMG from "../../assets/images/auth-img2.png";
 
-const AuthLayout = ({ children }) => {
+const AppEntry = ({ children }) => {
   return (
     <div className="flex">
       <div className="w-screen h-screen md:w-[60vw] px-12 pt-8 pb-12">
@@ -15,4 +15,4 @@ const AuthLayout = ({ children }) => {
   );
 };
 
-export default AuthLayout;
+export default AppEntry;

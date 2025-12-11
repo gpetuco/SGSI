@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import AuthLayout from "../../components/layouts/AuthLayout";
+import AppEntry from "../../components/layouts/AppEntry";
 import { emailVerificacao } from "../../utils/utils";
 import ImagemInput from "../../components/Inputs/ImagemInput";
 import Input from "../../components/Inputs/Input";
@@ -90,7 +90,7 @@ const SignUp = () => {
   };
 
   return (
-    <AuthLayout>
+    <AppEntry>
       <div className="lg:w-[100%] h-auto md:h-full mt-10 md:mt-0 flex flex-col justify-center">
         <h3 className="text-xl font-semibold text-black">Criar nova conta</h3>
         <p className="text-[14px] text-white mt-[5px] mb-6">
@@ -189,7 +189,7 @@ const SignUp = () => {
           </p>
         </form>
       </div>
-    </AuthLayout>
+    </AppEntry>
   );
 };
 

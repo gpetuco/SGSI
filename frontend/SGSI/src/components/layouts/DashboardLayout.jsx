@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/userContext";
-import SideMenu from "./SideMenu";
+import MenuLateral from "./MenuLateral";
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 
 const DashboardLayout = ({ children, activeMenu }) => {
   const { user } = useContext(UserContext);
-  const [openSideMenu, setOpenSideMenu] = useState(false);
+  const [menuLateral, setMenuLateral] = useState(false);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -21,32 +21,32 @@ const DashboardLayout = ({ children, activeMenu }) => {
       {user && (
         <div className="flex">
           <div className="max-[1080px]:hidden">
-            <SideMenu activeMenu={activeMenu} />
+            <MenuLateral activeMenu={activeMenu} />
           </div>
 
           <button
             aria-label="Open menu"
             className="fixed top-3 left-3 z-40 min-[1081px]:hidden inline-flex items-center justify-center w-10 h-10 rounded-md border border-gray-200/30 bg-slate-800/60 text-white"
-            onClick={() => setOpenSideMenu(true)}
+            onClick={() => setMenuLateral(true)}
           >
             <HiOutlineMenu className="text-2xl" />
           </button>
 
           <div className="grow mx-5">{children}</div>
 
-          {openSideMenu && (
+          {menuLateral && (
             <div className="fixed inset-0 z-50 min-[1081px]:hidden">
               <div
                 className="absolute inset-0 bg-black/40"
-                onClick={() => setOpenSideMenu(false)}
+                onClick={() => setMenuLateral(false)}
               />
               <div className="absolute top-0 left-0">
-                <SideMenu activeMenu={activeMenu} />
+                <MenuLateral activeMenu={activeMenu} />
               </div>
               <button
                 aria-label="Close menu"
                 className="absolute top-3 left-3 inline-flex items-center justify-center w-10 h-10 rounded-md border border-gray-200/30 bg-slate-800/80 text-white"
-                onClick={() => setOpenSideMenu(false)}
+                onClick={() => setMenuLateral(false)}
               >
                 <HiOutlineX className="text-2xl" />
               </button>

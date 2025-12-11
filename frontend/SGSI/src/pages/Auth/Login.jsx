@@ -1,11 +1,11 @@
-import React, { useContext, useState } from "react";
-import AuthLayout from "../../components/layouts/AuthLayout";
-import { Link, useNavigate } from "react-router-dom";
-import Input from "../../components/Inputs/Input";
-import { emailVerificacao } from "../../utils/utils";
-import axiosReq from "../../utils/axiosReq";
 import { URLS_API } from "../../utils/apiUrl";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
+import axiosReq from "../../utils/axiosReq";
+import Input from "../../components/Inputs/Input";
+import React, { useContext, useState } from "react";
+import AppEntry from "../../components/layouts/AppEntry";
+import { emailVerificacao } from "../../utils/utils";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -15,16 +15,16 @@ const Login = () => {
   const { updateUser } = useContext(UserContext);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const verificaLogin = async (e) => {
     e.preventDefault();
-
-    if (!emailVerificacao(email)) {
-      setError("Digite um email válido.");
-      return;
-    }
 
     if (!password) {
       setError("Preencha a senha");
+      return;
+    }
+
+    if (!emailVerificacao(email)) {
+      setError("Digite um email válido.");
       return;
     }
 
@@ -52,20 +52,20 @@ const Login = () => {
       if (error.response && error.response.data.message) {
         setError(error.response.data.message);
       } else {
-        setError("Something went wrong. Please try again.");
+        setError("Erro.");
       }
     }
   };
 
   return (
-    <AuthLayout>
-      <div className="lg:w-[70%] h-3/4 md:h-full flex flex-col justify-center">
-        <h3 className="text-xl font-semibold text-black">Bem-vindo!</h3>
-        <p className="text-[14px] text-white mt-[5px] mb-6">
+    <AppEntry>
+      <div className="flex-col justify-center md:h-full lg:w-[70%] h-3/4 flex">
+        <h3 className="font-semibold text-black text-xl">Bem-vindo!</h3>
+        <p className="mt-[5px] text-[14px] mb-6 text-white">
           Digite seu email e senha para iniciar sessão
         </p>
 
-        <form onSubmit={handleLogin}>
+        <form onSubmit={verificaLogin}>
           <Input
             value={email}
             onChange={({ target }) => setEmail(target.value)}
@@ -98,7 +98,7 @@ const Login = () => {
           </p>
         </form>
       </div>
-    </AuthLayout>
+    </AppEntry>
   );
 };
 
