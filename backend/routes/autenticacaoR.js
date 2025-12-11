@@ -5,8 +5,8 @@ const {
   getDadosUsuario,
   editarDadosUsuario,
 } = require("../controllers/autenticacao");
-const { protect } = require("../middlewares/authMiddleware");
-const upload = require("../middlewares/uploadMiddleware");
+const { protect } = require("../guards/autenticacaoGuard");
+const upload = require("../guards/abrirArquivoGuard");
 
 const router = express.Router();
 

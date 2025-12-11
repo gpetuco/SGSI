@@ -1,5 +1,5 @@
 const express = require("express");
-const { adminOnly, protect } = require("../middlewares/authMiddleware");
+const { privateEmpresaSec, protect } = require("../guards/autenticacaoGuard");
 const {
   retornaUsuariosData,
   getUsuarioUniqueId,
@@ -7,7 +7,7 @@ const {
 
 const router = express.Router();
 
-router.get("/", protect, adminOnly, retornaUsuariosData);
+router.get("/", protect, privateEmpresaSec, retornaUsuariosData);
 router.get("/:id", protect, getUsuarioUniqueId);
 
 module.exports = router;

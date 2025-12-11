@@ -1,5 +1,5 @@
 const express = require("express");
-const { protect, adminOnly } = require("../middlewares/authMiddleware");
+const { protect, privateEmpresaSec } = require("../guards/autenticacaoGuard");
 const {
   updateAcao,
   getAcoes,
@@ -17,11 +17,11 @@ const router = express.Router();
 router.get("/user-dashboard-data", protect, getDashboardClienteData);
 router.get("/dashboard-data", protect, getDashboardData);
 router.get("/", protect, getAcoes);
-router.post("/", protect, adminOnly, criarAcao);
+router.post("/", protect, privateEmpresaSec, criarAcao);
 router.get("/:id", protect, getAcaoUnique);
 router.put("/:id/status", protect, updateAcaoStatus);
 router.put("/:id/todo", protect, updateAcaoChecklist);
 router.put("/:id", protect, updateAcao);
-router.delete("/:id", protect, adminOnly, deleteAcao);
+router.delete("/:id", protect, privateEmpresaSec, deleteAcao);
 
 module.exports = router;

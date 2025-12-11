@@ -18,7 +18,7 @@ const protect = async (req, res, next) => {
   }
 };
 
-const adminOnly = (req, res, next) => {
+const privateEmpresaSec = (req, res, next) => {
   if (req.user && req.user.role === "admin") {
     next();
   } else {
@@ -26,4 +26,4 @@ const adminOnly = (req, res, next) => {
   }
 };
 
-module.exports = { protect, adminOnly };
+module.exports = { protect, privateEmpresaSec };
