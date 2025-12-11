@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import DashboardLayout from "../../components/layouts/DashboardLayout";
+import Home from "../../components/layouts/Home";
 import { URLS_API } from "../../utils/apiUrl";
 import axiosReq from "../../utils/axiosReq";
 import ImagemUsuario from "../../components/ImagemUsuario";
@@ -25,7 +25,7 @@ const Membros = () => {
   }, []);
 
   return (
-    <DashboardLayout activeMenu="Membros">
+    <Home activeMenu="Membros">
       <div className="mt-5 mb-10">
         <div className="flex md:flex-row md:items-center justify-between">
           <h2 className="text-xl md:text-xl font-medium">Membros</h2>
@@ -88,7 +88,7 @@ const Membros = () => {
           </table>
         </div>
       </div>
-    </DashboardLayout>
+    </Home>
   );
 };
 

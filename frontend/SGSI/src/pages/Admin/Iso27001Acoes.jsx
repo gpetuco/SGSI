@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import DashboardLayout from "../../components/layouts/DashboardLayout";
+import Home from "../../components/layouts/Home";
 import { useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
 import { URLS_API } from "../../utils/apiUrl";
@@ -113,7 +113,7 @@ const Iso27001Acoes = () => {
   }, [filterStatus, selectedUser, selectedCompany]);
 
   return (
-    <DashboardLayout activeMenu="ISO 27001">
+    <Home activeMenu="ISO 27001">
       <div className="my-5">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between">
           <h2 className="text-xl md:text-xl font-medium">ISO 27001</h2>
@@ -216,7 +216,7 @@ const Iso27001Acoes = () => {
             ))}
         </div>
       </div>
-    </DashboardLayout>
+    </Home>
   );
 };
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { hookUsuarioPermission } from "../../hooks/hookUsuarioPermission";
 import { useContext } from "react";
 import { UserContext } from "../../context/userContext";
-import DashboardLayout from "../../components/layouts/DashboardLayout";
+import Home from "../../components/layouts/Home";
 import { useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
 import { URLS_API } from "../../utils/apiUrl";
@@ -81,7 +81,7 @@ const DashboardCliente = () => {
   };
 
   return (
-    <DashboardLayout activeMenu="Dashboard">
+    <Home activeMenu="Dashboard">
       <div className="content-box my-5">
         <div>
           <div className="col-span-3">
@@ -146,7 +146,7 @@ const DashboardCliente = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
+    </Home>
   );
 };
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
 import { URLS_API } from "../../utils/apiUrl";
-import DashboardLayout from "../../components/layouts/DashboardLayout";
+import Home from "../../components/layouts/Home";
 import Popup from "../../components/Popup";
 import moment from "moment";
 import { UserContext } from "../../context/userContext";
@@ -104,7 +104,7 @@ const AcaoDetalhar = () => {
   };
 
   return (
-    <DashboardLayout activeMenu="My Acoes">
+    <Home activeMenu="My Acoes">
       <Popup
         aberto={openPopup}
         onClose={closeAndGoBack}
@@ -168,7 +168,7 @@ const AcaoDetalhar = () => {
           </div>
         )}
       </Popup>
-    </DashboardLayout>
+    </Home>
   );
 };
 

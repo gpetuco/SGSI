@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import DashboardLayout from "../../components/layouts/DashboardLayout";
+import Home from "../../components/layouts/Home";
 import axiosReq from "../../utils/axiosReq";
 import { URLS_API } from "../../utils/apiUrl";
 import toast from "react-hot-toast";
@@ -66,7 +66,7 @@ const Clientes = () => {
   }, []);
 
   return (
-    <DashboardLayout activeMenu="Clientes">
+    <Home activeMenu="Clientes">
       <div className="mt-5 mb-10">
         <h2 className="text-xl md:text-xl font-medium">Clientes</h2>
 
@@ -143,7 +143,7 @@ const Clientes = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
+    </Home>
   );
 };
 

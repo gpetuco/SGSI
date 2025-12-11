@@ -3,7 +3,7 @@ import { UserContext } from "../../context/userContext";
 import MenuLateral from "./MenuLateral";
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 
-const DashboardLayout = ({ children, activeMenu }) => {
+const Home = ({ children, activeMenu }) => {
   const { user } = useContext(UserContext);
   const [menuLateral, setMenuLateral] = useState(false);
 
@@ -58,4 +58,4 @@ const DashboardLayout = ({ children, activeMenu }) => {
   );
 };
 
-export default DashboardLayout;
+export default Home;

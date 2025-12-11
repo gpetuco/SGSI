@@ -1,5 +1,5 @@
 ﻿import React, { useEffect, useRef, useState } from "react";
-import DashboardLayout from "../../components/layouts/DashboardLayout";
+import Home from "../../components/layouts/Home";
 import { PRIORIDADE_DATA, CLASSIFICATION_DATA } from "../../utils/menus";
 import axiosReq from "../../utils/axiosReq";
 import { URLS_API } from "../../utils/apiUrl";
@@ -432,7 +432,7 @@ const CriarAcao = () => {
 
   if (acaoId && loadingAcao && !currentAcao) {
     return (
-      <DashboardLayout activeMenu="Create Acao">
+      <Home activeMenu="Create Acao">
         <Popup
           aberto={openFormPopup}
           onClose={closeAndGoBack}
@@ -450,12 +450,12 @@ const CriarAcao = () => {
             </div>
           </div>
         </Popup>
-      </DashboardLayout>
+      </Home>
     );
   }
 
   return (
-    <DashboardLayout activeMenu="Create Acao">
+    <Home activeMenu="Create Acao">
       <Popup
         aberto={openFormPopup}
         onClose={closeAndGoBack}
@@ -810,7 +810,7 @@ const CriarAcao = () => {
           onDelete={() => deleteAcao()}
         />
       </Popup>
-    </DashboardLayout>
+    </Home>
   );
 };
 

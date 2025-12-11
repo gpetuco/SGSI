@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import DashboardLayout from "../../components/layouts/DashboardLayout";
+import Home from "../../components/layouts/Home";
 import axiosReq from "../../utils/axiosReq";
 import { URLS_API } from "../../utils/apiUrl";
 import Acao from "../../components/Panels/Acao";
@@ -145,7 +145,7 @@ const Kanban = () => {
   };
 
   return (
-    <DashboardLayout activeMenu="Kanban">
+    <Home activeMenu="Kanban">
       <div className="my-5">
         <div className="flex flex-col lg:flex-row lg:items-center gap-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-2 w-full lg:w-[880px]">
@@ -219,7 +219,7 @@ const Kanban = () => {
           />
         </div>
       </div>
-    </DashboardLayout>
+    </Home>
   );
 };
 

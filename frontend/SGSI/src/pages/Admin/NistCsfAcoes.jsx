@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import DashboardLayout from "../../components/layouts/DashboardLayout";
+import Home from "../../components/layouts/Home";
 import { useNavigate } from "react-router-dom";
 import axiosReq from "../../utils/axiosReq";
 import { URLS_API } from "../../utils/apiUrl";
@@ -116,7 +116,7 @@ const NistCsfAcoes = () => {
   }, [filterStatus, selectedUser, selectedCompany]);
 
   return (
-    <DashboardLayout activeMenu="NIST CSF">
+    <Home activeMenu="NIST CSF">
       <div className="my-5">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between">
           <h2 className="text-xl md:text-xl font-medium">NIST CSF</h2>
@@ -217,7 +217,7 @@ const NistCsfAcoes = () => {
             ))}
         </div>
       </div>
-    </DashboardLayout>
+    </Home>
   );
 };
 
